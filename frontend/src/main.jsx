@@ -7,6 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import './scss/custom.css';
 
+//Date Picker Css
+import './../node_modules/react-datepicker/dist/react-datepicker.css';
+
 //Routes
 import ErrorPage from './context/errorPage/ErrorPage.jsx';
 import LoginRoute from './routes/login/LoginRoute.jsx';

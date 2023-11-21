@@ -1,11 +1,13 @@
 import { Button, Form } from 'react-bootstrap';
 
+import Register from '../register/Register';
+
 const login = () => {
   return (
     <>
       <Form
         id='LoginForm'
-        className='shadow p-3 rounded-3'
+        className='shadow p-3 rounded-3 bg-light m-auto'
         style={{ width: '400px' }}>
         <Form.Group
           className='mb-3'
@@ -28,21 +30,17 @@ const login = () => {
         <Button
           variant='primary'
           size='lg'
-          className='w-100 text-white'>
+          className='w-100'>
           Log In
         </Button>
         <a
           href=''
-          className='text-center d-block my-2'>
+          className='text-center text-text d-block my-4'
+          style={{ textDecoration: 'none' }}>
           Forgot password?
         </a>
         <hr />
-        <Button
-          variant='secondary'
-          size='lg'
-          className='d-block m-auto my-3'>
-          Create new account
-        </Button>
+        <Register />
       </Form>
     </>
   );

@@ -1,0 +1,9 @@
+(backend)root:
+npm init -y (-y means to skip all questions)
+npm i -D concurrently
+
+npm init -y (-y means to skip all questions)
+npm i express dotenv mongoose bcryptjs jsonwebtoken cookie-parser nodemon cors
+
+Frontend:
+npm i react-router-dom

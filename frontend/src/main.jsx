@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+import axios from 'axios';
 
 //Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +18,9 @@ import LoginRoute from './routes/login/LoginRoute.jsx';
 //react-router-dom
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RegisterRoute } from './routes/register/RegisterRoute.jsx';
+
+axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
   {

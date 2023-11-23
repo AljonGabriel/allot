@@ -5,5 +5,8 @@ npm i -D concurrently
 npm init -y (-y means to skip all questions)
 npm i express dotenv mongoose bcryptjs jsonwebtoken cookie-parser nodemon cors
 
+npm i express-async-handler
+
 Frontend:
 npm i react-router-dom
+npm i axios

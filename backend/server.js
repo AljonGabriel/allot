@@ -3,13 +3,16 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
-import db from './config/db.js';
+//import custom error handlers
+import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
+
+//Import DB
+import db from './configs/db.js';
+//DB Connect
+db();
 
 //Imported Routes
 import usersRoute from './routes/usersRoute.js';
-
-//DB Connect
-db();
 
 const app = express();
 app.use(
@@ -29,6 +32,8 @@ app.use('/api/users', usersRoute);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 
+app.use(notFound);
+app.use(errorHandler);
 //Port
 const port = process.env.PORT || 5000;
 

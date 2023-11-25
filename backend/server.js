@@ -6,6 +6,8 @@ import cors from 'cors';
 //import custom error handlers
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 
+import session from 'express-session';
+
 //Import DB
 import db from './configs/db.js';
 //DB Connect
@@ -26,6 +28,14 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// Use express-session middleware
+app.use(
+  session({
+    secret: '123',
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
 
 //routes
 app.use('/api/users', usersRoute);

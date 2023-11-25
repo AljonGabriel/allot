@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import UserModel from '../models/userModel.js';
 import { validatePassword } from '../utils/passwordUtils.js';
-import generateToken from '../utils/generateToken.js';
+import { sendCodeToUserEmail } from '../utils/emailUtils.js';
 
 //Login user
 const authUser = asyncHandler(async (req, res) => {
@@ -9,7 +9,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 //Create user and redirect to dashboard
-const createUser = asyncHandler(async (req, res) => {
+const checkInputsAndSendCode = asyncHandler(async (req, res) => {
   const {
     feFname,
     feMname,
@@ -21,7 +21,7 @@ const createUser = asyncHandler(async (req, res) => {
     feConfirmPwd,
   } = req.body;
 
-  const isEmailExist = await UserModel.findOne({ feEmail });
+  const isEmailExist = await UserModel.findOne({ email: feEmail });
 
   let errorsArr = {};
 
@@ -66,24 +66,74 @@ const createUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ errors: errorsArr });
   }
 
-  const createdUser = await UserModel.create({
-    fname: feFname,
-    mname: feMname,
-    lname: feLname,
-    gender: feGender,
-    birthDate: feBirthdate,
-    //User Account Information
-    email: feEmail,
-    password: fePassword, // hashpassword
-  });
+  const code = await sendCodeToUserEmail(feFname, feLname, feEmail);
 
-  if (createdUser) {
-    generateToken(res, createdUser._id);
-    res.status(200).json({ createdUser });
+  if (code) {
+    // Store the code or other information in a variable
+    req.session.verificationCode = code;
+
+    // Now you can redirect or send a success response
+    return res.status(200).json({ success: true });
+  }
+
+  // Handle the case where code is not generated
+  return res.status(500).json({ error: 'Failed to send code' });
+});
+
+const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
+  const { feVerificationCode } = req.body;
+
+  const storedCode = req.session.verificationCode;
+
+  // Compare the user-entered code with the stored code
+  if (feVerificationCode === storedCode) {
+    // Verification successful, proceed with creating the user or other logic
+
+    // Remove the session variable
+    delete req.session.verificationCode;
+
+    // Use the data from the registration process to create a new user document
+    const {
+      feFname,
+      feMname,
+      feLname,
+      feGender,
+      feBirthdate,
+      feEmail,
+      fePassword,
+    } = req.body;
+
+    // Assuming UserModel is your Mongoose model
+    const newUser = new UserModel({
+      fname: feFname,
+      mname: feMname,
+      lname: feLname,
+      gender: feGender,
+      birthDate: feBirthdate,
+      email: feEmail,
+      password: fePassword, // You might want to hash the password before saving
+    });
+
+    try {
+      // Remove the session variable
+      delete req.session.verificationCode; // or req.session.destroy();
+      // Save the user to the database
+      const savedUser = await newUser.save();
+
+      // Respond with success or redirect the user
+      res.status(200).json({ verificationResult: 'success', savedUser });
+    } catch (error) {
+      // Handle database save error
+      res
+        .status(500)
+        .json({ verificationResult: 'failure', error: 'Failed to save user' });
+    }
   } else {
-    res.status(400);
-    throw new Error('Error creating the account');
+    // Verification failed, handle accordingly
+    res
+      .status(400)
+      .json({ verificationResult: 'failure', error: 'Invalid code' });
   }
 });
 
-export { authUser, createUser };
+export { authUser, checkInputsAndSendCode, verifyEmailCodeThenCreateUser };

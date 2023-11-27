@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, Form, InputGroup, Spinner } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
-/* import { useNavigate } from 'react-router-dom'; */
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [inputData, setInputData] = useState({
@@ -19,7 +19,7 @@ const Register = () => {
     feVerificationCode: '',
   });
 
-  /*  const navigate = useNavigate(); */
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState();
 
@@ -41,12 +41,10 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/users/verify', inputData);
-      console.log(res);
+      await axios.post('/api/users/verify', inputData);
       setCodeSent(true);
     } catch (err) {
       setErrors(err.response?.data?.errors);
-      console.log(err);
     } finally {
       // Set loading back to false after the request is completed
       setLoading(false);
@@ -60,10 +58,10 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/users/create', inputData);
-      console.log(res);
+      await axios.post('/api/users/create', inputData);
+      navigate('/home');
     } catch (err) {
-      console.log(err);
+      setErrors(err.response?.data?.errors);
     } finally {
       setLoading(false);
     }
@@ -394,9 +392,6 @@ const Register = () => {
                     }
                   />
                 </InputGroup>
-                <small className='text-bg-secondary'>
-                  Code was sent to your e-mail
-                </small>
                 <div
                   role='alert'
                   aria-live='assertive'

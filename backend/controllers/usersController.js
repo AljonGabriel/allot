@@ -66,14 +66,14 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
     return res.status(400).json({ errors: errorsArr });
   }
 
-  const code = await sendCodeToUserEmail(feFname, feLname, feEmail);
+  const codeSent = await sendCodeToUserEmail(feFname, feLname, feEmail);
 
-  if (code) {
+  if (codeSent) {
     // Store the code or other information in a variable
-    req.session.verificationCode = code;
+    req.session.verificationCode = codeSent;
 
     // Now you can redirect or send a success response
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ codeSent: true });
   }
 
   // Handle the case where code is not generated
@@ -82,11 +82,15 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
 
 const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
   const { feVerificationCode } = req.body;
-
   const storedCode = req.session.verificationCode;
 
-  // Compare the user-entered code with the stored code
-  if (feVerificationCode === storedCode) {
+  let errorsArr = {};
+
+  if (!feVerificationCode) {
+    res.status(400);
+    errorsArr.feVerificationCode = 'Please enter the code';
+  } // Compare the user-entered code with the stored code
+  else if (feVerificationCode === storedCode) {
     // Verification successful, proceed with creating the user or other logic
 
     // Remove the session variable
@@ -130,9 +134,11 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
     }
   } else {
     // Verification failed, handle accordingly
-    res
-      .status(400)
-      .json({ verificationResult: 'failure', error: 'Invalid code' });
+    errorsArr.feVerificationCode = 'Invalid Code';
+  }
+
+  if (Object.keys(errorsArr).length > 0) {
+    return res.status(400).json({ errors: errorsArr });
   }
 });
 

@@ -3,6 +3,7 @@ import { Button, Modal, Form, InputGroup, Spinner } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../loading/LoadingSpinner';
 
 const Register = () => {
   const [inputData, setInputData] = useState({
@@ -421,14 +422,7 @@ const Register = () => {
               type='submit'
               disabled={loading} // Disable the button when loading
             >
-              {loading ? (
-                <Spinner
-                  animation='border'
-                  size='sm'
-                />
-              ) : (
-                'Next'
-              )}
+              {loading ? <LoadingSpinner /> : 'Next'}
             </Button>
           ) : (
             <Button
@@ -436,14 +430,7 @@ const Register = () => {
               variant='primary'
               type='submit'
               disabled={loading}>
-              {loading ? (
-                <Spinner
-                  animation='border'
-                  size='sm'
-                />
-              ) : (
-                'Verify Code'
-              )}
+              {loading ? <LoadingSpinner /> : 'Verify Code'}
             </Button>
           )}
         </Modal.Footer>

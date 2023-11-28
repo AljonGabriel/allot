@@ -14,10 +14,15 @@ import './../node_modules/react-datepicker/dist/react-datepicker.css';
 //Routes
 import ErrorPage from './context/errorPage/ErrorPage.jsx';
 import LoginRoute from './routes/login/LoginRoute.jsx';
+import HomeRoute from './routes/home/homeRoute.jsx';
 
 //react-router-dom
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RegisterRoute } from './routes/register/RegisterRoute.jsx';
+
+//Redux
+import store from './store.js';
+import { Provider } from 'react-redux';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true;
@@ -37,10 +42,16 @@ const router = createBrowserRouter([
     path: '/register',
     element: <RegisterRoute />,
   },
+  {
+    path: '/home',
+    element: <HomeRoute />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  </Provider>,
 );

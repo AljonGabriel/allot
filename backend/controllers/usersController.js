@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import UserModel from '../models/userModel.js';
 import { validatePassword } from '../utils/passwordUtils.js';
 import { sendCodeToUserEmail } from '../utils/emailUtils.js';
+import generateToken from '../utils/generateToken.js';
 
 //Login user
 const authUser = asyncHandler(async (req, res) => {
@@ -113,7 +114,7 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
       mname: feMname,
       lname: feLname,
       gender: feGender,
-      birthDate: feBirthdate,
+      birthdate: feBirthdate,
       email: feEmail,
       password: fePassword, // You might want to hash the password before saving
     });
@@ -123,6 +124,7 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
       delete req.session.verificationCode; // or req.session.destroy();
       // Save the user to the database
       const savedUser = await newUser.save();
+      generateToken(res, savedUser._id);
 
       // Respond with success or redirect the user
       res.status(200).json({ verificationResult: 'success', savedUser });

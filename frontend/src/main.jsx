@@ -21,7 +21,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RegisterRoute } from './routes/register/RegisterRoute.jsx';
 
 //Redux
-import store from './store.js';
+import store from './states/store.js';
 import { Provider } from 'react-redux';
 
 axios.defaults.baseURL = 'http://localhost:5000';

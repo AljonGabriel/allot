@@ -1,4 +1,5 @@
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
+import LogoutBtn from '../logoutBtn/LogoutBtn';
 
 const AppNavbar = () => {
   return (
@@ -24,8 +25,8 @@ const AppNavbar = () => {
                   Something
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href='#action/3.4'>
-                  Separated link
+                <NavDropdown.Item>
+                  <LogoutBtn />
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>

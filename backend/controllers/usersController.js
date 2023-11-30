@@ -7,6 +7,37 @@ import generateToken from '../utils/generateToken.js';
 //Login user
 const authUser = asyncHandler(async (req, res) => {
   const { feEmail, fePassword } = req.body;
+
+  const user = await UserModel.findOne({ email: feEmail });
+
+  if (!feEmail) {
+    res.status(400);
+    throw new Error('Please enter your email address');
+  }
+
+  if (!fePassword) {
+    res.status(400);
+    throw new Error('Please enter your password');
+  }
+
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid E-mail or Password');
+  } else if (!(await user.matchPassword(fePassword))) {
+    res.status(400);
+    throw new Error('Invalid E-mail or Password');
+  } else {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      fname: user.fname,
+      mname: user.mname,
+      lname: user.lname,
+      email: user.email,
+      gender: user.gender,
+      birthdate: user.birthdate,
+    });
+  }
 });
 
 //Create user and redirect to dashboard
@@ -144,4 +175,15 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, checkInputsAndSendCode, verifyEmailCodeThenCreateUser };
+const logout = asyncHandler(async (req, res) => {
+  res.cookie('jwt', '', { httpOnly: true, expires: new Date() });
+
+  res.status(200).json({ message: 'Successfully logout' });
+});
+
+export {
+  authUser,
+  checkInputsAndSendCode,
+  verifyEmailCodeThenCreateUser,
+  logout,
+};

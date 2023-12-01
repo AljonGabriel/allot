@@ -1,9 +1,18 @@
 import { useState } from 'react';
-import { Button, Modal, Form, InputGroup, Spinner } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
-import axios from 'axios';
+import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+//Api Calls
+import {
+  useVerifyMutation,
+  useCreateMutation,
+} from '../../states/slices/users/usersApiSlice.js';
+
+//Local Reducers
+import { setCredentials } from '../../states/slices/users/authSlice.js';
+
+import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner';
+import DatePicker from 'react-datepicker';
 
 const Register = () => {
   const [inputData, setInputData] = useState({
@@ -19,52 +28,45 @@ const Register = () => {
 
     feVerificationCode: '',
   });
-
-  const navigate = useNavigate();
-
-  const [errors, setErrors] = useState();
-
+  //Modal State
   const [show, setShow] = useState(false);
-
-  const [codeSent, setCodeSent] = useState(false);
-
-  // Add loading state
-  const [loading, setLoading] = useState(false);
-
+  //Modal boolean
   const handleClose = () => setShow(false);
-
   const handleShow = () => setShow(true);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [verify, { isLoading: isVerifyLoading }] = useVerifyMutation();
+  const [create, { isLoading: isCreateLoading }] = useCreateMutation();
+
+  const [errors, setErrors] = useState();
+  const [codeSent, setCodeSent] = useState(false);
+
+  //verify data then sendcode
   const handlesData = async (event) => {
     event.preventDefault();
 
-    // Set loading to true when starting the request
-    setLoading(true);
-
     try {
-      await axios.post('/api/users/verify', inputData);
+      const res = await verify(inputData).unwrap();
+      console.log(res);
       setCodeSent(true);
     } catch (err) {
-      setErrors(err.response?.data?.errors);
-    } finally {
-      // Set loading back to false after the request is completed
-      setLoading(false);
+      setErrors(err.data?.errors);
+      console.log(err);
     }
   };
 
   const handlesCreatingUser = async (e) => {
     e.preventDefault();
 
-    // Set loading to true when starting the request
-    setLoading(true);
-
     try {
-      await axios.post('/api/users/create', inputData);
+      const res = await create(inputData).unwrap();
+      dispatch(setCredentials({ ...res }));
       navigate('/home');
     } catch (err) {
-      setErrors(err.response?.data?.errors);
-    } finally {
-      setLoading(false);
+      setErrors(err.data?.errors);
+      console.log(err);
     }
   };
 
@@ -420,17 +422,17 @@ const Register = () => {
               form='handlesDataForm'
               variant='primary'
               type='submit'
-              disabled={loading} // Disable the button when loading
+              disabled={isVerifyLoading} // Disable the button when loading
             >
-              {loading ? <LoadingSpinner /> : 'Next'}
+              {isVerifyLoading ? <LoadingSpinner /> : 'Next'}
             </Button>
           ) : (
             <Button
               form='handlesCreatingUserForm'
               variant='primary'
               type='submit'
-              disabled={loading}>
-              {loading ? <LoadingSpinner /> : 'Verify Code'}
+              disabled={isCreateLoading}>
+              {isCreateLoading ? <LoadingSpinner /> : 'Verify Code'}
             </Button>
           )}
         </Modal.Footer>

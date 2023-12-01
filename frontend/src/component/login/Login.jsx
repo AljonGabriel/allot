@@ -13,6 +13,7 @@ const Login = () => {
     fePassword: '',
   });
 
+  //Erros stores here
   const [errors, setErrors] = useState(null);
 
   const navigate = useNavigate();
@@ -51,9 +52,7 @@ const Login = () => {
         className='shadow p-3 rounded-3 bg-light m-auto'
         style={{ width: '400px' }}>
         {errors ? (
-          <small className='my-3 text-center d-block text-danger'>
-            {errors}
-          </small>
+          <p className='my-3 text-center d-block text-danger'>{errors}</p>
         ) : (
           ''
         )}
@@ -67,6 +66,7 @@ const Login = () => {
               size='lg'
               type='email'
               value={inputData.feEmail}
+              className={errors ? 'is-invalid' : !errors ? '' : 'is-valid'}
               onChange={(e) =>
                 setInputData({ ...inputData, feEmail: e.target.value })
               }
@@ -79,6 +79,7 @@ const Login = () => {
             <Form.Control
               size='lg'
               type='password'
+              className={errors ? 'is-invalid' : !errors ? '' : 'is-valid'}
               value={inputData.fePassword}
               onChange={(e) =>
                 setInputData({ ...inputData, fePassword: e.target.value })

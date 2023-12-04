@@ -30,6 +30,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    uploadProfilePic: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/profile-upload`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -38,4 +45,5 @@ export const {
   useVerifyMutation,
   useCreateMutation,
   useLogoutMutation,
+  useUploadProfilePicMutation,
 } = usersApiSlice;

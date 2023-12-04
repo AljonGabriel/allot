@@ -4,6 +4,8 @@ const app = express();
 
 import dotenv from 'dotenv';
 dotenv.config();
+
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 //import custom error handlers
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
@@ -37,6 +39,7 @@ app.use(
     saveUninitialized: false,
   }),
 );
+app.use(cookieParser());
 
 //routes
 app.use('/api/users', usersRoute);

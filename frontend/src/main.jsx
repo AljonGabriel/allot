@@ -23,7 +23,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 //Redux
 import store from './states/store.js';
 import { Provider } from 'react-redux';
-import AddProfile from './routes/addProfle/AddProfile.jsx';
+import AddProfile from './routes/uploadProfile/UploadProfileRoute.jsx';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true;
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     element: <RegisterRoute />,
   },
   {
-    path: '/addprofile',
+    path: '/profilepicture',
     element: <AddProfile />,
   },
   {

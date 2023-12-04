@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import defBoyImg from './../../assets/defaultImg/DefaultBoy.jpg';
 import defGirlImg from './../../assets/defaultImg/DefaultGirl.jpg';
 import defImg from './../../assets/defaultImg/Default.jpg';
+import { UserProfileImage } from '../userProfileImage/userProfileImage';
 
 const AppNavbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -24,24 +25,7 @@ const AppNavbar = () => {
                 <NavDropdown
                   title={
                     <span>
-                      <Image
-                        src={
-                          userInfo.gender === 'Male'
-                            ? defBoyImg
-                            : userInfo.gender === 'Female'
-                            ? defGirlImg
-                            : defImg
-                        }
-                        alt={
-                          userInfo.gender === 'Male'
-                            ? defBoyImg
-                            : userInfo.gender === 'Female'
-                            ? defGirlImg
-                            : defImg
-                        }
-                        style={{ width: '40px', height: '40px' }}
-                        roundedCircle
-                      />
+                      <UserProfileImage />
                     </span>
                   }>
                   <NavDropdown.Item href='#action/3.1'>

@@ -36,6 +36,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       gender: user.gender,
       birthdate: user.birthdate,
+      profileImage: user.profileImage,
     });
   }
 });
@@ -166,6 +167,7 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
         email: savedUser.email,
         gender: savedUser.gender,
         birthdate: savedUser.birthdate,
+        profileImage,
       });
     } catch (error) {
       // Handle database save error
@@ -189,9 +191,23 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Successfully logout' });
 });
 
+const profilePicUpload = asyncHandler(async (req, res) => {
+  const user = req.user; // Assuming you have user information in the request
+
+  const imageData = req.file.buffer.toString('base64'); // Convert binary data to base64
+
+  if (imageData) {
+    // Update the user's profileImage field with the image data or store it as a file and save the URL
+    user.profileImage = `data:image/png;base64,${imageData}`;
+    await user.save();
+    res.status(200).json({ user });
+  }
+});
+
 export {
   authUser,
   checkInputsAndSendCode,
   verifyEmailCodeThenCreateUser,
   logout,
+  profilePicUpload,
 };

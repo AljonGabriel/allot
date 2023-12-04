@@ -1,3 +1,5 @@
-export const RegisterRoute = () => {
+const RegisterRoute = () => {
   return <div>RegisterRoute</div>;
 };
+
+export default RegisterRoute;

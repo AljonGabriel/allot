@@ -1,5 +1,7 @@
 //Import
 import express from 'express';
+const app = express();
+
 import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
@@ -16,7 +18,6 @@ db();
 //Imported Routes
 import usersRoute from './routes/usersRoute.js';
 
-const app = express();
 app.use(
   cors({
     origin: 'http://localhost:3000',

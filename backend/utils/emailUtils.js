@@ -22,7 +22,7 @@ const sendCodeToUserEmail = async (
       theme: 'default',
       product: {
         name: 'Allot',
-        link: 'https://mailgen.js/',
+        link: 'www.Allot.com',
       },
     });
 

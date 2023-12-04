@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   useVerifyMutation,
   useCreateMutation,
-} from '../../states/slices/users/usersApiSlice.js';
+} from '../../states/slices/users/usersApiSlice.js.js';
 
 //Local Reducers
 import { setCredentials } from '../../states/slices/users/authSlice.js';
 
 import { useDispatch } from 'react-redux';
-import LoadingSpinner from '../loading/LoadingSpinner';
+import LoadingSpinner from '../loading/LoadingSpinner.jsx';
 import DatePicker from 'react-datepicker';
 
 const Register = () => {
@@ -48,8 +48,7 @@ const Register = () => {
     event.preventDefault();
 
     try {
-      const res = await verify(inputData).unwrap();
-      console.log(res);
+      await verify(inputData).unwrap();
       setCodeSent(true);
     } catch (err) {
       setErrors(err.data?.errors);

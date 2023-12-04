@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../../states/slices/users/usersApiSlice.js';
 import { setCredentials } from './../../states/slices/users/authSlice.js';
-import Register from '../register/Register';
+import RegisterModal from '../registerModal/RegisterModal.jsx';
 import LoadingSpinner from '../loading/LoadingSpinner.jsx';
 
 const Login = () => {
@@ -105,7 +105,7 @@ const Login = () => {
           </a>
         </Form>
         <hr />
-        <Register />
+        <RegisterModal />
       </section>
     </>
   );

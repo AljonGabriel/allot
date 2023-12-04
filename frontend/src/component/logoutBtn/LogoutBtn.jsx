@@ -24,8 +24,9 @@ const LogoutBtn = () => {
   return (
     <>
       <Button
-        variant='danger'
+        variant='outline-danger'
         onClick={handleLogout}
+        className='w-100'
         disabled={isLoading}>
         {isLoading ? <LoadingSpinner /> : 'Logout'}
       </Button>

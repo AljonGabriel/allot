@@ -158,7 +158,15 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
       generateToken(res, savedUser._id);
 
       // Respond with success or redirect the user
-      res.status(200).json({ verificationResult: 'success', savedUser });
+      res.status(200).json({
+        _id: savedUser._id,
+        fname: savedUser.fname,
+        mname: savedUser.mname,
+        lname: savedUser.lname,
+        email: savedUser.email,
+        gender: savedUser.gender,
+        birthdate: savedUser.birthdate,
+      });
     } catch (error) {
       // Handle database save error
       res

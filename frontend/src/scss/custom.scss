@@ -4,12 +4,15 @@ $primary: #4369db;
 $secondary: #a9bbef;
 $accent: #2143ab;
 
+$whiteSecondary: #f2f2f2;
+
 @import './../../node_modules/bootstrap/scss/_functions';
 @import './../../node_modules/bootstrap/scss/_variables';
 
 $custom-color-theme: (
   'accent': $accent,
   'text': $text,
+  'white-secondary': $whiteSecondary,
 );
 
 $theme-colors: map-merge($custom-color-theme, $theme-colors);

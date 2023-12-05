@@ -62,7 +62,7 @@ const Register = () => {
     try {
       const res = await create(inputData).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate('/home');
+      navigate('/upload-profile-picture');
     } catch (err) {
       setErrors(err.data?.errors);
       console.log(err);
@@ -372,41 +372,42 @@ const Register = () => {
             <>
               <Form
                 id='handlesCreatingUserForm'
-                onSubmit={(e) => handlesCreatingUser(e)}></Form>
-              <Form.Group>
-                <InputGroup className='mb-3'>
-                  <Form.Control
-                    type='text'
-                    placeholder='Enter code here'
-                    className={
-                      errors && errors.feVerificationCode
-                        ? 'is-invalid'
-                        : !errors
-                        ? ''
-                        : 'is-valid'
-                    }
-                    value={inputData.feVerificationCode}
-                    onChange={(e) =>
-                      setInputData({
-                        ...inputData,
-                        feVerificationCode: e.target.value,
-                      })
-                    }
-                  />
-                </InputGroup>
-                <div
-                  role='alert'
-                  aria-live='assertive'
-                  aria-atomic='true'>
-                  {errors && errors.feVerificationCode ? (
-                    <p className='text-danger'>{errors.feVerificationCode}</p>
-                  ) : !errors ? (
-                    ''
-                  ) : (
-                    <p className='text-success'>Looks good</p>
-                  )}
-                </div>
-              </Form.Group>
+                onSubmit={(e) => handlesCreatingUser(e)}>
+                <Form.Group>
+                  <InputGroup className='mb-3'>
+                    <Form.Control
+                      type='text'
+                      placeholder='Enter code here'
+                      className={
+                        errors && errors.feVerificationCode
+                          ? 'is-invalid'
+                          : !errors
+                          ? ''
+                          : 'is-valid'
+                      }
+                      value={inputData.feVerificationCode}
+                      onChange={(e) =>
+                        setInputData({
+                          ...inputData,
+                          feVerificationCode: e.target.value,
+                        })
+                      }
+                    />
+                  </InputGroup>
+                  <div
+                    role='alert'
+                    aria-live='assertive'
+                    aria-atomic='true'>
+                    {errors && errors.feVerificationCode ? (
+                      <p className='text-danger'>{errors.feVerificationCode}</p>
+                    ) : !errors ? (
+                      ''
+                    ) : (
+                      <p className='text-success'>Looks good</p>
+                    )}
+                  </div>
+                </Form.Group>
+              </Form>
             </>
           )}
         </Modal.Body>

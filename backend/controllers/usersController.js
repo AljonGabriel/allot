@@ -103,8 +103,8 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
 
   if (codeSent) {
     // Store the code or other information in a variable
-    req.session.verificationCode = codeSent;
-
+    /*     req.verificationCode = codeSent;
+     */
     // Now you can redirect or send a success response
     return res.status(200).json({ codeSent: true });
   }
@@ -115,19 +115,18 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
 
 const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
   const { feVerificationCode } = req.body;
-  const storedCode = req.session.verificationCode;
+  const storedCode = req.verificationCode;
+
+  console.log('Stored Code Var' + storedCode);
 
   let errorsArr = {};
 
   if (!feVerificationCode) {
     res.status(400);
     errorsArr.feVerificationCode = 'Please enter the code';
-  } // Compare the user-entered code with the stored code
-  else if (feVerificationCode === storedCode) {
-    // Verification successful, proceed with creating the user or other logic
-
+  } else if (feVerificationCode === storedCode) {
     // Remove the session variable
-    delete req.session.verificationCode;
+    delete req.verificationCode;
 
     // Use the data from the registration process to create a new user document
     const {
@@ -167,7 +166,7 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
         email: savedUser.email,
         gender: savedUser.gender,
         birthdate: savedUser.birthdate,
-        profileImage,
+        profileImage: null,
       });
     } catch (error) {
       // Handle database save error
@@ -200,7 +199,8 @@ const profilePicUpload = asyncHandler(async (req, res) => {
     // Update the user's profileImage field with the image data or store it as a file and save the URL
     user.profileImage = `data:image/png;base64,${imageData}`;
     await user.save();
-    res.status(200).json({ user });
+
+    res.status(200).json(user.profileImage);
   }
 });
 

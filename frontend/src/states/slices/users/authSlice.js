@@ -15,6 +15,15 @@ const authSlice = createSlice({
       localStorage.setItem('userInfo', JSON.stringify(action.payload));
     },
 
+    updateProfileImage: (state, action) => {
+      // Update only the profileImage property in userInfo
+      state.userInfo = {
+        ...state.userInfo,
+        profileImage: action.payload,
+      };
+      localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+    },
+
     logout: (state) => {
       state.userInfo = null;
       localStorage.removeItem('userInfo');
@@ -22,6 +31,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, updateProfileImage } = authSlice.actions;
 
 export default authSlice.reducer;

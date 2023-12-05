@@ -25,10 +25,8 @@ const Login = () => {
   console.log(userInfo);
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo.profileImage !== null) {
       navigate('/home');
-    } else {
-      navigate('/');
     }
   }, [navigate, userInfo, dispatch]);
 

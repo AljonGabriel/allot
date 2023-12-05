@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { useUploadProfilePicMutation } from '../../states/slices/users/usersApiSlice.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateProfileImage } from '../../states/slices/users/authSlice.js';
 
 import defBoyImg from './../../assets/defaultImg/DefaultBoy.jpg';
 import defGirlImg from './../../assets/defaultImg/DefaultGirl.jpg';
@@ -15,6 +16,7 @@ const ProfilePicture = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -25,7 +27,9 @@ const ProfilePicture = () => {
     formData.append('image', selectedFile); // Use 'file' instead of 'formData'
 
     try {
-      await profileUpload(formData).unwrap();
+      const res = await profileUpload(formData).unwrap();
+      dispatch(updateProfileImage(res));
+      console.log(res);
       navigate('/home');
     } catch (err) {
       console.log(err);

@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     element: <RegisterRoute />,
   },
   {
-    path: '/profilepicture',
+    path: '/upload-profile-picture',
     element: <AddProfile />,
   },
   {

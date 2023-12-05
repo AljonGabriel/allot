@@ -1,4 +1,4 @@
-const generateRandomCode = (length) => {
+const generateRandomCode = (length, req) => {
   const charset =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let code = '';

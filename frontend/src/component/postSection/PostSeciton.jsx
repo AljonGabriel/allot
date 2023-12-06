@@ -1,50 +1,67 @@
-import { Form, Image, Button } from 'react-bootstrap';
+import { Form, Image, Button, Stack } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import { Images } from 'react-bootstrap-icons';
 
 const PostSeciton = () => {
   const [inputData, setInputData] = useState({
     fePostDescription: '',
-    fePostImage: '',
+    fePostImages: null,
   });
 
   const { userInfo } = useSelector((state) => state.auth);
   return (
     <>
       <section>
-        <section className='bg-white-secondary w-100 mb-3 rounded-2 p-3'>
+        <section className='border border-1 w-100 mb-3 rounded-2 p-3'>
           <Form>
             <Form.Control
               as='textarea'
-              className='mb-3'
+              className='mb-3 border border-0 bg-transparent'
               placeholder={`Whats on your mind, ${userInfo.fname}`}
-              value={inputData.fePost}
+              value={inputData.fePostDescription}
               onChange={(e) =>
-                setInputData({ ...inputData, fePost: e.target.value })
+                setInputData({
+                  ...inputData,
+                  fePostDescription: e.target.value,
+                })
               }
             />
 
-            <Form.Label
-              className='text-center text-text p-3 d-flex align-items-center justify-content-center rounded border bg-white'
-              htmlFor='postFileInput'>
-              Add photos/Videos
-            </Form.Label>
+            <Stack
+              gap={1}
+              className='p-3 d-flex align-items-center justify-content-center rounded border bg-white'>
+              <Form.Label htmlFor='postFileInput'>
+                {' '}
+                <Images
+                  size={50}
+                  className='d-block text-center m-auto text-secondary'
+                />
+                Add photos/Videos
+              </Form.Label>
+              <Form.Control
+                type='file'
+                accept='image/*'
+                id='postFileInput'
+                name='post' // Ensure this matches the field name in the array function
+                className='d-none'
+                multiple
+                onChange={(e) => {
+                  const selectedFiles = e.target.files;
+                  setInputData({ ...inputData, fePostImages: selectedFiles });
+                }}
+              />
+            </Stack>
 
-            <Form.Control
-              type='file'
-              accept='image/*'
-              id='postFileInput'
-              className='d-none'
-              multiple
-              onChange={(e) => {
-                const selectedFiles = e.target.files;
-                setInputData({ ...inputData, fePostImages: selectedFiles });
-              }}
-            />
             <Button
               variant='primary'
               size='lg'
-              className='mt-3 w-100'>
+              className='mt-3 w-100'
+              disabled={
+                inputData.fePostDescription && inputData.fePostImages
+                  ? false
+                  : true
+              }>
               Post
             </Button>
           </Form>

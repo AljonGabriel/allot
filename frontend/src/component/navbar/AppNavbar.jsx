@@ -1,10 +1,15 @@
-import { Navbar, Nav, NavDropdown, Container, Image } from 'react-bootstrap';
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  Container,
+  Form,
+  Button,
+} from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
-import defBoyImg from './../../assets/defaultImg/DefaultBoy.jpg';
-import defGirlImg from './../../assets/defaultImg/DefaultGirl.jpg';
-import defImg from './../../assets/defaultImg/Default.jpg';
 import { UserProfileImage } from '../userProfileImage/userProfileImage';
+import { Search } from 'react-bootstrap-icons';
 
 const AppNavbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -16,11 +21,25 @@ const AppNavbar = () => {
         {userInfo && (
           <>
             <Container>
-              <Navbar.Brand href='#home'>Allot</Navbar.Brand>
+              <Navbar.Brand
+                href='/home'
+                className='text-accent fw-bold'>
+                Allot
+              </Navbar.Brand>
               <Navbar.Toggle aria-controls='basic-navbar-nav' />
               <Navbar.Collapse id='basic-navbar-nav'>
                 <Nav className='me-auto'>
-                  <Nav.Link href='#home'>Home</Nav.Link>
+                  <Form className='d-flex'>
+                    <Form.Control
+                      type='search'
+                      placeholder='Search'
+                      className='me-2'
+                      aria-label='Search'
+                    />
+                    <Button variant='outline-secondary'>
+                      <Search size={16} />
+                    </Button>
+                  </Form>
                 </Nav>
                 <NavDropdown
                   title={

@@ -10,7 +10,6 @@ const HomeRoute = () => {
       <Container className='d-flex justify-content-start mt-3'>
         <ProfileSection />
         <PostSeciton />
-        <ProfileSection />
       </Container>
     </>
   );

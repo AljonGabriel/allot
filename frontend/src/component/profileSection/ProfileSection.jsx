@@ -19,6 +19,11 @@ const ProfileSection = () => {
             <span>{userName}</span>
           </Stack>
         </a>
+        <a
+          href=''
+          className='btn btn-outline-secondary border-0 text-black'>
+          More feature soon
+        </a>
       </section>
     </>
   );

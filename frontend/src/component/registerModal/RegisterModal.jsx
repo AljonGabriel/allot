@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 //Api Calls
@@ -42,6 +42,25 @@ const Register = () => {
 
   const [errors, setErrors] = useState();
   const [codeSent, setCodeSent] = useState(false);
+  const [timer, setTimer] = useState(0);
+
+  const startTimer = () => {
+    setTimer(900); // 15 minutes in seconds
+  };
+
+  const decrementTimer = () => {
+    setTimer((prevTimer) => prevTimer - 1);
+  };
+
+  useEffect(() => {
+    let timerId;
+
+    if (timer > 0) {
+      timerId = setInterval(decrementTimer, 1000);
+    }
+
+    return () => clearInterval(timerId);
+  }, [timer]);
 
   //verify data then sendcode
   const handlesData = async (event) => {
@@ -50,6 +69,7 @@ const Register = () => {
     try {
       await verify(inputData).unwrap();
       setCodeSent(true);
+      startTimer();
     } catch (err) {
       setErrors(err.data?.errors);
       console.log(err);
@@ -373,37 +393,39 @@ const Register = () => {
               <Form
                 id='handlesCreatingUserForm'
                 onSubmit={(e) => handlesCreatingUser(e)}>
-                <Form.Group>
-                  <InputGroup className='mb-3'>
-                    <Form.Control
-                      type='text'
-                      placeholder='Enter code here'
-                      className={
-                        errors && errors.feVerificationCode
-                          ? 'is-invalid'
-                          : !errors
-                          ? ''
-                          : 'is-valid'
-                      }
-                      value={inputData.feVerificationCode}
-                      onChange={(e) =>
-                        setInputData({
-                          ...inputData,
-                          feVerificationCode: e.target.value,
-                        })
-                      }
-                    />
-                  </InputGroup>
+                <Form.Group className='mb-3'>
+                  <Form.Label>
+                    Verification Code:{' '}
+                    <b className='text-success'> {inputData.feEmail}</b>
+                  </Form.Label>
+                  <Form.Control
+                    type='text'
+                    placeholder='ex.rLPOCE'
+                    className={
+                      errors && errors.feVerificationCode
+                        ? 'is-invalid'
+                        : !errors?.feVerificationCode
+                        ? ''
+                        : 'is-valid'
+                    }
+                    value={inputData.feVerificationCode}
+                    onChange={(e) =>
+                      setInputData({
+                        ...inputData,
+                        feVerificationCode: e.target.value,
+                      })
+                    }
+                  />
+                  <small className='text-muted d-block'>
+                    The code was sent to your email
+                  </small>
+
                   <div
                     role='alert'
                     aria-live='assertive'
                     aria-atomic='true'>
-                    {errors && errors.feVerificationCode ? (
+                    {errors && errors.feVerificationCode && (
                       <p className='text-danger'>{errors.feVerificationCode}</p>
-                    ) : !errors ? (
-                      ''
-                    ) : (
-                      <p className='text-success'>Looks good</p>
                     )}
                   </div>
                 </Form.Group>
@@ -412,11 +434,6 @@ const Register = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant='secondary'
-            onClick={handleClose}>
-            Close
-          </Button>
           {!codeSent ? (
             <Button
               form='handlesDataForm'
@@ -427,13 +444,34 @@ const Register = () => {
               {isVerifyLoading ? <LoadingSpinner /> : 'Next'}
             </Button>
           ) : (
-            <Button
-              form='handlesCreatingUserForm'
-              variant='primary'
-              type='submit'
-              disabled={isCreateLoading}>
-              {isCreateLoading ? <LoadingSpinner /> : 'Verify Code'}
-            </Button>
+            <>
+              <Button
+                variant='outline-secondary'
+                type='button'
+                onClick={startTimer}
+                disabled={timer}>
+                {timer > 0 ? (
+                  <>
+                    Re-send in: {Math.floor(timer / 60)}:{timer % 60}
+                  </>
+                ) : (
+                  'Re-send code'
+                )}
+              </Button>
+              <Button
+                variant='secondary'
+                type='button'
+                onClick={() => setCodeSent(false)}>
+                Change e-mail
+              </Button>
+              <Button
+                form='handlesCreatingUserForm'
+                variant='primary'
+                type='submit'
+                disabled={isCreateLoading}>
+                {isCreateLoading ? <LoadingSpinner /> : 'Verify Code'}
+              </Button>
+            </>
           )}
         </Modal.Footer>
       </Modal>

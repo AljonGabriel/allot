@@ -10,6 +10,7 @@ import { updateProfileImage } from '../../states/slices/users/authSlice.js';
 import defBoyImg from './../../assets/defaultImg/DefaultBoy.jpg';
 import defGirlImg from './../../assets/defaultImg/DefaultGirl.jpg';
 import defImg from './../../assets/defaultImg/Default.jpg';
+import LoadingSpinner from '../loading/LoadingSpinner.jsx';
 
 const ProfilePicture = () => {
   const [profileUpload, { isLoading }] = useUploadProfilePicMutation();
@@ -76,8 +77,9 @@ const ProfilePicture = () => {
             <Button
               variant='primary'
               type='submit'
-              className='my-3 w-100'>
-              Upload
+              className='my-3 w-100'
+              disabled={isLoading}>
+              {isLoading ? <LoadingSpinner /> : 'Upload'}
             </Button>
           </Form.Group>
         </Form>

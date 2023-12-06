@@ -1,15 +1,52 @@
 import { Form, Image, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+
 const PostSeciton = () => {
+  const [inputData, setInputData] = useState({
+    fePostDescription: '',
+    fePostImage: '',
+  });
+
+  const { userInfo } = useSelector((state) => state.auth);
   return (
     <>
       <section>
         <section className='bg-white-secondary w-100 mb-3 rounded-2 p-3'>
           <Form>
             <Form.Control
-              type='text'
-              placeholder="What's on your mind, User"
+              as='textarea'
+              className='mb-3'
+              placeholder={`Whats on your mind, ${userInfo.fname}`}
+              value={inputData.fePost}
+              onChange={(e) =>
+                setInputData({ ...inputData, fePost: e.target.value })
+              }
             />
-            <Button className='mt-3'>Post</Button>
+
+            <Form.Label
+              className='text-center text-text p-3 d-flex align-items-center justify-content-center rounded border bg-white'
+              htmlFor='postFileInput'>
+              Add photos/Videos
+            </Form.Label>
+
+            <Form.Control
+              type='file'
+              accept='image/*'
+              id='postFileInput'
+              className='d-none'
+              multiple
+              onChange={(e) => {
+                const selectedFiles = e.target.files;
+                setInputData({ ...inputData, fePostImages: selectedFiles });
+              }}
+            />
+            <Button
+              variant='primary'
+              size='lg'
+              className='mt-3 w-100'>
+              Post
+            </Button>
           </Form>
         </section>
         <section className='bg-white-secondary w-100 rounded-2 p-3'>

@@ -103,8 +103,8 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
 
   if (codeSent) {
     // Store the code or other information in a variable
-    /*     req.verificationCode = codeSent;
-     */
+    req.session.verificationCode = codeSent;
+
     // Now you can redirect or send a success response
     return res.status(200).json({ codeSent: true });
   }
@@ -115,18 +115,22 @@ const checkInputsAndSendCode = asyncHandler(async (req, res) => {
 
 const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
   const { feVerificationCode } = req.body;
-  const storedCode = req.verificationCode;
-
-  console.log('Stored Code Var' + storedCode);
+  const storedCode = req.session.verificationCode;
 
   let errorsArr = {};
+
+  setTimeout(() => {
+    // Remove the session variable
+    delete req.session.verificationCode;
+    errorsArr.feVerificationCode = 'Code expired';
+  }, 1000);
 
   if (!feVerificationCode) {
     res.status(400);
     errorsArr.feVerificationCode = 'Please enter the code';
   } else if (feVerificationCode === storedCode) {
     // Remove the session variable
-    delete req.verificationCode;
+    delete req.session.verificationCode;
 
     // Use the data from the registration process to create a new user document
     const {
@@ -151,8 +155,6 @@ const verifyEmailCodeThenCreateUser = asyncHandler(async (req, res) => {
     });
 
     try {
-      // Remove the session variable
-      delete req.session.verificationCode; // or req.session.destroy();
       // Save the user to the database
       const savedUser = await newUser.save();
       generateToken(res, savedUser._id);

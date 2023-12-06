@@ -3,7 +3,6 @@ import Mailgen from 'mailgen';
 import generateRandomCode from './generateRandomCode.js';
 
 const sendCodeToUserEmail = async (
-  req,
   userFirstName,
   userLastName,
   userEnteredEmail,
@@ -29,8 +28,6 @@ const sendCodeToUserEmail = async (
 
     let code = generateRandomCode(6);
 
-    req.verificationCode = code;
-
     let response = {
       body: {
         name: userFirstName + ' ' + userLastName,
@@ -52,6 +49,7 @@ const sendCodeToUserEmail = async (
       .sendMail(message)
       .then(() => {
         console.log('Random Code:' + code);
+        resolve(code);
       })
       .catch((err) => {
         console.error(err); // Log the error for debugging

@@ -7,6 +7,9 @@ dotenv.config();
 
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+
+import path from 'path';
+
 //import custom error handlers
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 
@@ -19,6 +22,7 @@ db();
 
 //Imported Routes
 import usersRoute from './routes/usersRoute.js';
+import uploadsRoute from './routes/uploadsRoutes.js';
 
 app.use(
   cors({
@@ -39,10 +43,13 @@ app.use(
     saveUninitialized: false,
   }),
 );
-app.use(cookieParser());
 
+app.use(cookieParser());
+const uploadsPath = path.join('frontend', 'src', 'assets', 'uploads');
+app.use(express.static(uploadsPath));
 //routes
 app.use('/api/users', usersRoute);
+app.use('/api/uploads', uploadsRoute);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 

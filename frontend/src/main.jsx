@@ -16,6 +16,7 @@ import ErrorPage from './context/errorPage/ErrorPage.jsx';
 import LoginRoute from './routes/login/LoginRoute.jsx';
 import HomeRoute from './routes/home/homeRoute.jsx';
 import RegisterRoute from './routes/register/RegisterRoute.jsx';
+import AddProfile from './routes/uploadProfile/UploadProfileRoute.jsx';
 
 //react-router-dom
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -23,7 +24,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 //Redux
 import store from './states/store.js';
 import { Provider } from 'react-redux';
-import AddProfile from './routes/uploadProfile/UploadProfileRoute.jsx';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true;

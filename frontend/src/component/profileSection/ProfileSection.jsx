@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import { Stack } from 'react-bootstrap';
 
 import { UserProfileImage } from '../userProfileImage/userProfileImage';
 
@@ -8,21 +7,12 @@ const ProfileSection = () => {
   const userName = userInfo.fname + ' ' + userInfo.mname + ' ' + userInfo.lname;
   return (
     <>
-      <section className='w-50'>
+      <section className='w-auto position-fixed'>
         <a
-          href=''
+          href='#home'
           className='btn btn-outline-secondary border-0 text-black'>
-          <Stack
-            direction='horizontal'
-            gap={3}>
-            <UserProfileImage />
-            <span>{userName}</span>
-          </Stack>
-        </a>
-        <a
-          href=''
-          className='btn btn-outline-secondary border-0 text-black'>
-          More feature soon
+          <UserProfileImage />
+          <h6 className='d-inline ms-3'>{userName}</h6>
         </a>
       </section>
     </>

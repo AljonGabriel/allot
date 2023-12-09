@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import { useLogoutMutation } from '../../states/slices/users/usersApiSlice.js';
+import { useLogoutMutation } from '../../states/slices/users/apiUsersEndpoints.js';
 import { logout } from '../../states/slices/users/authSlice.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

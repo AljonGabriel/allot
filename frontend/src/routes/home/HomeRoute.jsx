@@ -7,7 +7,10 @@ const HomeRoute = () => {
   return (
     <>
       <AppNavbar />
-      <Container className='d-flex justify-content-start mt-3'>
+      <Container
+        className='d-flex justify-content-start bg-white-secondary h-100'
+        style={{ paddingTop: '90px' }}
+        fluid>
         <ProfileSection />
         <PostSeciton />
       </Container>

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useVerifyMutation,
   useCreateMutation,
-} from '../../states/slices/users/usersApiSlice.js.js';
+} from '../../states/slices/users/apiUsersEndpoints.js';
 
 //Local Reducers
 import { setCredentials } from '../../states/slices/users/authSlice.js';

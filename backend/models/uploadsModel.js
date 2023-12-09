@@ -19,6 +19,10 @@ const uploadSchema = mongoose.Schema(
     postedDate: {
       type: String,
     },
+    userProfile: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

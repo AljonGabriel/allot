@@ -1,20 +1,18 @@
 import { Form, Button } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useUploadProfilePicMutation } from '../../states/slices/users/usersApiSlice.js';
+import { useCreateProfilePicMutation } from '../../states/slices/uploads/apiUploadsEndpoints.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import LoadingSpinner from '../loading/LoadingSpinner.jsx';
 import { updateProfileImage } from '../../states/slices/users/authSlice.js';
 
-import defBoyImg from './../../assets/defaultImg/DefaultBoy.jpg';
-import defGirlImg from './../../assets/defaultImg/DefaultGirl.jpg';
-import defImg from './../../assets/defaultImg/Default.jpg';
-import LoadingSpinner from '../loading/LoadingSpinner.jsx';
-
 const ProfilePicture = () => {
-  const [profileUpload, { isLoading }] = useUploadProfilePicMutation();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [profileUpload, { isLoading }] = useCreateProfilePicMutation();
+  const [inputData, setInputData] = useState({
+    fePostImages: null,
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,22 +23,27 @@ const ProfilePicture = () => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('image', selectedFile); // Use 'file' instead of 'formData'
+    formData.append('pfImage', inputData.fePostImages); // Use 'file' instead of 'formData'
 
     try {
       const res = await profileUpload(formData).unwrap();
-      dispatch(updateProfileImage(res));
-      console.log(res);
+      // Assuming res.data.updatedProfile contains the profileImage property
+      const profileImage = res.uploaded.images[0];
+
+      // Dispatch the updateProfileImage action with the profileImage
+      dispatch(updateProfileImage(profileImage));
       navigate('/home');
+
+      console.log(profileImage);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleFileChange = (event) => {
-    // Update the selected file when the input changes
-    setSelectedFile(event.target.files[0]);
-  };
+  const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
+  const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
+  const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
+
   return (
     <>
       <section className='bg-white p-5 border border-white-secondary rounded-3'>
@@ -50,17 +53,17 @@ const ProfilePicture = () => {
           <Image
             src={
               userInfo.gender === 'Male'
-                ? defBoyImg
+                ? defMaleImg
                 : userInfo.gender === 'Female'
-                ? defGirlImg
+                ? defFemaleImg
                 : defImg
             }
             alt={
               userInfo.gender === 'Male'
-                ? defBoyImg
+                ? 'Male Avatar'
                 : userInfo.gender === 'Female'
-                ? defGirlImg
-                : defImg
+                ? 'Female Avatar'
+                : 'Default'
             }
             style={{ width: '150px', height: '150px' }}
             roundedCircle
@@ -72,12 +75,18 @@ const ProfilePicture = () => {
             <Form.Control
               type='file'
               accept='image/*'
-              onChange={handleFileChange}
+              onChange={(e) =>
+                setInputData({
+                  ...inputData,
+                  fePostImages: e.target.files[0],
+                })
+              }
             />
             <Button
               variant='primary'
               type='submit'
               className='my-3 w-100'
+              name='pfImage' // Ensure this matches the field name in the array
               disabled={isLoading}>
               {isLoading ? <LoadingSpinner /> : 'Upload'}
             </Button>

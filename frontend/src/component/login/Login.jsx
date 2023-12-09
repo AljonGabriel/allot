@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLoginMutation } from '../../states/slices/users/usersApiSlice.js';
+import { useLoginMutation } from '../../states/slices/users/apiUsersEndpoints.js';
 import { setCredentials } from './../../states/slices/users/authSlice.js';
 import RegisterModal from '../registerModal/RegisterModal.jsx';
 import LoadingSpinner from '../loading/LoadingSpinner.jsx';

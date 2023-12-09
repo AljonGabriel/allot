@@ -17,14 +17,15 @@ const AppNavbar = () => {
     <>
       <Navbar
         expand='lg'
-        className='bg-body-tertiary'>
+        className='bg-body-tertiary px-3'
+        fixed='top'>
         {userInfo && (
           <>
-            <Container>
+            <Container fluid>
               <Navbar.Brand
                 href='/home'
                 className='text-accent fw-bold'>
-                Allot
+                A
               </Navbar.Brand>
               <Navbar.Toggle aria-controls='basic-navbar-nav' />
               <Navbar.Collapse id='basic-navbar-nav'>
@@ -46,7 +47,8 @@ const AppNavbar = () => {
                     <span>
                       <UserProfileImage />
                     </span>
-                  }>
+                  }
+                  drop='start'>
                   <NavDropdown.Item href='#action/3.1'>
                     Settings
                   </NavDropdown.Item>

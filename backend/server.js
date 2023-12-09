@@ -24,6 +24,15 @@ db();
 import usersRoute from './routes/usersRoute.js';
 import uploadsRoute from './routes/uploadsRoutes.js';
 
+//Socket.io
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+httpServer.listen(3000);
+
 app.use(
   cors({
     origin: 'http://localhost:3000',
@@ -51,7 +60,24 @@ app.use(express.static(uploadsPath));
 app.use('/api/users', usersRoute);
 app.use('/api/uploads', uploadsRoute);
 
-app.get('/', (req, res) => res.send('Server is ready'));
+app.get('/', (req, res) => {
+  io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    // Handle events from connected clients
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
+
+    // Emit a test event to the connected client
+    socket.emit('serverEvent', 'Hello, Client!');
+
+    // Listen for events from the client
+    socket.on('testEvent', (data) => {
+      console.log('Received from client:', data);
+    });
+  });
+});
 
 app.use(notFound);
 app.use(errorHandler);

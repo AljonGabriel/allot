@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import { Image, Form } from 'react-bootstrap';
 import { useGetUploadsQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
 import LoadingSpinner from './../loading/LoadingSpinner';
+import { useSelector } from 'react-redux';
 
-import { io } from 'socket.io-client';
-const socket = io();
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
 const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
-import { useSelector } from 'react-redux';
 
 const PostedContainer = () => {
   const [posted, setPosted] = useState(null);
 
   const { userInfo } = useSelector((state) => state.auth);
+  const { postedData } = useSelector((state) => state.posts);
+
+  console.log(postedData);
 
   const { data, isLoading, isError } = useGetUploadsQuery();
 
@@ -25,27 +26,9 @@ const PostedContainer = () => {
     }
   };
 
-  // Connect to the default namespace '/'
-  const socket = io('/');
-  socket.on('connection', () => {
-    console.log('Connected to the server');
-
-    // Emit a test event
-    socket.emit('testEvent', 'Hello, Server!');
-  });
-
-  socket.on('disconnect', () => {
-    console.log('Disconnected from the server');
-  });
-
-  // Listen for custom events from the server
-  socket.on('serverEvent', (data) => {
-    console.log('Received from server:', data);
-  });
-
   useEffect(() => {
     getPosted();
-  }, []);
+  }, [postedData]);
 
   return (
     <>

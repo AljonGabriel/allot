@@ -19,6 +19,7 @@ const post = asyncHandler(async (req, res) => {
 
   try {
     const uploaded = await newUpload.save();
+
     res.status(200).json({ uploaded });
   } catch (err) {
     res.status(400).json({ error: 'Posting failed' });

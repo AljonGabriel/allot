@@ -7,6 +7,8 @@ import PostedContainer from '../postedContainer/PostedContainer';
 import { UserProfileImage } from '../userProfileImage/userProfileImage';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setPosts } from '../../states/slices/uploads/postSlice';
 
 const PostSeciton = () => {
   const [show, setShow] = useState(false);
@@ -15,6 +17,7 @@ const PostSeciton = () => {
   const handleShow = () => setShow(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [inputData, setInputData] = useState({
     fePostDescription: '',
@@ -39,7 +42,11 @@ const PostSeciton = () => {
     formData.append('fePostDescription', inputData.fePostDescription);
 
     try {
-      await post(formData).unwrap();
+      const data = await post(formData).unwrap();
+      console.log(data);
+      dispatch(setPosts(data.uploaded.images));
+
+      handleClose();
       navigate('/home');
     } catch (err) {
       console.log(err);

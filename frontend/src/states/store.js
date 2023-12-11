@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/users/authSlice';
+import postsReducer from './slices/uploads/postSlice';
 
 import { apiUsersSlice } from './slices/users/apiUsersSlice';
 import { apiUploadsSlice } from './slices/uploads/apiUploadsSlice';
@@ -7,8 +8,8 @@ import { apiUploadsSlice } from './slices/uploads/apiUploadsSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    posts: postsReducer,
 
-    //Below path is api
     [apiUsersSlice.reducerPath]: apiUsersSlice.reducer,
     [apiUploadsSlice.reducerPath]: apiUploadsSlice.reducer,
   },

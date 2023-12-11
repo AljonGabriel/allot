@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Image, Form } from 'react-bootstrap';
+import { Image, Form, CloseButton } from 'react-bootstrap';
 import { useGetUploadsQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
 import LoadingSpinner from './../loading/LoadingSpinner';
 import { useSelector } from 'react-redux';
+import TimeAgo from '../../utils/TimeAgo';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -14,9 +15,7 @@ const PostedContainer = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { postedData } = useSelector((state) => state.posts);
 
-  console.log(postedData);
-
-  const { data, isLoading, isError } = useGetUploadsQuery();
+  const { data, isLoading, isError, refetch } = useGetUploadsQuery();
 
   const getPosted = async () => {
     try {
@@ -27,8 +26,13 @@ const PostedContainer = () => {
   };
 
   useEffect(() => {
-    getPosted();
-  }, [postedData]);
+    const fetchData = async () => {
+      const result = await refetch();
+      console.log('Data from backend:', result.data);
+      getPosted();
+    };
+    fetchData();
+  }, [postedData, data]);
 
   return (
     <>
@@ -39,20 +43,40 @@ const PostedContainer = () => {
               key={post._id}
               className='bg-white mt-3 rounded shadow border'>
               <div className='p-3'>
-                <Image
-                  src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
-                  alt={
-                    userInfo.gender === 'Male'
-                      ? defMaleImg
-                      : userInfo.gender === 'Female'
-                      ? defFemaleImg
-                      : defImg
-                  }
-                  style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                  roundedCircle
-                  className='m-auto'
-                />
-                <h6 className='d-inline ms-3'>{post.uploadedBy}</h6>
+                <div className='d-flex justify-content-between'>
+                  <div className='d-flex align-items-center gap-3'>
+                    <Image
+                      src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
+                      alt={
+                        userInfo.gender === 'Male'
+                          ? defMaleImg
+                          : userInfo.gender === 'Female'
+                          ? defFemaleImg
+                          : defImg
+                      }
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        objectFit: 'cover',
+                      }}
+                      roundedCircle
+                      className='m-auto'
+                    />
+                    <div>
+                      <h4 className='d-block m-0 text-text'>
+                        {post.uploadedBy}
+                      </h4>
+                      <small className='d-block text-muted white'>
+                        <TimeAgo date={post.createdAt} />
+                      </small>
+                    </div>
+                  </div>
+                  {post.uploadedUserID === userInfo._id && (
+                    <div>
+                      <CloseButton />
+                    </div>
+                  )}
+                </div>
 
                 {post.images.length <= 0 ? (
                   <h2 className='m-auto text-text'>{post.description}</h2>

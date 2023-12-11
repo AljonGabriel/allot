@@ -44,10 +44,9 @@ const PostSeciton = () => {
     try {
       const data = await post(formData).unwrap();
       console.log(data);
-      dispatch(setPosts(data.uploaded.images));
+      dispatch(setPosts({ ...data.uploaded.images }));
 
       handleClose();
-      navigate('/home');
     } catch (err) {
       console.log(err);
     }

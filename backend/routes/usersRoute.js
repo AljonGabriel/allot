@@ -6,6 +6,7 @@ import {
   checkInputsAndSendCode,
   verifyEmailCodeThenCreateUser,
   logout,
+  search,
 } from '../controllers/usersController.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
@@ -20,5 +21,7 @@ router.post('/auth', authUser);
 router.post('/verify', checkInputsAndSendCode);
 router.post('/create', verifyEmailCodeThenCreateUser);
 router.post('/logout', logout);
+
+router.get('/search', protect, search);
 
 export default router;

@@ -26,12 +26,10 @@ import uploadsRoute from './routes/uploadsRoutes.js';
 
 app.use(
   cors({
-    cors: {
-      origin: 'http://localhost:3000',
-      methods: 'GET,PUT,POST,DELETE',
-      optionsSuccessStatus: 204,
-      credentials: true, // Allow credentials (cookies, authentication)
-    },
+    origin: 'http://localhost:3000',
+    methods: 'GET,PUT,POST,DELETE',
+    optionsSuccessStatus: 204,
+    credentials: true, // Allow credentials (cookies, authentication)
   }),
 );
 

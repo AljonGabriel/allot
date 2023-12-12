@@ -37,6 +37,13 @@ export const apiUsersEndpoints = apiUsersSlice.injectEndpoints({
         body: data,
       }),
     }),
+    search: builder.query({
+      query: ({ key, limit }) => ({
+        url: `${USERS_URL}/search`,
+        method: 'GET',
+        params: { key, limit },
+      }),
+    }),
   }),
 });
 
@@ -46,4 +53,5 @@ export const {
   useCreateMutation,
   useLogoutMutation,
   useUploadProfilePicMutation,
+  useSearchQuery,
 } = apiUsersEndpoints;

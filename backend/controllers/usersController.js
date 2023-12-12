@@ -192,9 +192,24 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Successfully logout' });
 });
 
+const search = asyncHandler(async (req, res) => {
+  const { key, limit } = req.query;
+
+  if (key) {
+    const users = await UserModel.find({
+      fname: { $regex: `^${key}`, $options: 'i' },
+    }).limit(parseInt(limit));
+
+    console.log(key);
+    // Return the search results
+    res.json(users);
+  }
+});
+
 export {
   authUser,
   checkInputsAndSendCode,
   verifyEmailCodeThenCreateUser,
   logout,
+  search,
 };

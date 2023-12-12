@@ -24,6 +24,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 //Redux
 import store from './states/store.js';
 import { Provider } from 'react-redux';
+import UserPageRoute from './routes/userPage/UserPageRoute.jsx';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true;
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: '/home',
     element: <HomeRoute />,
+  },
+  {
+    path: '/userPage/:id',
+    element: <UserPageRoute />,
   },
 ]);
 

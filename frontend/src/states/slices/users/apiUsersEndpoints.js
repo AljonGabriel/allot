@@ -44,6 +44,12 @@ export const apiUsersEndpoints = apiUsersSlice.injectEndpoints({
         params: { key, limit },
       }),
     }),
+    getProfile: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/profile`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 

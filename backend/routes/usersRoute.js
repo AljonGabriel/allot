@@ -7,15 +7,10 @@ import {
   verifyEmailCodeThenCreateUser,
   logout,
   search,
+  getProfile,
 } from '../controllers/usersController.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
-
-//Imported multer
-import multer from 'multer';
-
-const storage = multer.memoryStorage(); // Use memory storage for storing binary data
-const upload = multer({ storage: storage });
 
 router.post('/auth', authUser);
 router.post('/verify', checkInputsAndSendCode);
@@ -23,5 +18,6 @@ router.post('/create', verifyEmailCodeThenCreateUser);
 router.post('/logout', logout);
 
 router.get('/search', protect, search);
+router.get('/profile/:id', protect, getProfile);
 
 export default router;

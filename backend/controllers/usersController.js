@@ -200,10 +200,15 @@ const search = asyncHandler(async (req, res) => {
       fname: { $regex: `^${key}`, $options: 'i' },
     }).limit(parseInt(limit));
 
-    console.log(key);
     // Return the search results
-    res.json(users);
+    res.status(200).json(users);
   }
+});
+
+const getProfile = asyncHandler(async (req, res) => {
+  const UID = req.params;
+
+  console.log(UID);
 });
 
 export {
@@ -212,4 +217,5 @@ export {
   verifyEmailCodeThenCreateUser,
   logout,
   search,
+  getProfile,
 };

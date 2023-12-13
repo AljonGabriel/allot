@@ -5,6 +5,8 @@ import {
   Container,
   Form,
   Image,
+  Button,
+  InputGroup,
 } from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
@@ -14,10 +16,11 @@ import { useEffect, useState } from 'react';
 import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSearchQuery } from '../../states/slices/users/apiUsersEndpoints';
+import LoadingSpinner from '../loading/LoadingSpinner';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
-  const [key, setKey] = useState('');
+  const [key, setKey] = useState(null);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -62,19 +65,27 @@ const AppNavbar = () => {
               <Navbar.Toggle aria-controls='basic-navbar-nav' />
               <Navbar.Collapse id='basic-navbar-nav'>
                 <Nav className='me-auto position-relative'>
-                  <Form className='d-flex'>
-                    <Form.Control
-                      type='search'
-                      placeholder='Search'
-                      className='me-2 w-100'
-                      aria-label='Search'
-                      value={key}
-                      onChange={(e) => setKey(e.target.value)}
-                    />
+                  <Form>
+                    <InputGroup>
+                      <Form.Control
+                        type='search'
+                        placeholder='Search'
+                        aria-label='Search'
+                        className=' border border-end-0'
+                        value={key}
+                        onChange={(e) => setKey(e.target.value)}
+                        aria-describedby='basic-addon1'
+                      />
+
+                      <InputGroup.Text
+                        id='basic-addon1'
+                        className='bg-white border border-start-0'>
+                        <Search />
+                      </InputGroup.Text>
+                    </InputGroup>
                   </Form>
 
-                  {search &&
-                    search.length > 0 &&
+                  {search && search.length > 0 ? (
                     search.map((user) => (
                       <div
                         key={user._id}
@@ -107,7 +118,12 @@ const AppNavbar = () => {
                           </div>
                         </LinkContainer>
                       </div>
-                    ))}
+                    ))
+                  ) : isLoading ? (
+                    <div className='search-result  bg-white p-3 m-auto'>
+                      <LoadingSpinner />
+                    </div>
+                  ) : null}
                 </Nav>
 
                 <NavDropdown

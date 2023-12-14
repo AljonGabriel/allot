@@ -20,7 +20,7 @@ import LoadingSpinner from '../loading/LoadingSpinner';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
-  const [key, setKey] = useState(null);
+  const [key, setKey] = useState('');
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -38,7 +38,6 @@ const AppNavbar = () => {
         }
 
         setSearch(data);
-        console.log('Users Log:' + data);
       } catch (err) {
         console.log(isError);
       }
@@ -47,7 +46,6 @@ const AppNavbar = () => {
     search();
   }, [key]);
 
-  console.log(key);
   return (
     <>
       <Navbar
@@ -85,7 +83,8 @@ const AppNavbar = () => {
                     </InputGroup>
                   </Form>
 
-                  {search && search.length > 0 ? (
+                  {search &&
+                    search.length > 0 &&
                     search.map((user) => (
                       <div
                         key={user._id}
@@ -118,12 +117,7 @@ const AppNavbar = () => {
                           </div>
                         </LinkContainer>
                       </div>
-                    ))
-                  ) : isLoading ? (
-                    <div className='search-result  bg-white p-3 m-auto'>
-                      <LoadingSpinner />
-                    </div>
-                  ) : null}
+                    ))}
                 </Nav>
 
                 <NavDropdown

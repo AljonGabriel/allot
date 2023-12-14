@@ -13,11 +13,18 @@ export const apiUploadsEndpoints = apiUploadsSlice.injectEndpoints({
     getUploads: builder.query({
       query: () => `${UPLOAD_URL}/view`,
     }),
-    CreateProfilePic: builder.mutation({
+    createProfilePic: builder.mutation({
       query: (data) => ({
         url: `${UPLOAD_URL}/createProfilePic`,
         method: 'POST',
         body: data,
+      }),
+    }),
+    getUploadsById: builder.query({
+      query: ({ id }) => ({
+        url: `${UPLOAD_URL}/viewById`,
+        method: 'GET',
+        params: { id },
       }),
     }),
   }),
@@ -27,4 +34,5 @@ export const {
   useCreateMutation,
   useGetUploadsQuery,
   useCreateProfilePicMutation,
+  useGetUploadsByIdQuery,
 } = apiUploadsEndpoints;

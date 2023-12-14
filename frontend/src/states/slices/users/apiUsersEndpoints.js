@@ -45,9 +45,10 @@ export const apiUsersEndpoints = apiUsersSlice.injectEndpoints({
       }),
     }),
     getProfile: builder.query({
-      query: () => ({
+      query: ({ id }) => ({
         url: `${USERS_URL}/profile`,
         method: 'GET',
+        params: { id },
       }),
     }),
   }),
@@ -60,4 +61,5 @@ export const {
   useLogoutMutation,
   useUploadProfilePicMutation,
   useSearchQuery,
+  useGetProfileQuery,
 } = apiUsersEndpoints;

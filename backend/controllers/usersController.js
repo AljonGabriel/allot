@@ -206,9 +206,11 @@ const search = asyncHandler(async (req, res) => {
 });
 
 const getProfile = asyncHandler(async (req, res) => {
-  const UID = req.params;
+  const userId = req.query.id;
 
-  console.log(UID);
+  const user = await UserModel.findOne({ _id: userId });
+
+  res.status(200).json({ user });
 });
 
 export {

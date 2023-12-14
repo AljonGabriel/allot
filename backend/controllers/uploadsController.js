@@ -33,6 +33,20 @@ const getPost = asyncHandler(async (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+const getPostById = asyncHandler(async (req, res) => {
+  const uId = req.query.id;
+
+  const userPost = await UploadModel.find({
+    uploadedUserID: uId,
+  });
+
+  console.log(uId);
+
+  console.log(userPost);
+
+  userPost && res.status(200).json({ userPost });
+});
+
 const pfUpload = asyncHandler(async (req, res) => {
   const userInfo = req.user;
 
@@ -63,4 +77,4 @@ const pfUpload = asyncHandler(async (req, res) => {
   }
 });
 
-export { post, getPost, pfUpload };
+export { post, getPost, pfUpload, getPostById };

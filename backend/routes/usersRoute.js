@@ -18,6 +18,6 @@ router.post('/create', verifyEmailCodeThenCreateUser);
 router.post('/logout', logout);
 
 router.get('/search', protect, search);
-router.get('/profile/:id', protect, getProfile);
+router.get('/profile/', protect, getProfile);
 
 export default router;

@@ -1,7 +1,12 @@
 import express from 'express';
 const router = express.Router();
 
-import { post, getPost, pfUpload } from '../controllers/uploadsController.js';
+import {
+  post,
+  getPost,
+  pfUpload,
+  getPostById,
+} from '../controllers/uploadsController.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
 import {
@@ -17,5 +22,6 @@ router.post(
   pfUpload,
 );
 router.get('/view', protect, getPost);
+router.get('/viewById', protect, getPostById);
 
 export default router;

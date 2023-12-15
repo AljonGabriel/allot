@@ -5,7 +5,6 @@ import {
   Container,
   Form,
   Image,
-  Button,
   InputGroup,
 } from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
@@ -16,7 +15,6 @@ import { useEffect, useState } from 'react';
 import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSearchQuery } from '../../states/slices/users/apiUsersEndpoints';
-import LoadingSpinner from '../loading/LoadingSpinner';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
@@ -24,7 +22,7 @@ const AppNavbar = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { data, isLoading, isError } = useSearchQuery({
+  const { data, isError } = useSearchQuery({
     key,
     limit: 5,
   });
@@ -44,7 +42,7 @@ const AppNavbar = () => {
     };
 
     search();
-  }, [key]);
+  }, [key, data]);
 
   return (
     <>

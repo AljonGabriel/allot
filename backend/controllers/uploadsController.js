@@ -27,7 +27,7 @@ const post = asyncHandler(async (req, res) => {
 });
 
 const getPost = asyncHandler(async (req, res) => {
-  UploadModel.find()
+  await UploadModel.find()
     .sort({ postedDate: -1 })
     .then((posted) => res.status(200).json({ posted }))
     .catch((err) => res.status(400).json(err));
@@ -39,10 +39,6 @@ const getPostById = asyncHandler(async (req, res) => {
   const userPost = await UploadModel.find({
     uploadedUserID: uId,
   });
-
-  console.log(uId);
-
-  console.log(userPost);
 
   userPost && res.status(200).json({ userPost });
 });

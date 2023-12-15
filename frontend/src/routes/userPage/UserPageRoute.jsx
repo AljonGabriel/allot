@@ -7,9 +7,8 @@ const UserPageRoute = () => {
     <>
       <AppNavbar />
       <Container
-        className=''
-        style={{ marginTop: '66px' }}
-        fluid>
+        className='pt-3'
+        style={{ marginTop: '66px' }}>
         <UserProfile />
       </Container>
     </>

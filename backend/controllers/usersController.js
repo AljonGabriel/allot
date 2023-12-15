@@ -198,7 +198,7 @@ const search = asyncHandler(async (req, res) => {
   if (key) {
     const users = await UserModel.find({
       fname: { $regex: `^${key}`, $options: 'i' },
-    }).limit(parseInt(limit));
+    }).limit(limit);
 
     // Return the search results
     res.status(200).json(users);

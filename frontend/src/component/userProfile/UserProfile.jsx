@@ -7,7 +7,7 @@ import { useGetUploadsByIdQuery } from '../../states/slices/uploads/apiUploadsEn
 import { useEffect, useState } from 'react';
 
 import TimeAgo from '../../utils/TimeAgo';
-import UserProfileHeader from '../userProfileHeader/UserProfileHeader';
+import UserProfileHeader from './UserProfileHeader';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';

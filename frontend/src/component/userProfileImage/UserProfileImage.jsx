@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Image } from 'react-bootstrap';
+
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
 const defImg = 'http://localhost:5000/defaultImg/Default.jpg';

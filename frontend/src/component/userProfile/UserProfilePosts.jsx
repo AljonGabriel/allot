@@ -1,5 +1,6 @@
 import { Image, Form, CloseButton } from 'react-bootstrap';
 import LoadingSpinner from '../loading/LoadingSpinner';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import TimeAgo from '../../utils/TimeAgo';
 
@@ -9,10 +10,10 @@ const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
 
 const UserProfile = ({ uploadData, userData }) => {
   return (
-    <section className='w-75'>
+    <section className='w-100'>
       {userData ? (
         <>
-          <h4 className='text-muted'>Posted</h4>
+          <h4 className='text-muted mb-3'>Other posts</h4>
           {uploadData ? (
             <>
               {uploadData.map((post, index) => (
@@ -22,31 +23,37 @@ const UserProfile = ({ uploadData, userData }) => {
                   <div className='p-3'>
                     <div className='d-flex justify-content-between'>
                       <div className='d-flex align-items-center gap-3'>
-                        <Image
-                          src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
-                          alt={
-                            userData.gender === 'Male'
-                              ? defMaleImg
-                              : userData.gender === 'Female'
-                              ? defFemaleImg
-                              : defImg
-                          }
-                          style={{
-                            width: '50px',
-                            height: '50px',
-                            objectFit: 'cover',
-                          }}
-                          roundedCircle
-                          className='m-auto'
-                        />
-                        <div>
-                          <h4 className='d-block m-0 text-text'>
-                            {post.uploadedBy}
-                          </h4>
-                          <small className='d-block text-muted white'>
-                            <TimeAgo date={post.createdAt} />
-                          </small>
-                        </div>
+                        <LinkContainer
+                          to={`/userPage/${userData._id}`}
+                          className='btn btn-outline-secondary border-0 text-black'>
+                          <>
+                            <Image
+                              src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
+                              alt={
+                                userData.gender === 'Male'
+                                  ? defMaleImg
+                                  : userData.gender === 'Female'
+                                  ? defFemaleImg
+                                  : defImg
+                              }
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                                objectFit: 'cover',
+                              }}
+                              roundedCircle
+                              className='m-auto'
+                            />
+                            <div>
+                              <h4 className='d-block m-0 text-text'>
+                                {post.uploadedBy}
+                              </h4>
+                              <small className='d-block text-muted white'>
+                                <TimeAgo date={post.createdAt} />
+                              </small>
+                            </div>
+                          </>
+                        </LinkContainer>
                       </div>
                       {post.uploadedUserID === userData._id && (
                         <div>

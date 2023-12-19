@@ -10,11 +10,16 @@ import UserProfileHeader from '../../component/userProfile/UserProfileHeader';
 import UserProfile from '../../component/userProfile/UserProfilePosts';
 import UserProfileBio from '../../component/userProfile/userProfileBio';
 
+import PostModal from '../../component/postModal/PostModal';
+import { useSelector } from 'react-redux';
+
 const UserPageRoute = () => {
   const [userData, setUserData] = useState();
   const [uploadData, setUploadData] = useState();
 
   const { id } = useParams();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const { data: userProfile, isLoading } = useGetProfileQuery({ id });
 
@@ -22,27 +27,38 @@ const UserPageRoute = () => {
 
   useEffect(() => {
     if (userProfile && userUploads) {
-      setUserData(userProfile?.user);
+      setUserData(userProfile.user);
       setUploadData(userUploads?.userPost || []);
     }
-  }, [userProfile, userUploads]);
+  }, [userProfile, userUploads, userData, uploadData]);
 
   return (
     <>
       <AppNavbar />
       <Container
-        className='pt-3'
-        style={{ marginTop: '66px' }}>
+        style={{ marginTop: '66px' }}
+        fluid>
+        {' '}
         <UserProfileHeader userData={userData} />
-        <section
-          className='d-flex gap-3 mt-3 '
-          style={{ height: '500px' }}>
-          <UserProfileBio />
+      </Container>
+      <Container className='d-flex gap-3 mt-3'>
+        <section className='w-25'>
+          <div className='mb-3'>
+            <UserProfileBio userData={userData} />
+          </div>
+        </section>
+
+        <div className='w-75'>
+          {userData && String(userData._id) === String(userInfo._id) ? (
+            <PostModal />
+          ) : (
+            ''
+          )}
           <UserProfile
             uploadData={uploadData}
             userData={userData}
           />
-        </section>
+        </div>
       </Container>
     </>
   );

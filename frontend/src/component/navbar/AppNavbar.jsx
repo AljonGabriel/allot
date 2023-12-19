@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
-import { UserProfileImage } from '../userProfileImage/userProfileImage';
+import { UserProfileImage } from './../userProfile/UserProfileImage';
 import { Search } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import './appNavbar.css';

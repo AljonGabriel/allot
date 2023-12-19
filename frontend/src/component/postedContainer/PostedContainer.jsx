@@ -4,6 +4,7 @@ import { useGetUploadsQuery } from '../../states/slices/uploads/apiUploadsEndpoi
 import LoadingSpinner from './../loading/LoadingSpinner';
 import { useSelector } from 'react-redux';
 import TimeAgo from '../../utils/TimeAgo';
+import { LinkContainer } from 'react-router-bootstrap';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -44,33 +45,38 @@ const PostedContainer = () => {
               className='bg-white mt-3 rounded shadow border'>
               <div className='p-3'>
                 <div className='d-flex justify-content-between'>
-                  <div className='d-flex align-items-center gap-3'>
-                    <Image
-                      src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
-                      alt={
-                        userInfo.gender === 'Male'
-                          ? defMaleImg
-                          : userInfo.gender === 'Female'
-                          ? defFemaleImg
-                          : defImg
-                      }
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                      }}
-                      roundedCircle
-                      className='m-auto'
-                    />
-                    <div>
-                      <h4 className='d-block m-0 text-text'>
-                        {post.uploadedBy}
-                      </h4>
-                      <small className='d-block text-muted white'>
-                        <TimeAgo date={post.createdAt} />
-                      </small>
+                  <LinkContainer to={`/userPage/${post.uploadedUserID}`}>
+                    <div className='d-flex align-items-center gap-3'>
+                      <>
+                        <Image
+                          src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
+                          alt={
+                            userInfo.gender === 'Male'
+                              ? defMaleImg
+                              : userInfo.gender === 'Female'
+                              ? defFemaleImg
+                              : defImg
+                          }
+                          style={{
+                            width: '50px',
+                            height: '50px',
+                            objectFit: 'cover',
+                            cursor: 'pointer',
+                          }}
+                          roundedCircle
+                          className='m-auto '
+                        />
+                        <div>
+                          <h4 className='d-block m-0 text-text'>
+                            {post.uploadedBy}
+                          </h4>
+                          <small className='d-block text-muted white'>
+                            <TimeAgo date={post.createdAt} />
+                          </small>
+                        </div>
+                      </>
                     </div>
-                  </div>
+                  </LinkContainer>
                   {post.uploadedUserID === userInfo._id && (
                     <div>
                       <CloseButton />

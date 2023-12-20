@@ -27,7 +27,6 @@ const PostModal = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {

@@ -5,7 +5,8 @@ import {
   post,
   getPost,
   pfUpload,
-  getPostById,
+  getPostByUserId,
+  getSpecificPostByUserId,
 } from '../controllers/uploadsController.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
@@ -22,6 +23,7 @@ router.post(
   pfUpload,
 );
 router.get('/view', protect, getPost);
-router.get('/viewById', protect, getPostById);
+router.get('/viewById', protect, getPostByUserId);
+router.get('/viewSpecificById', protect, getSpecificPostByUserId);
 
 export default router;

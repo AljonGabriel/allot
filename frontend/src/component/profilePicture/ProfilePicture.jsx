@@ -2,7 +2,7 @@ import { Form, Button } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCreateProfilePicMutation } from '../../states/slices/uploads/apiUploadsEndpoints.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner.jsx';
@@ -12,6 +12,7 @@ const ProfilePicture = () => {
   const [profileUpload, { isLoading }] = useCreateProfilePicMutation();
   const [inputData, setInputData] = useState({
     fePostImages: null,
+    feDescription: '',
   });
 
   const navigate = useNavigate();
@@ -22,10 +23,11 @@ const ProfilePicture = () => {
   const handlesSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('pfImage', inputData.fePostImages); // Use 'file' instead of 'formData'
-
     try {
+      const formData = new FormData();
+      formData.append('pfImage', inputData.fePostImages);
+      formData.append('feDescription', inputData.feDescription);
+
       const res = await profileUpload(formData).unwrap();
       // Assuming res.data.updatedProfile contains the profileImage property
       const profileImage = res.uploaded.images[0];
@@ -40,9 +42,43 @@ const ProfilePicture = () => {
     }
   };
 
-  const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
-  const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
-  const defImg = 'http://localhost:5000/defaultImg/default.jpg';
+  // Assuming defMaleImg, defFemaleImg, and defImg are state variables
+  /*   const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
+  const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg'; */
+
+  const [defImg, setDefImg] = useState('');
+
+  useEffect(() => {
+    if (userInfo.gender === 'Male') {
+      setDefImg('http://localhost:5000/defaultImg/defaultMale.jpg');
+    } else if (userInfo.gender === 'Female') {
+      setDefImg('http://localhost:5000/defaultImg/defaultFemale.jpg');
+    } else {
+      setDefImg('http://localhost:5000/defaultImg/default.jpg');
+    }
+  }, [userInfo.gender]);
+
+  const handleImageData = (e) => {
+    // Assuming you want to update the default image based on the selected file
+    const selectedFile = e.target.files[0];
+
+    setInputData({ ...inputData, fePostImages: selectedFile });
+
+    if (selectedFile) {
+      // Assuming you are using FileReader to read the selected file
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const newImageUrl = reader.result;
+        // Update the default image state based on the selected file
+        setDefImg(newImageUrl);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  console.log(inputData);
 
   return (
     <>
@@ -51,20 +87,8 @@ const ProfilePicture = () => {
           className='text-center'
           onSubmit={(e) => handlesSubmit(e)}>
           <Image
-            src={
-              userInfo.gender === 'Male'
-                ? defMaleImg
-                : userInfo.gender === 'Female'
-                ? defFemaleImg
-                : defImg
-            }
-            alt={
-              userInfo.gender === 'Male'
-                ? 'Male Avatar'
-                : userInfo.gender === 'Female'
-                ? 'Female Avatar'
-                : 'Default'
-            }
+            src={defImg}
+            alt='Default Image'
             style={{ width: '150px', height: '150px' }}
             roundedCircle
             className='m-auto'
@@ -75,11 +99,17 @@ const ProfilePicture = () => {
             <Form.Control
               type='file'
               accept='image/*'
+              onChange={handleImageData}
+            />
+
+            <Form.Control
+              type='text'
+              as='textarea'
+              className='mt-3'
+              value={inputData.feDescription}
+              placeholder='Description'
               onChange={(e) =>
-                setInputData({
-                  ...inputData,
-                  fePostImages: e.target.files[0],
-                })
+                setInputData({ ...inputData, feDescription: e.target.value })
               }
             />
             <Button

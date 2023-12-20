@@ -39,7 +39,10 @@ const UserPageRoute = () => {
         style={{ marginTop: '66px' }}
         fluid>
         {' '}
-        <UserProfileHeader userData={userData} />
+        <UserProfileHeader
+          userData={userData}
+          uploadData={uploadData}
+        />
       </Container>
       <Container className='d-flex gap-3 mt-3'>
         <section className='w-25'>

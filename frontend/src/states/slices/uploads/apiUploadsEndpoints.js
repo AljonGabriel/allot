@@ -27,6 +27,14 @@ export const apiUploadsEndpoints = apiUploadsSlice.injectEndpoints({
         params: { id },
       }),
     }),
+
+    getSpecificUploadsById: builder.query({
+      query: ({ img }) => ({
+        url: `${UPLOAD_URL}/viewSpecificById`,
+        method: 'GET',
+        params: { img },
+      }),
+    }),
   }),
 });
 
@@ -35,4 +43,5 @@ export const {
   useGetUploadsQuery,
   useCreateProfilePicMutation,
   useGetUploadsByIdQuery,
+  useGetSpecificUploadsByIdQuery,
 } = apiUploadsEndpoints;

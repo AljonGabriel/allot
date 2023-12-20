@@ -89,7 +89,7 @@ const PostedContainer = () => {
                 ) : post.images[0].includes('PF_') ? (
                   <>
                     <p className='text-accent m-auto d-flex align-items-center py-3'>
-                      New profile picture
+                      {post.description}
                     </p>
                   </>
                 ) : (

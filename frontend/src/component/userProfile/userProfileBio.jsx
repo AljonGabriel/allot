@@ -1,4 +1,3 @@
-import { useGetUploadsByIdQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { Button } from 'react-bootstrap';
 import './userProfileBio.css';

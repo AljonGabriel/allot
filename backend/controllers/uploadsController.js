@@ -33,11 +33,21 @@ const getPost = asyncHandler(async (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
-const getPostById = asyncHandler(async (req, res) => {
+const getPostByUserId = asyncHandler(async (req, res) => {
   const uId = req.query.id;
 
   const userPost = await UploadModel.find({
     uploadedUserID: uId,
+  }).sort({ postedDate: -1 });
+
+  userPost && res.status(200).json({ userPost });
+});
+
+const getSpecificPostByUserId = asyncHandler(async (req, res) => {
+  const img = req.query.img;
+
+  const userPost = await UploadModel.findOne({
+    userProfile: img,
   });
 
   userPost && res.status(200).json({ userPost });
@@ -46,17 +56,20 @@ const getPostById = asyncHandler(async (req, res) => {
 const pfUpload = asyncHandler(async (req, res) => {
   const userInfo = req.user;
 
+  const { feDescription } = req.body;
+
   // Check if req.file is defined
   if (!req.file) {
     return res.status(400).json({ error: 'No file provided' });
   }
 
-  const fePostImages = req.file.filename; // Update this line based on the file information
+  const fePostImages = req.file.filename;
 
   const newUpload = new UploadModel({
     uploadedUserID: userInfo._id,
     uploadedBy: userInfo.fname + ' ' + userInfo.lname,
     images: fePostImages,
+    description: feDescription,
     postedDate: formatDate(new Date()),
     userProfile: fePostImages,
   });
@@ -73,4 +86,4 @@ const pfUpload = asyncHandler(async (req, res) => {
   }
 });
 
-export { post, getPost, pfUpload, getPostById };
+export { post, getPost, pfUpload, getPostByUserId, getSpecificPostByUserId };

@@ -1,9 +1,7 @@
-import { UserProfileImage } from '../userProfile/UserProfileImage';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { Form, Button, Stack, Modal } from 'react-bootstrap';
 import { Images } from 'react-bootstrap-icons';
 
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setPosts } from '../../states/slices/uploads/postSlice';
 

@@ -21,8 +21,9 @@ import db from './configs/db.js';
 db();
 
 //Imported Routes
-import usersRoute from './routes/usersRoute.js';
-import uploadsRoute from './routes/uploadsRoutes.js';
+import usersRoutes from './routes/usersRoutes.js';
+import uploadsRoutes from './routes/uploadsRoutes.js';
+import friendRoutes from './routes/friendRoutes.js';
 
 app.use(
   cors({
@@ -48,8 +49,9 @@ app.use(cookieParser());
 const uploadsPath = path.join('frontend', 'src', 'assets', 'uploads');
 app.use(express.static(uploadsPath));
 //routes
-app.use('/api/users', usersRoute);
-app.use('/api/uploads', uploadsRoute);
+app.use('/api/users', usersRoutes);
+app.use('/api/uploads', uploadsRoutes);
+app.use('/api/friend', friendRoutes);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 

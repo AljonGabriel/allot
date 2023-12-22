@@ -1,5 +1,5 @@
 import AppNavbar from '../../component/navbar/AppNavbar';
-import { Container, Stack } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const UserPageRoute = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { data: userProfile, isLoading } = useGetProfileQuery({ id });
+  const { data: userProfile } = useGetProfileQuery({ id });
 
   const { data: userUploads } = useGetUploadsByIdQuery({ id });
 
@@ -41,7 +41,7 @@ const UserPageRoute = () => {
         {' '}
         <UserProfileHeader
           userData={userData}
-          uploadData={uploadData}
+          userInfo={userInfo}
         />
       </Container>
       <Container className='d-flex gap-3 mt-3'>

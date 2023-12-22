@@ -59,7 +59,7 @@ const UserProfileBio = ({ userData }) => {
             <span className='value'>{userData.email}</span>
           </div>
           <Button
-            variant='outline-accent'
+            variant='outline-secondary'
             className='mt-3 w-100'>
             Add more detail
           </Button>

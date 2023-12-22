@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { Image, Modal } from 'react-bootstrap';
+import { Image, Modal, Button } from 'react-bootstrap';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import { useGetSpecificUploadsByIdQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
+import { PersonAdd, Chat } from 'react-bootstrap-icons';
 
-const UserProfileHeader = ({ userData, uploadData }) => {
+const UserProfileHeader = ({ userData, userInfo }) => {
   const [imgData, setImgData] = useState();
 
   const userName = `${userData?.fname} ${userData?.mname} ${userData?.lname}`;
@@ -22,8 +23,6 @@ const UserProfileHeader = ({ userData, uploadData }) => {
     setImgData(data && data.userPost);
   }),
     [data];
-
-  console.log(data && data.userPost);
 
   return (
     <>
@@ -43,6 +42,26 @@ const UserProfileHeader = ({ userData, uploadData }) => {
               roundedCircle
               className=' border border-5 border-white shadow'
             />
+
+            <div>
+              <h3>{userName}</h3>
+              <p className='text-muted '>Work title here</p>
+
+              {String(userData._id) !== String(userInfo._id) && (
+                <>
+                  <Button variant='primary'>
+                    <PersonAdd size={20} />
+                    <small className='ms-1'>Add friend</small>
+                  </Button>
+                  <Button
+                    variant='secondary'
+                    className='ms-1'>
+                    <Chat size={20} />
+                    <small className='ms-1'>Reach</small>
+                  </Button>
+                </>
+              )}
+            </div>
 
             <Modal
               size='md'
@@ -66,9 +85,6 @@ const UserProfileHeader = ({ userData, uploadData }) => {
                 />
               </Modal.Body>
             </Modal>
-            <div className=''>
-              <h3>{profileImage.description}</h3>
-            </div>
           </header>
         </>
       ) : (

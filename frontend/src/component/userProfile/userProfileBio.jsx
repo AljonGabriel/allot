@@ -2,7 +2,8 @@ import LoadingSpinner from '../loading/LoadingSpinner';
 import { Button } from 'react-bootstrap';
 import './userProfileBio.css';
 
-const UserProfileBio = ({ userData }) => {
+const UserProfileBio = ({ viewedUser }) => {
+  const viewed = viewedUser || '';
   const calculateAge = (birthdate) => {
     const birthDateObj = new Date(birthdate);
     const currentDate = new Date();
@@ -22,8 +23,8 @@ const UserProfileBio = ({ userData }) => {
   };
 
   const formattedBirthdate =
-    userData && userData.birthdate
-      ? new Date(userData.birthdate).toLocaleDateString('en-US', {
+    viewed && viewed.birthdate
+      ? new Date(viewed.birthdate).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -32,19 +33,17 @@ const UserProfileBio = ({ userData }) => {
 
   const age = calculateAge(formattedBirthdate);
 
-  console.log(age); // This will log the calculated age
-
   return (
     <section
       className=' bg-white rounded p-3 border'
       style={{ minHeight: '200px', flex: '1' }}>
-      {userData ? (
+      {viewed ? (
         <>
           <h2 className='pb-3'>Intro</h2>
           <hr />
           <div className='info-item'>
             <span className='label'>Gender:</span>
-            <span className='value'>{userData.gender}</span>
+            <span className='value'>{viewed.gender}</span>
           </div>
           <div className='info-item'>
             <span className='label'>Birthday:</span>
@@ -56,7 +55,7 @@ const UserProfileBio = ({ userData }) => {
           </div>
           <div className='info-item'>
             <span className='label'>E-mail:</span>
-            <span className='value'>{userData.email}</span>
+            <span className='value'>{viewed.email}</span>
           </div>
           <Button
             variant='outline-secondary'

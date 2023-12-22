@@ -14,8 +14,8 @@ import PostModal from '../../component/postModal/PostModal';
 import { useSelector } from 'react-redux';
 
 const UserPageRoute = () => {
-  const [userData, setUserData] = useState();
-  const [uploadData, setUploadData] = useState();
+  const [viewedUser, setViewedUser] = useState();
+  const [viewedUserPosts, setViewedUserPosts] = useState();
 
   const { id } = useParams();
 
@@ -27,10 +27,10 @@ const UserPageRoute = () => {
 
   useEffect(() => {
     if (userProfile && userUploads) {
-      setUserData(userProfile.user);
-      setUploadData(userUploads?.userPost || []);
+      setViewedUser(userProfile.user);
+      setViewedUserPosts(userUploads?.userPost || []);
     }
-  }, [userProfile, userUploads, userData, uploadData]);
+  }, [userProfile, userUploads, viewedUser, viewedUserPosts]);
 
   return (
     <>
@@ -40,26 +40,26 @@ const UserPageRoute = () => {
         fluid>
         {' '}
         <UserProfileHeader
-          userData={userData}
+          viewedUser={viewedUser}
           userInfo={userInfo}
         />
       </Container>
       <Container className='d-flex gap-3 mt-3'>
         <section className='w-25'>
           <div className='mb-3'>
-            <UserProfileBio userData={userData} />
+            <UserProfileBio viewedUser={viewedUser} />
           </div>
         </section>
 
         <div className='w-75'>
-          {userData && String(userData._id) === String(userInfo._id) ? (
+          {viewedUser && String(viewedUser._id) === String(userInfo._id) ? (
             <PostModal />
           ) : (
             ''
           )}
           <UserProfile
-            uploadData={uploadData}
-            userData={userData}
+            viewedUserPosts={viewedUserPosts}
+            viewedUser={viewedUser}
           />
         </div>
       </Container>

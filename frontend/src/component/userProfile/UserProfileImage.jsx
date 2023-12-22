@@ -10,12 +10,6 @@ const UserProfileImage = () => {
 
   const userProfilePath = `http://localhost:5000/${userInfo._id}/profilePictures/${userInfo.profileImage} `;
 
-  console.log(
-    'Users Profile Path' + userProfilePath,
-    'User Profile Name',
-    userInfo.profileImage,
-  );
-
   return (
     <Image
       src={

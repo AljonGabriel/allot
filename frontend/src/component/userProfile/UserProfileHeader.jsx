@@ -3,19 +3,21 @@ import { Image, Modal, Button } from 'react-bootstrap';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import { useGetSpecificUploadsByIdQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
-import { PersonAdd, Chat } from 'react-bootstrap-icons';
+import { Chat } from 'react-bootstrap-icons';
+import FriendRequestBtn from '../friendRequestBtn/FriendRequestBtn';
 
-const UserProfileHeader = ({ userData, userInfo }) => {
+const UserProfileHeader = ({ viewedUser, userInfo }) => {
+  const viewed = viewedUser || '';
   const [imgData, setImgData] = useState();
 
-  const userName = `${userData?.fname} ${userData?.mname} ${userData?.lname}`;
+  const userName = `${viewed?.fname} ${viewed?.mname} ${viewed?.lname}`;
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const profileImage = userData && userData.profileImage;
+  const profileImage = viewed && viewed.profileImage;
 
   const { data } = useGetSpecificUploadsByIdQuery({ img: profileImage });
 
@@ -26,12 +28,12 @@ const UserProfileHeader = ({ userData, userInfo }) => {
 
   return (
     <>
-      {userData ? (
+      {viewed ? (
         <>
           <header className='d-flex align-items-center justify-content-center gap-3 p-5 bg-white-secondary'>
             <Image
-              src={`http://localhost:5000/${userData?._id}/profilePictures/${profileImage}`}
-              alt={userData?.fname}
+              src={`http://localhost:5000/${viewed?._id}/profilePictures/${profileImage}`}
+              alt={viewed?.fname}
               onClick={handleShow}
               style={{
                 width: '200px',
@@ -47,12 +49,9 @@ const UserProfileHeader = ({ userData, userInfo }) => {
               <h3>{userName}</h3>
               <p className='text-muted '>Work title here</p>
 
-              {String(userData._id) !== String(userInfo._id) && (
+              {String(viewed._id) !== String(userInfo._id) && (
                 <>
-                  <Button variant='primary'>
-                    <PersonAdd size={20} />
-                    <small className='ms-1'>Add friend</small>
-                  </Button>
+                  <FriendRequestBtn viewedUser={viewedUser} />
                   <Button
                     variant='secondary'
                     className='ms-1'>
@@ -75,8 +74,8 @@ const UserProfileHeader = ({ userData, userInfo }) => {
               </Modal.Header>
               <Modal.Body>
                 <Image
-                  src={`http://localhost:5000/${userData?._id}/profilePictures/${userData?.profileImage}`}
-                  alt={userData?.fname}
+                  src={`http://localhost:5000/${viewed?._id}/profilePictures/${viewed?.profileImage}`}
+                  alt={viewed?.fname}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -97,13 +96,13 @@ const UserProfileHeader = ({ userData, userInfo }) => {
 };
 
 UserProfileHeader.propTypes = {
-  userData: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    fname: PropTypes.string.isRequired,
+  viewedUser: PropTypes.shape({
+    _id: PropTypes.string,
+    fname: PropTypes.string,
     mname: PropTypes.string,
-    lname: PropTypes.string.isRequired,
-    profileImage: PropTypes.string.isRequired,
-  }).isRequired,
+    lname: PropTypes.string,
+    profileImage: PropTypes.string,
+  }),
 };
 
 export default UserProfileHeader;

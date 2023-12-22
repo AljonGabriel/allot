@@ -8,15 +8,17 @@ const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
 const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
 
-const UserProfile = ({ uploadData, userData }) => {
+const UserProfile = ({ viewedUserPosts, viewedUser }) => {
+  const viewed = viewedUser || '';
+  const viewedPost = viewedUserPosts || [];
   return (
     <section className='w-100'>
-      {userData ? (
+      {viewed ? (
         <>
           <h4 className='text-muted mb-3'>Other posts</h4>
-          {uploadData ? (
+          {viewedPost ? (
             <>
-              {uploadData.map((post, index) => (
+              {viewedPost.map((post, index) => (
                 <section
                   key={index}
                   className='bg-white mb-3 rounded shadow border'>
@@ -24,15 +26,15 @@ const UserProfile = ({ uploadData, userData }) => {
                     <div className='d-flex justify-content-between'>
                       <div className='d-flex align-items-center gap-3'>
                         <LinkContainer
-                          to={`/userPage/${userData._id}`}
+                          to={`/userPage/${viewed._id}`}
                           className='btn btn-outline-secondary border-0 text-black'>
                           <>
                             <Image
                               src={`http://localhost:5000/${post.uploadedUserID}/profilePictures/${post.userProfile}`}
                               alt={
-                                userData.gender === 'Male'
+                                viewed.gender === 'Male'
                                   ? defMaleImg
-                                  : userData.gender === 'Female'
+                                  : viewed.gender === 'Female'
                                   ? defFemaleImg
                                   : defImg
                               }
@@ -55,7 +57,7 @@ const UserProfile = ({ uploadData, userData }) => {
                           </>
                         </LinkContainer>
                       </div>
-                      {post.uploadedUserID === userData._id && (
+                      {post.uploadedUserID === viewed._id && (
                         <div>
                           <CloseButton />
                         </div>
@@ -124,24 +126,19 @@ const UserProfile = ({ uploadData, userData }) => {
                       </>
                     ) : post.images.length === 3 ? (
                       <>
-                        {post.images.map(
-                          (image, index) => (
-                            console.log('Images:', [image]),
-                            (
-                              <Image
-                                key={index}
-                                src={`http://localhost:5000/${post.uploadedUserID}/post/${post.postedDate}/${image}`}
-                                style={{
-                                  width: index === 0 ? '100%' : '50%', // Set width to 100% for the first image, else 50%
-                                  backgroundRepeat: 'no-repeat',
-                                  objectFit: 'cover',
-                                }}
-                                className=''
-                                alt={`Image ${index + 1}`}
-                              />
-                            )
-                          ),
-                        )}
+                        {post.images.map((image, index) => (
+                          <Image
+                            key={index}
+                            src={`http://localhost:5000/${post.uploadedUserID}/post/${post.postedDate}/${image}`}
+                            style={{
+                              width: index === 0 ? '100%' : '50%', // Set width to 100% for the first image, else 50%
+                              backgroundRepeat: 'no-repeat',
+                              objectFit: 'cover',
+                            }}
+                            className=''
+                            alt={`Image ${index + 1}`}
+                          />
+                        ))}
                       </>
                     ) : (
                       <>

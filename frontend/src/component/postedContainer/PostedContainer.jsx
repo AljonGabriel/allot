@@ -28,8 +28,7 @@ const PostedContainer = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await refetch();
-      console.log('Data from backend:', result.data);
+      await refetch();
       getPosted();
     };
     fetchData();

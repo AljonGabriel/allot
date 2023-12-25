@@ -77,6 +77,7 @@ const PostModal = () => {
               onSubmit={(e) => handleSubmit(e)}>
               <Form.Control
                 as='textarea'
+                style={{ maxHeight: '100px' }}
                 className='mb-3 border border-0 bg-transparent'
                 placeholder={`Whats on your mind, ${userInfo.fname}`}
                 value={inputData.fePostDescription}

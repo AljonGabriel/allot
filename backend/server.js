@@ -51,7 +51,7 @@ app.use(express.static(uploadsPath));
 //routes
 app.use('/api/users', usersRoutes);
 app.use('/api/uploads', uploadsRoutes);
-app.use('/api/friend', friendRoutes);
+app.use('/api/friends', friendRoutes);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 

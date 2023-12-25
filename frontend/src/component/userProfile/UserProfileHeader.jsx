@@ -51,7 +51,10 @@ const UserProfileHeader = ({ viewedUser, userInfo }) => {
 
               {String(viewed._id) !== String(userInfo._id) && (
                 <>
-                  <FriendRequestBtn viewedUser={viewedUser} />
+                  <FriendRequestBtn
+                    viewedUser={viewedUser}
+                    userInfo={userInfo}
+                  />
                   <Button
                     variant='secondary'
                     className='ms-1'>

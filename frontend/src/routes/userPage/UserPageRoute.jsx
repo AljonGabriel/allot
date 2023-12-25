@@ -14,8 +14,8 @@ import PostModal from '../../component/postModal/PostModal';
 import { useSelector } from 'react-redux';
 
 const UserPageRoute = () => {
-  const [viewedUser, setViewedUser] = useState();
-  const [viewedUserPosts, setViewedUserPosts] = useState();
+  const [viewedUser, setViewedUser] = useState(null);
+  const [viewedUserPosts, setViewedUserPosts] = useState(null);
 
   const { id } = useParams();
 

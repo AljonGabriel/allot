@@ -21,6 +21,8 @@ const PostedContainer = () => {
   const getPosted = async () => {
     try {
       setPosted(data?.posted || []);
+
+      console.log(data.posted);
     } catch (error) {
       console.error('Error fetching posts:', isError);
     }
@@ -38,9 +40,9 @@ const PostedContainer = () => {
     <>
       {posted ? (
         <>
-          {posted.map((post) => (
+          {posted.map((post, index) => (
             <section
-              key={post._id}
+              key={index}
               className='bg-white mt-3 rounded shadow border'>
               <div className='p-3'>
                 <div className='d-flex justify-content-between'>
@@ -65,6 +67,7 @@ const PostedContainer = () => {
                           roundedCircle
                           className='m-auto '
                         />
+
                         <div>
                           <h4 className='d-block m-0 text-text'>
                             {post.uploadedBy}
@@ -88,7 +91,9 @@ const PostedContainer = () => {
                 ) : post.images[0].includes('PF_') ? (
                   <>
                     <p className='text-accent m-auto d-flex align-items-center py-3'>
-                      {post.description}
+                      {post.description === ''
+                        ? 'Updated my profile picture'
+                        : post.description}
                     </p>
                   </>
                 ) : (

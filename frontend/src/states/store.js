@@ -4,6 +4,7 @@ import postsReducer from './slices/uploads/postSlice';
 
 import { apiUsersSlice } from './slices/users/apiUsersSlice';
 import { apiUploadsSlice } from './slices/uploads/apiUploadsSlice';
+import { apiFriendsSlice } from './slices/friends/apiFriendsSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,11 +13,13 @@ const store = configureStore({
 
     [apiUsersSlice.reducerPath]: apiUsersSlice.reducer,
     [apiUploadsSlice.reducerPath]: apiUploadsSlice.reducer,
+    [apiFriendsSlice.reducerPath]: apiFriendsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(apiUsersSlice.middleware)
-      .concat(apiUploadsSlice.middleware),
+      .concat(apiUploadsSlice.middleware)
+      .concat(apiFriendsSlice.middleware),
 
   devTools: true,
 });

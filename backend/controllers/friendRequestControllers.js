@@ -38,4 +38,20 @@ const addRequest = asyncHandler(async (req, res) => {
   res.status(201).json({ message: 'Friend request added successfully' });
 });
 
-export { addRequest };
+const checkRequest = asyncHandler(async (req, res) => {
+  const { feRequesterId, feRequesteeId } = req.query;
+
+  // Now, you can use feRequesterId and feRequesteeId in your logic
+  // For example, querying the database with Mongoose
+
+  await FriendRequestModel.findOne({
+    requesterId: feRequesterId,
+    requesteeId: feRequesteeId,
+  })
+    .then((checked) => {
+      res.status(200).json({ checked });
+    })
+    .catch((err) => res.status(400).json({ err }));
+});
+
+export { addRequest, checkRequest };

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const friendRequestSchema = mongoose.Schema(
   {
     requesterId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     requesterName: {
@@ -11,7 +11,7 @@ const friendRequestSchema = mongoose.Schema(
       required: true,
     },
     requesteeId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     requesteeName: {

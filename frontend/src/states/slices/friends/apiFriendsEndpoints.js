@@ -10,7 +10,14 @@ export const apiUploadsEndpoints = apiFriendsSlice.injectEndpoints({
         body: data,
       }),
     }),
+    checkRequest: builder.query({
+      query: ({ feRequesteeId, feRequesterId }) => ({
+        url: `${BASE_URL}/check`,
+        method: 'GET',
+        params: { feRequesterId, feRequesteeId },
+      }),
+    }),
   }),
 });
 
-export const { useAddMutation } = apiUploadsEndpoints;
+export const { useAddMutation, useCheckRequestQuery } = apiUploadsEndpoints;

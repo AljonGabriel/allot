@@ -38,11 +38,24 @@ const addRequest = asyncHandler(async (req, res) => {
   res.status(201).json({ message: 'Friend request added successfully' });
 });
 
+const cancelRequest = asyncHandler(async (req, res) => {
+  const { feRequesterId, feRequesteeId } = req.body;
+
+  const cancelled = await FriendRequestModel.deleteOne({
+    requesterId: feRequesterId,
+    requesteeId: feRequesteeId,
+  });
+
+  if (cancelled) {
+    res.status(200).json({ cancelled });
+  } else {
+    res.status(401);
+    throw new Error('Request cancell failed');
+  }
+});
+
 const checkRequest = asyncHandler(async (req, res) => {
   const { feRequesterId, feRequesteeId } = req.query;
-
-  // Now, you can use feRequesterId and feRequesteeId in your logic
-  // For example, querying the database with Mongoose
 
   await FriendRequestModel.findOne({
     requesterId: feRequesterId,
@@ -54,4 +67,4 @@ const checkRequest = asyncHandler(async (req, res) => {
     .catch((err) => res.status(400).json({ err }));
 });
 
-export { addRequest, checkRequest };
+export { addRequest, checkRequest, cancelRequest };

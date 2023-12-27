@@ -17,7 +17,18 @@ export const apiUploadsEndpoints = apiFriendsSlice.injectEndpoints({
         params: { feRequesterId, feRequesteeId },
       }),
     }),
+    cancelRequest: builder.mutation({
+      query: (feData) => ({
+        url: `${BASE_URL}/delete`,
+        method: 'DELETE',
+        body: feData,
+      }),
+    }),
   }),
 });
 
-export const { useAddMutation, useCheckRequestQuery } = apiUploadsEndpoints;
+export const {
+  useAddMutation,
+  useCheckRequestQuery,
+  useCancelRequestMutation,
+} = apiUploadsEndpoints;

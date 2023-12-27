@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import { useAddMutation } from '../../states/slices/friends/apiFriendsEndpoints';
 import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndpoints';
 
-import { setRequest } from '../../states/slices/friends/friendsSlice';
+import { setFriendAction } from '../../states/slices/friends/friendsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner';
+import CancelRequestBtn from '../cancelRequestBtn/CancelRequestBtn';
 
 const FriendRequestBtn = ({ viewedUser, userInfo }) => {
   const [checkRequest, setCheckRequest] = useState(null);
@@ -24,9 +25,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   const dispatch = useDispatch();
 
-  const { friendRequest } = useSelector((state) => state.friends);
-
-  console.log('Friend R:' + friendRequest);
+  const { friendAction } = useSelector((state) => state.friends);
 
   const feData = {
     feRequesterId: loggedUserId,
@@ -47,7 +46,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     };
 
     reFetch();
-  }, [data, friendRequest]); // Include data in the dependency array
+  }, [data, friendAction]); // Include data in the dependency array
 
   console.log(data);
 
@@ -58,13 +57,11 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
     try {
       const sent = await addRequest(feData).unwrap();
-      dispatch(setRequest({ sent }));
+      dispatch(setFriendAction({ ...sent }));
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log(checkRequest);
 
   return (
     <>
@@ -81,10 +78,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
           )}
         </Button>
       ) : (
-        <Button variant='outline-danger'>
-          <PersonAdd size={20} />
-          <small className='ms-1'>Cancel request</small>
-        </Button>
+        <CancelRequestBtn feData={feData} />
       )}
     </>
   );

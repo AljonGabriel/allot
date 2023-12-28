@@ -1,6 +1,15 @@
-import { Image, Form, CloseButton } from 'react-bootstrap';
+import {
+  Image,
+  Form,
+  CloseButton,
+  Stack,
+  InputGroup,
+  Button,
+} from 'react-bootstrap';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { LinkContainer } from 'react-router-bootstrap';
+
+import { HandThumbsUp, Send, ChatLeftText } from 'react-bootstrap-icons';
 
 import TimeAgo from '../../utils/TimeAgo';
 
@@ -156,12 +165,37 @@ const UserProfile = ({ viewedUserPosts, viewedUser }) => {
                         ))}
                       </>
                     )}
+
                     <div className='p-3'>
+                      <hr />
+                      <Stack direction='horizontal'>
+                        <div>
+                          <HandThumbsUp
+                            color='gray'
+                            className='m-3 bg-white'
+                            size={30}
+                          />
+                          <small>Like</small>
+                        </div>
+                        <div>
+                          <ChatLeftText
+                            color='gray'
+                            className='m-3 bg-white'
+                            size={30}
+                          />
+                          <label>Comment</label>
+                        </div>
+                      </Stack>
                       <Form>
-                        <Form.Control
-                          type='text'
-                          placeholder='Write a public comment'
-                        />
+                        <InputGroup>
+                          <Form.Control
+                            type='text'
+                            placeholder='Write a public comment'
+                          />
+                          <Button size='lg'>
+                            <Send />
+                          </Button>
+                        </InputGroup>
                       </Form>
                     </div>
                   </div>

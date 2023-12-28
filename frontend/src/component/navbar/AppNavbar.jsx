@@ -6,6 +6,8 @@ import {
   Form,
   Image,
   InputGroup,
+  Button,
+  Badge,
 } from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
@@ -16,18 +18,36 @@ import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSearchQuery } from '../../states/slices/users/apiUsersEndpoints';
 
+import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndpoints';
+
+import TimeAgo from '../../utils/TimeAgo';
+import { NavLink } from 'react-router-dom';
+
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
   const [key, setKey] = useState('');
 
+  const [friendRequest, setFriendRequest] = useState([]);
+
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { data, isError } = useSearchQuery({
+  const feRequesteeId = userInfo._id;
+
+  const { data: searchData, isError } = useSearchQuery({
     key,
     limit: 5,
   });
 
+  const { data: checkedRequestData, refetch } = useCheckRequestQuery({
+    feRequesteeId,
+  });
+
   useEffect(() => {
+    const fetchFriendRequest = async () => {
+      setFriendRequest(checkedRequestData || []);
+      await refetch();
+    };
+
     const search = async () => {
       try {
         if (!key.trim()) {
@@ -35,14 +55,17 @@ const AppNavbar = () => {
           return;
         }
 
-        setSearch(data);
+        setSearch(searchData);
       } catch (err) {
         console.log(isError);
       }
     };
 
+    fetchFriendRequest();
     search();
-  }, [key, data]);
+  }, [key, searchData, checkedRequestData, refetch, isError]);
+
+  console.log(friendRequest);
 
   return (
     <>
@@ -118,43 +141,73 @@ const AppNavbar = () => {
                           </div>
                         ))}
                     </Form>
-                    <div className='d-flex gap-3 cursor-pointer '>
-                      <LinkContainer
+                    <div className='d-flex gap-3 cursor-pointer align-items-center'>
+                      <NavLink
                         to='/home'
-                        className='nav-item'
+                        className='nav-link-item'
                         style={{ cursor: 'pointer' }}>
-                        <House
-                          size={25}
-                          className=''
-                        />
-                      </LinkContainer>
-                      <LinkContainer
+                        <House size={25} />
+                      </NavLink>
+                      <NavLink
                         to='/friendRequest'
+                        className='  nav-link-item'
                         style={{ cursor: 'pointer' }}>
                         <People size={25} />
-                      </LinkContainer>
+                      </NavLink>
                     </div>
                   </section>
 
                   <div className='d-flex align-items-center'>
                     <NavDropdown
                       title={
-                        <span>
-                          <Bell
-                            size={30}
-                            color='primary'
-                          />
-                        </span>
+                        <>
+                          <span>
+                            <Bell
+                              size={25}
+                              className='nav-link-item'
+                            />
+                          </span>
+                          <Badge bg='primary'>{friendRequest.length}</Badge>
+                        </>
                       }
                       drop='down'
+                      className='remove-arrow '
                       align='end'>
-                      <NavDropdown.Item href='#action/3.1'>
-                        Settings
-                      </NavDropdown.Item>
+                      <NavDropdown.Header>Notifications</NavDropdown.Header>
                       <NavDropdown.Divider />
-                      <NavDropdown.Item>
-                        <LogoutBtn />
-                      </NavDropdown.Item>
+
+                      {friendRequest && friendRequest.length > 0
+                        ? friendRequest.map((request, index) => (
+                            <div key={index}>
+                              <NavDropdown.Item>
+                                <ul>
+                                  <li>
+                                    <small>
+                                      <strong>
+                                        {request?.requesterName + ' '}
+                                      </strong>{' '}
+                                      Sent you a friend request{' '}
+                                      <TimeAgo date={request.createdAt} />
+                                    </small>
+
+                                    <InputGroup>
+                                      <Button
+                                        variant='primary'
+                                        size='sm'>
+                                        Confirm
+                                      </Button>
+                                      <Button
+                                        variant='outline-danger'
+                                        size='sm'>
+                                        Reject
+                                      </Button>
+                                    </InputGroup>
+                                  </li>
+                                </ul>
+                              </NavDropdown.Item>
+                            </div>
+                          ))
+                        : 'null'}
                     </NavDropdown>
 
                     <NavDropdown

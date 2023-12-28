@@ -57,12 +57,21 @@ const cancelRequest = asyncHandler(async (req, res) => {
 const checkRequest = asyncHandler(async (req, res) => {
   const { feRequesterId, feRequesteeId } = req.query;
 
-  await FriendRequestModel.findOne({
-    requesterId: feRequesterId,
-    requesteeId: feRequesteeId,
-  })
+  let query = {};
+  if (feRequesterId && feRequesteeId) {
+    query = {
+      requesterId: feRequesterId,
+      requesteeId: feRequesteeId,
+    };
+  } else if (feRequesteeId) {
+    query = {
+      requesteeId: feRequesteeId,
+    };
+  }
+
+  await FriendRequestModel.find(query)
     .then((checked) => {
-      res.status(200).json({ checked });
+      res.status(200).json(checked);
     })
     .catch((err) => res.status(400).json({ err }));
 });

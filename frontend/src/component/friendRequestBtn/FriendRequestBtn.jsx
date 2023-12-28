@@ -41,14 +41,14 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   useEffect(() => {
     const reFetch = async () => {
-      setCheckRequest(data?.checked);
+      setCheckRequest(data);
       await refetch();
     };
 
     reFetch();
   }, [data, friendAction]); // Include data in the dependency array
 
-  console.log(data);
+  console.log('Data from check request', checkRequest);
 
   const [addRequest, { isLoading }] = useAddMutation();
 
@@ -65,7 +65,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   return (
     <>
-      {!checkRequest ? (
+      {checkRequest <= 0 ? (
         <Button
           variant='primary'
           onClick={(e) => handleClick(e)}

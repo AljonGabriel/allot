@@ -13,19 +13,7 @@ function App() {
             className=' align-items-center'>
             <Col lg='6'>
               <figure className='text-left'>
-                <blockquote className='blockquote'>
-                  <h1
-                    className='text-primary fw-bold '
-                    style={{ letterSpacing: '3px' }}>
-                    Allot ~
-                  </h1>
-                  <h2 className='text-secondary  fw-bold mb-3'>
-                    Give or apportion something to someone as a share or task.
-                  </h2>
-                  <figcaption className='blockquote-footer'>
-                    <cite title='Source Title'>Google</cite>
-                  </figcaption>
-                </blockquote>
+                <h1 className='text-primary '>allot</h1>
 
                 <h2 className='text-black'>Recent Log-in</h2>
                 <small className='text-secondary'>Click your account</small>

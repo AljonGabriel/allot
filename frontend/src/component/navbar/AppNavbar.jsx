@@ -22,6 +22,7 @@ import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndp
 
 import TimeAgo from '../../utils/TimeAgo';
 import { NavLink } from 'react-router-dom';
+import AcceptRequestBtn from '../acceptRequestBtn/AcceptRequestBtn';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
@@ -191,11 +192,7 @@ const AppNavbar = () => {
                                     </small>
 
                                     <InputGroup>
-                                      <Button
-                                        variant='primary'
-                                        size='sm'>
-                                        Confirm
-                                      </Button>
+                                      <AcceptRequestBtn />
                                       <Button
                                         variant='outline-danger'
                                         size='sm'>

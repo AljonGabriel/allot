@@ -12,11 +12,13 @@
 .nav-link-item {
   color: #9f9f9f;
   transition: 0.3s;
+  padding: 5px;
+  border: 0.5px solid #9f9f9f;
+  border-radius: 5px;
 }
 
 .nav-link-item:hover {
   color: #464646;
-  border-radius: 5px;
   padding: 5px;
   box-shadow: 1.2px 0px 1.8px -84px rgba(0, 0, 0, 0.074),
     3px 0px 4.5px -84px rgba(0, 0, 0, 0.106),
@@ -24,14 +26,13 @@
     12.8px 0px 19px -84px rgba(0, 0, 0, 0.166),
     35px 0px 52px -84px rgba(0, 0, 0, 0.24);
 
-  border-left: 0.5px solid #9f9f9f;
   background-color: #f2f2f2;
 }
 
 .active {
   color: #464646;
   background-color: #f2f2f2;
-  padding: 5px;
+
   pointer-events: none;
   border-radius: 5px;
   box-shadow: 1.2px 0px 1.8px -84px rgba(0, 0, 0, 0.074),

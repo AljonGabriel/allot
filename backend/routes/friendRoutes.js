@@ -5,12 +5,15 @@ import {
   addRequest,
   checkRequest,
   cancelRequest,
-} from '../controllers/friendRequestControllers.js';
+  acceptRequest,
+} from '../controllers/friends/friendRequestControllers.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
 
 router.post('/', protect, addRequest);
 router.get('/check', protect, checkRequest);
+
+router.put('/accept', protect, acceptRequest);
 
 router.delete('/delete', protect, cancelRequest);
 

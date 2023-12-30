@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
-import FriendRequestModel from '../models/friendRequestModel.js';
-import UserModel from '../models/userModel.js';
+import FriendRequestModel from '../../models/friendRequestModel.js';
+import UserModel from '../../models/userModel.js';
 
 const addRequest = asyncHandler(async (req, res) => {
   const { feRequesterId, feRequesterName, feRequesteeId, feRequesteeName } =
@@ -76,4 +76,14 @@ const checkRequest = asyncHandler(async (req, res) => {
     .catch((err) => res.status(400).json({ err }));
 });
 
-export { addRequest, checkRequest, cancelRequest };
+const acceptRequest = asyncHandler(async (req, res) => {
+  const { feRequesteeId, feRequesterId } = req.body;
+
+  await FriendRequestModel.findOneAndDelete({
+    requesteeId: feRequesteeId,
+    requesterId: feRequesterId,
+    status: 'pending',
+  });
+});
+
+export { addRequest, checkRequest, cancelRequest, acceptRequest };

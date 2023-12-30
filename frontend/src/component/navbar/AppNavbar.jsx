@@ -12,7 +12,7 @@ import {
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
 import { UserProfileImage } from './../userProfile/UserProfileImage';
-import { Search, Bell, House, People } from 'react-bootstrap-icons';
+import { Search, Bell, House, People, Link } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -162,12 +162,8 @@ const AppNavbar = () => {
                     <NavDropdown
                       title={
                         <>
-                          <span>
-                            <Bell
-                              size={25}
-                              className='nav-link-item'
-                            />
-                          </span>
+                          <Bell size={25} />
+
                           <Badge bg='primary'>{friendRequest.length}</Badge>
                         </>
                       }
@@ -183,13 +179,16 @@ const AppNavbar = () => {
                               <NavDropdown.Item>
                                 <ul>
                                   <li>
-                                    <small>
-                                      <strong>
-                                        {request?.requesterName + ' '}
-                                      </strong>{' '}
-                                      Sent you a friend request{' '}
-                                      <TimeAgo date={request.createdAt} />
-                                    </small>
+                                    <LinkContainer
+                                      to={`/userPage/${request.requesterId}`}>
+                                      <small>
+                                        <strong>
+                                          {request?.requesterName + ' '}
+                                        </strong>{' '}
+                                        Sent you a friend request{' '}
+                                        <TimeAgo date={request.createdAt} />
+                                      </small>
+                                    </LinkContainer>
 
                                     <InputGroup>
                                       <AcceptRequestBtn />

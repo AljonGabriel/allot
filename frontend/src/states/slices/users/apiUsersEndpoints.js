@@ -51,6 +51,12 @@ export const apiUsersEndpoints = apiUsersSlice.injectEndpoints({
         params: { id },
       }),
     }),
+    checkToken: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/protected`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -62,4 +68,5 @@ export const {
   useUploadProfilePicMutation,
   useSearchQuery,
   useGetProfileQuery,
+  useCheckTokenQuery,
 } = apiUsersEndpoints;

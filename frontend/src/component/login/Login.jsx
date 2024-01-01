@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../states/slices/users/apiUsersEndpoints.js';
 import { setCredentials } from './../../states/slices/users/authSlice.js';
 import RegisterModal from '../registerModal/RegisterModal.jsx';
@@ -20,15 +20,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
-
-  const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
-
-  useEffect(() => {
-    if (userInfo && userInfo.profileImage !== null) {
-      navigate('/home');
-    }
-  }, [navigate, userInfo, dispatch]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();

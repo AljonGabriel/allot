@@ -18,6 +18,9 @@ import HomeRoute from './routes/home/homeRoute.jsx';
 import RegisterRoute from './routes/register/RegisterRoute.jsx';
 import AddProfile from './routes/uploadProfile/UploadProfileRoute.jsx';
 
+//Private Route
+import PrivateRoute from './component/privateRoute/PrivateRoute.jsx';
+
 //react-router-dom
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -46,15 +49,27 @@ const router = createBrowserRouter([
   },
   {
     path: '/upload-profile-picture',
-    element: <AddProfile />,
+    element: (
+      <PrivateRoute>
+        <AddProfile />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/home',
-    element: <HomeRoute />,
+    element: (
+      <PrivateRoute>
+        <HomeRoute />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/userPage/:id',
-    element: <UserPageRoute />,
+    element: (
+      <PrivateRoute>
+        <UserPageRoute />
+      </PrivateRoute>
+    ),
   },
 ]);
 

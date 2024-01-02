@@ -213,6 +213,16 @@ const getProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ user });
 });
 
+const checkToken = asyncHandler(async (req, res) => {
+  let userToken;
+  userToken = req.cookies.jwt;
+  if (userToken) {
+    res.status(200).json({ token: userToken });
+  } else {
+    res.status(400).json('No token found');
+  }
+});
+
 export {
   authUser,
   checkInputsAndSendCode,
@@ -220,4 +230,5 @@ export {
   logout,
   search,
   getProfile,
+  checkToken,
 };

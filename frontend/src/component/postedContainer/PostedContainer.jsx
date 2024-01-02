@@ -24,15 +24,13 @@ const PostedContainer = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { postedData } = useSelector((state) => state.posts);
 
-  const { data, isLoading, isError, refetch } = useGetUploadsQuery();
+  const { data, isLoading, refetch } = useGetUploadsQuery();
 
   const getPosted = async () => {
     try {
       setPosted(data?.posted || []);
-
-      console.log(data.posted);
     } catch (error) {
-      console.error('Error fetching posts:', isError);
+      console.error('Error fetching posts:', error);
     }
   };
 
@@ -158,24 +156,19 @@ const PostedContainer = () => {
                   </>
                 ) : post.images.length === 3 ? (
                   <>
-                    {post.images.map(
-                      (image, index) => (
-                        console.log('Images:', [image]),
-                        (
-                          <Image
-                            key={index}
-                            src={`http://localhost:5000/${post.uploadedUserID}/post/${post.postedDate}/${image}`}
-                            style={{
-                              width: index === 0 ? '100%' : '50%', // Set width to 100% for the first image, else 50%
-                              backgroundRepeat: 'no-repeat',
-                              objectFit: 'cover',
-                            }}
-                            className=''
-                            alt={`Image ${index + 1}`}
-                          />
-                        )
-                      ),
-                    )}
+                    {post.images.map((image, index) => (
+                      <Image
+                        key={index}
+                        src={`http://localhost:5000/${post.uploadedUserID}/post/${post.postedDate}/${image}`}
+                        style={{
+                          width: index === 0 ? '100%' : '50%', // Set width to 100% for the first image, else 50%
+                          backgroundRepeat: 'no-repeat',
+                          objectFit: 'cover',
+                        }}
+                        className=''
+                        alt={`Image ${index + 1}`}
+                      />
+                    ))}
                   </>
                 ) : (
                   <>

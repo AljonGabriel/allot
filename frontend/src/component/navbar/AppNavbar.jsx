@@ -12,7 +12,7 @@ import {
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
 import { UserProfileImage } from './../userProfile/UserProfileImage';
-import { Search, Bell, House, People, Link } from 'react-bootstrap-icons';
+import { Search, Bell, House, People } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -65,8 +65,6 @@ const AppNavbar = () => {
     fetchFriendRequest();
     search();
   }, [key, searchData, checkedRequestData, refetch, isError]);
-
-  console.log(friendRequest);
 
   return (
     <>

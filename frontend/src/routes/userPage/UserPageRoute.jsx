@@ -52,7 +52,8 @@ const UserPageRoute = () => {
         </section>
 
         <div className='w-75'>
-          {viewedUser && String(viewedUser._id) === String(userInfo._id) ? (
+          {viewedUser &&
+          String(viewedUser._id) === String(userInfo && userInfo._id) ? (
             <PostModal />
           ) : (
             ''

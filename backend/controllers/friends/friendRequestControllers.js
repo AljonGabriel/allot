@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';
-import FriendRequestModel from '../../models/friendRequestModel.js';
+import FriendRequestModel from '../../models/friends/friendRequestModel.js';
 import UserModel from '../../models/userModel.js';
+
+import FriendListModel from '../../models/friends/friendListModel.js';
 
 const addRequest = asyncHandler(async (req, res) => {
   const { feRequesterId, feRequesterName, feRequesteeId, feRequesteeName } =
@@ -79,11 +81,35 @@ const checkRequest = asyncHandler(async (req, res) => {
 const acceptRequest = asyncHandler(async (req, res) => {
   const { feRequesteeId, feRequesterId } = req.body;
 
-  await FriendRequestModel.findOneAndDelete({
+  // Step 1: Find or Create the FriendList Document
+  const friendList = await FriendListModel.findOne({
+    loggedInUserId: feRequesteeId,
+  });
+
+  // If no friendList document exists, you may want to create one.
+  if (!friendList) {
+    const newFriendList = new FriendListModel({
+      loggedInUserId: feRequesteeId,
+    });
+    await newFriendList.save();
+  }
+
+  // Step 2: Update the `friends` Array
+  const requestDeleted = await FriendRequestModel.findOneAndDelete({
     requesteeId: feRequesteeId,
     requesterId: feRequesterId,
     status: 'pending',
   });
+
+  if (requestDeleted) {
+    // Assuming `friendId` is the field in the FriendList model.
+    friendList.friends.push({ friendId: feRequesterId });
+    await friendList.save();
+
+    res.status(200).json({ requestDeleted });
+  } else {
+    res.status(400).json({ error: 'No request found' });
+  }
 });
 
 export { addRequest, checkRequest, cancelRequest, acceptRequest };

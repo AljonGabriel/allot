@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }) => {
     console.log('Cookie is not present');
     // Redirect or handle unauthorized access (e.g., navigate to the login page)
     // For demonstration, we're just logging a message here
-    return <>{'Not authorized'}</>;
+    return <>{'Not authorized, please log in'}</>;
   }
 };
 

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const friendListSchema = mongoose.Schema({
-  loggedInUserId: {
+  userId: {
     type: 'String',
     required: true,
   },
@@ -9,7 +9,7 @@ const friendListSchema = mongoose.Schema({
     {
       friendId: {
         type: 'String',
-        ref: 'users', // Reference to the User model
+        ref: 'UserModel', // Reference to the User model
       },
     },
   ],

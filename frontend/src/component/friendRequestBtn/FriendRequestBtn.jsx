@@ -46,7 +46,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     };
 
     reFetch();
-  }, [data, friendAction]); // Include data in the dependency array
+  }, [data, friendAction, refetch]); // Include data in the dependency array
 
   console.log('Data from check request', checkRequest);
 
@@ -56,8 +56,8 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     e.preventDefault();
 
     try {
-      const sent = await addRequest(feData).unwrap();
-      dispatch(setFriendAction({ ...sent }));
+      const addFriend = await addRequest(feData).unwrap();
+      dispatch(setFriendAction(addFriend));
     } catch (err) {
       console.log(err);
     }

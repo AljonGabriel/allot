@@ -32,9 +32,11 @@ const AppNavbar = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
+  const { friendAction } = useSelector((state) => state.friends);
+
   const feRequesteeId = userInfo._id;
 
-  const { data: searchData, isError } = useSearchQuery({
+  const { data: searchData } = useSearchQuery({
     key,
     limit: 5,
   });
@@ -44,27 +46,36 @@ const AppNavbar = () => {
   });
 
   useEffect(() => {
+    try {
+      if (key.trim()) {
+        setSearch(searchData ? searchData : []);
+      } else {
+        setSearch([]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Remove friendRequest from the dependency array
+  }, [key, searchData]);
+
+  useEffect(() => {
     const fetchFriendRequest = async () => {
-      setFriendRequest(checkedRequestData || []);
-      await refetch();
-    };
-
-    const search = async () => {
       try {
-        if (!key.trim()) {
-          setSearch([]);
-          return;
-        }
-
-        setSearch(searchData);
+        setFriendRequest(checkedRequestData ? checkedRequestData : []);
+        await refetch();
       } catch (err) {
-        console.log(isError);
+        console.log(err);
       }
     };
 
+    // Call the fetchFriendRequest function whenever friendAction changes
     fetchFriendRequest();
-    search();
-  }, [key, searchData, checkedRequestData, refetch, isError]);
+
+    // Assuming friendAction is a dependency you want to track
+  }, [checkedRequestData, friendAction, refetch]); // Add other dependencies as needed
+
+  console.log('Friend Request', friendRequest);
 
   return (
     <>
@@ -171,37 +182,43 @@ const AppNavbar = () => {
                       <NavDropdown.Header>Notifications</NavDropdown.Header>
                       <NavDropdown.Divider />
 
-                      {friendRequest && friendRequest.length > 0
-                        ? friendRequest.map((request, index) => (
-                            <div key={index}>
-                              <NavDropdown.Item>
-                                <ul>
-                                  <li>
-                                    <LinkContainer
-                                      to={`/userPage/${request.requesterId}`}>
-                                      <small>
-                                        <strong>
-                                          {request?.requesterName + ' '}
-                                        </strong>{' '}
-                                        Sent you a friend request{' '}
-                                        <TimeAgo date={request.createdAt} />
-                                      </small>
-                                    </LinkContainer>
+                      {friendRequest && friendRequest.length > 0 ? (
+                        friendRequest.map((request, index) => (
+                          <div key={index}>
+                            <NavDropdown.Item>
+                              <ul>
+                                <li>
+                                  <LinkContainer
+                                    to={`/userPage/${request.requesterId}`}>
+                                    <small>
+                                      <strong>
+                                        {request?.requesterName + ' '}
+                                      </strong>{' '}
+                                      Sent you a friend request{' '}
+                                      <TimeAgo date={request.createdAt} />
+                                    </small>
+                                  </LinkContainer>
 
-                                    <InputGroup>
-                                      <AcceptRequestBtn />
-                                      <Button
-                                        variant='outline-danger'
-                                        size='sm'>
-                                        Reject
-                                      </Button>
-                                    </InputGroup>
-                                  </li>
-                                </ul>
-                              </NavDropdown.Item>
-                            </div>
-                          ))
-                        : 'null'}
+                                  <InputGroup>
+                                    <AcceptRequestBtn friendRequest={request} />
+                                    <Button
+                                      variant='outline-danger'
+                                      size='sm'>
+                                      Reject
+                                    </Button>
+                                  </InputGroup>
+                                </li>
+                              </ul>
+                            </NavDropdown.Item>
+                          </div>
+                        ))
+                      ) : (
+                        <ul>
+                          <li>
+                            <small>{'null'}</small>
+                          </li>
+                        </ul>
+                      )}
                     </NavDropdown>
 
                     <NavDropdown

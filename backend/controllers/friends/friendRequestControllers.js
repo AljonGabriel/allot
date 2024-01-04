@@ -83,11 +83,18 @@ const acceptRequest = asyncHandler(async (req, res) => {
 
   try {
     // Step 1: Find or Create the FriendList Document
-    let friendList = await FriendListModel.findOne({ userId: feRequesteeId });
+    let requestee = await FriendListModel.findOne({ userId: feRequesteeId });
+
+    let requester = await FriendListModel.findOne({ userId: feRequesteeId });
 
     // If no friendList document exists, create one
-    if (!friendList) {
-      friendList = await FriendListModel.create({ userId: feRequesteeId });
+    if (!requestee) {
+      requestee = await FriendListModel.create({ userId: feRequesteeId });
+    }
+
+    // If no friendList document exists, create one
+    if (!requester) {
+      requester = await FriendListModel.create({ userId: feRequesterId });
     }
 
     // Step 2: Update the `friends` Array
@@ -105,10 +112,12 @@ const acceptRequest = asyncHandler(async (req, res) => {
     });
 
     // Assuming `friendId` is the field in the FriendList model.
-    friendList.friends.push({ friendId: feRequesterId });
-    await friendList.save();
+    requestee.friends.push({ friendId: feRequesterId });
+    requester.friends.push({ friendId: feRequesteeId });
+    await requestee.save();
+    await requester.save();
 
-    res.status(200).json({ friendList });
+    res.status(200).json({ requestee });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -116,9 +125,7 @@ const acceptRequest = asyncHandler(async (req, res) => {
 });
 
 const checkIfFriend = asyncHandler(async (req, res) => {
-  const { userId1, userId2 } = req.query;
-
-  console.log(userId1, userId2);
+  const { loggedInUser, usersId } = req.query;
 
   try {
     // Step 1: Find friend list for user 1

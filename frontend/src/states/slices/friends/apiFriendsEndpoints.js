@@ -24,6 +24,14 @@ export const apiUploadsEndpoints = apiFriendsSlice.injectEndpoints({
         body: feData,
       }),
     }),
+    acceptRequest: builder.mutation({
+      query: (feRequesteeId, feRequesterId) => ({
+        url: `${BASE_URL}/accept`,
+        method: 'POST',
+        body: feRequesteeId,
+        feRequesterId,
+      }),
+    }),
   }),
 });
 
@@ -31,4 +39,5 @@ export const {
   useAddMutation,
   useCheckRequestQuery,
   useCancelRequestMutation,
+  useAcceptRequestMutation,
 } = apiUploadsEndpoints;

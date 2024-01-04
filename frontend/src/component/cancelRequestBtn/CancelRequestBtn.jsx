@@ -3,14 +3,11 @@ import { PersonAdd } from 'react-bootstrap-icons';
 
 import { setFriendAction } from '../../states/slices/friends/friendsSlice';
 import { useCancelRequestMutation } from '../../states/slices/friends/apiFriendsEndpoints';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const CancelRequestBtn = ({ feData }) => {
   const [cancel, { isLoading }] = useCancelRequestMutation();
-
-  console.log(feData);
 
   const dispatch = useDispatch();
 

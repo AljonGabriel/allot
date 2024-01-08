@@ -1,10 +1,11 @@
-import { Button } from 'react-bootstrap';
-import { PersonAdd } from 'react-bootstrap-icons';
+import { Button, Dropdown } from 'react-bootstrap';
+import { Check, PersonAdd } from 'react-bootstrap-icons';
 
 import { useEffect, useState } from 'react';
 
 import { useAddMutation } from '../../states/slices/friends/apiFriendsEndpoints';
 import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndpoints';
+import { useCheckIfFriendQuery } from '../../states/slices/friends/apiFriendsEndpoints';
 
 import { setFriendAction } from '../../states/slices/friends/friendsSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import CancelRequestBtn from '../cancelRequestBtn/CancelRequestBtn';
 
 const FriendRequestBtn = ({ viewedUser, userInfo }) => {
   const [checkRequest, setCheckRequest] = useState(null);
+  const [friend, setFriend] = useState(null);
 
   const requesterName =
     userInfo.fname + ' ' + userInfo.mname + ' ' + userInfo.lname;
@@ -34,21 +36,31 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     feRequesteeName: requesteeName,
   };
 
-  const { data, refetch } = useCheckRequestQuery({
+  const { data: request, refetch } = useCheckRequestQuery({
     feRequesterId: loggedUserId,
     feRequesteeId: requesteeId,
   });
 
+  const { data: isFriend } = useCheckIfFriendQuery({
+    loggedInUserId: loggedUserId,
+    otherUserId: requesteeId,
+  });
+
   useEffect(() => {
+    const checkIfFriend = async () => {
+      setFriend(isFriend.areFriends);
+    };
+
     const reFetch = async () => {
-      setCheckRequest(data);
+      setCheckRequest(request);
       await refetch();
     };
 
+    checkIfFriend();
     reFetch();
-  }, [data, friendAction, refetch]); // Include data in the dependency array
+  }, [request, friendAction, refetch, isFriend]); // Include data in the dependency array
 
-  console.log('Data from check request', checkRequest);
+  console.log('friend', friend);
 
   const [addRequest, { isLoading }] = useAddMutation();
 
@@ -65,7 +77,18 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   return (
     <>
-      {checkRequest <= 0 ? (
+      {friend ? (
+        <Dropdown>
+          <Dropdown.Toggle variant='outline-primary'>
+            <Check size={20} />
+            <small className='ms-1'>Friend</small>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item className='text-danger'>Unfriend</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      ) : checkRequest <= 0 ? (
         <Button
           variant='primary'
           onClick={(e) => handleClick(e)}

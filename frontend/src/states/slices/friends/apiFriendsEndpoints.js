@@ -32,6 +32,14 @@ export const apiUploadsEndpoints = apiFriendsSlice.injectEndpoints({
         feRequesterId,
       }),
     }),
+    checkIfFriend: builder.query({
+      query: (loggedInUserId, otherUserId) => ({
+        url: `${BASE_URL}/isFriend`,
+        method: 'GET',
+        params: loggedInUserId,
+        otherUserId,
+      }),
+    }),
   }),
 });
 
@@ -40,4 +48,5 @@ export const {
   useCheckRequestQuery,
   useCancelRequestMutation,
   useAcceptRequestMutation,
+  useCheckIfFriendQuery,
 } = apiUploadsEndpoints;

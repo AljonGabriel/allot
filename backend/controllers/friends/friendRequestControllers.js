@@ -125,21 +125,24 @@ const acceptRequest = asyncHandler(async (req, res) => {
 });
 
 const checkIfFriend = asyncHandler(async (req, res) => {
-  const { loggedInUser, usersId } = req.query;
+  const { loggedInUserId, otherUserId } = req.query;
+
+  console.log(loggedInUserId, otherUserId);
 
   try {
-    // Step 1: Find friend list for user 1
-    const friendList1 = await FriendListModel.findOne({ userId: userId1 });
+    //Check if loggedin user is exist
+    const loggedInUser = await FriendListModel.findOne({
+      userId: loggedInUserId,
+    });
 
-    console.log(friendList1);
+    //Check if the loggedin user is friend with other otherUserId
 
-    // Step 2: Check if user 2 is in the friend list of user 1
-    const isFriend1To2 = friendList1
-      ? friendList1.friends.some((friend) => friend.friendId === userId2)
+    const isFriend = loggedInUser
+      ? loggedInUser.friends.some((friend) => friend.friendId === otherUserId)
       : false;
 
     // Step 5: Respond based on the friendship status
-    if (isFriend1To2) {
+    if (isFriend) {
       res.status(200).json({ areFriends: true });
     } else {
       res.status(200).json({ areFriends: false });

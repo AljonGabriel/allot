@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Image, Modal, Button } from 'react-bootstrap';
+import { Image, Modal, Button, Stack } from 'react-bootstrap';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import { useGetSpecificUploadsByIdQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
@@ -50,7 +50,7 @@ const UserProfileHeader = ({ viewedUser, userInfo }) => {
               <p className='text-muted '>Work title here</p>
 
               {String(viewed._id) !== String(userInfo._id) && (
-                <>
+                <Stack direction='horizontal'>
                   <FriendRequestBtn
                     viewedUser={viewedUser}
                     userInfo={userInfo}
@@ -61,7 +61,7 @@ const UserProfileHeader = ({ viewedUser, userInfo }) => {
                     <Chat size={20} />
                     <small className='ms-1'>Reach</small>
                   </Button>
-                </>
+                </Stack>
               )}
             </div>
 

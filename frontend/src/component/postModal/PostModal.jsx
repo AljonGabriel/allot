@@ -1,6 +1,6 @@
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { Form, Button, Stack, Modal } from 'react-bootstrap';
-import { Images } from 'react-bootstrap-icons';
+import { GlobeAmericas, Images } from 'react-bootstrap-icons';
 
 import { useDispatch } from 'react-redux';
 import { setPosts } from '../../states/slices/uploads/postSlice';
@@ -75,6 +75,16 @@ const PostModal = () => {
             <Form
               id='postingForm'
               onSubmit={(e) => handleSubmit(e)}>
+              <Form.Select
+                aria-label='Default select example'
+                className='mb-3 border border-0'>
+                <option value='1'>
+                  Public <GlobeAmericas size={20} />
+                </option>
+                <option value='2'>Friends</option>
+                <option value='3'>Private</option>
+              </Form.Select>
+
               <Form.Control
                 as='textarea'
                 style={{ maxHeight: '100px' }}

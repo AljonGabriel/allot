@@ -14,6 +14,7 @@ const PostModal = () => {
   const [inputData, setInputData] = useState({
     fePostDescription: '',
     fePostImages: [],
+    fePostSort: '',
   });
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -40,6 +41,9 @@ const PostModal = () => {
     // Append the description to the FormData
     formData.append('fePostDescription', inputData.fePostDescription);
 
+    // Append the description to the FormData
+    formData.append('fePostSort', inputData.fePostSort);
+
     try {
       const data = await post(formData).unwrap();
 
@@ -50,6 +54,15 @@ const PostModal = () => {
       console.log(err);
     }
   };
+
+  //Handles data
+  const handlePostSortChange = (event) => {
+    event.preventDefault();
+    console.log('clicked');
+
+    setInputData({ ...inputData, fePostSort: event.target.value });
+  };
+
   return (
     <>
       <div className='p-3  bg-white rounded  shadow-sm border mb-3'>
@@ -75,18 +88,15 @@ const PostModal = () => {
             <Form
               id='postingForm'
               onSubmit={(e) => handleSubmit(e)}>
-              <Stack
-                direction='horizontal'
-                className=''>
-                <GlobeAmericas size={20} />
-                <Form.Select
-                  aria-label='Default select example'
-                  className='mb-3 border border-0'>
-                  <option value='public'>Public</option>
-                  <option value='friends'>Friends</option>
-                  <option value='private'>Private</option>
-                </Form.Select>
-              </Stack>
+              <Form.Select
+                aria-label='Default select example'
+                className='mb-3 border border-0'
+                onChange={handlePostSortChange}
+                value={inputData.fePostSort}>
+                <option value='public'>Public</option>
+                <option value='friends'>Friends</option>
+                <option value='private'>Private</option>
+              </Form.Select>
 
               <Form.Control
                 as='textarea'

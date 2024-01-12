@@ -23,6 +23,11 @@ const uploadSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    postAudience: {
+      type: String,
+      required: true,
+      enum: ['public', 'friends', 'private'],
+    },
   },
   {
     timestamps: true,

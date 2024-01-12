@@ -3,12 +3,12 @@ import UploadModel from '../models/uploadsModel.js';
 import formatDate from '../utils/formatDate.js';
 
 const post = asyncHandler(async (req, res) => {
-  const { fePostDescription, fePostSort } = req.body;
+  const { fePostDescription, fePostAudience } = req.body;
   const fePostImages = req.files.map((file) => file.filename);
 
   const userInfo = req.user;
 
-  console.log(fePostDescription, fePostSort);
+  console.log(fePostAudience);
 
   const newUpload = new UploadModel({
     uploadedUserID: userInfo._id,
@@ -17,6 +17,7 @@ const post = asyncHandler(async (req, res) => {
     description: fePostDescription,
     postedDate: formatDate(new Date()),
     userProfile: userInfo.profileImage,
+    postAudience: fePostAudience,
   });
 
   try {

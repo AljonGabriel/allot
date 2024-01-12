@@ -14,7 +14,7 @@ const PostModal = () => {
   const [inputData, setInputData] = useState({
     fePostDescription: '',
     fePostImages: [],
-    fePostSort: '',
+    fePostAudience: 'public',
   });
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -42,7 +42,7 @@ const PostModal = () => {
     formData.append('fePostDescription', inputData.fePostDescription);
 
     // Append the description to the FormData
-    formData.append('fePostSort', inputData.fePostSort);
+    formData.append('fePostAudience', inputData.fePostAudience);
 
     try {
       const data = await post(formData).unwrap();
@@ -60,8 +60,13 @@ const PostModal = () => {
     event.preventDefault();
     console.log('clicked');
 
-    setInputData({ ...inputData, fePostSort: event.target.value });
+    setInputData({
+      ...inputData,
+      fePostAudience: event.target.value,
+    });
   };
+
+  console.log(inputData);
 
   return (
     <>
@@ -92,7 +97,7 @@ const PostModal = () => {
                 aria-label='Default select example'
                 className='mb-3 border border-0'
                 onChange={handlePostSortChange}
-                value={inputData.fePostSort}>
+                value={inputData.fePostAudience}>
                 <option value='public'>Public</option>
                 <option value='friends'>Friends</option>
                 <option value='private'>Private</option>

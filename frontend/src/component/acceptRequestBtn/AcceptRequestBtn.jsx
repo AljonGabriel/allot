@@ -9,7 +9,9 @@ const AcceptRequestBtn = ({ friendRequest }) => {
   const dispatch = useDispatch();
 
   const feRequesteeId = friendRequest.requesteeId;
+  const feRequesteeName = friendRequest.requesteeName;
   const feRequesterId = friendRequest.requesterId;
+  const feRequesterName = friendRequest.requesterName;
 
   console.log(feRequesteeId, feRequesterId);
 
@@ -19,7 +21,12 @@ const AcceptRequestBtn = ({ friendRequest }) => {
     e.preventDefault();
 
     try {
-      const res = await accepted({ feRequesteeId, feRequesterId }).unwrap();
+      const res = await accepted({
+        feRequesteeId,
+        feRequesterId,
+        feRequesteeName,
+        feRequesterName,
+      }).unwrap();
       dispatch(setFriendAction(res));
     } catch (err) {
       console.log(err);

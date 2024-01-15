@@ -79,7 +79,8 @@ const checkRequest = asyncHandler(async (req, res) => {
 });
 
 const acceptRequest = asyncHandler(async (req, res) => {
-  const { feRequesteeId, feRequesterId } = req.body;
+  const { feRequesteeId, feRequesterId, feRequesteeName, feRequesterName } =
+    req.body;
 
   try {
     // Step 1: Find or Create the FriendList Document
@@ -89,12 +90,18 @@ const acceptRequest = asyncHandler(async (req, res) => {
 
     // If no friendList document exists, create one
     if (!requestee) {
-      requestee = await FriendListModel.create({ userId: feRequesteeId });
+      requestee = await FriendListModel.create({
+        userId: feRequesteeId,
+        userName: feRequesteeName,
+      });
     }
 
     // If no friendList document exists, create one
     if (!requester) {
-      requester = await FriendListModel.create({ userId: feRequesterId });
+      requester = await FriendListModel.create({
+        userId: feRequesterId,
+        userName: feRequesterName,
+      });
     }
 
     // Step 2: Update the `friends` Array
@@ -112,8 +119,14 @@ const acceptRequest = asyncHandler(async (req, res) => {
     });
 
     // Assuming `friendId` is the field in the FriendList model.
-    requestee.friends.push({ friendId: feRequesterId });
-    requester.friends.push({ friendId: feRequesteeId });
+    requestee.friends.push({
+      friendId: feRequesterId,
+      friendName: feRequesterName,
+    });
+    requester.friends.push({
+      friendId: feRequesteeId,
+      friendName: feRequesteeName,
+    });
     await requestee.save();
     await requester.save();
 

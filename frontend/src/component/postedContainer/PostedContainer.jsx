@@ -34,7 +34,12 @@ const PostedContainer = () => {
   const { data, isLoading, refetch } = useGetUploadsQuery();
   const { data: friend } = useCheckIfFriendQuery({
     loggedInUserId: loggedUserId,
-    otherUserId: posted.map((post) => post.uploadedUserID),
+    otherUserId: posted.map(
+      (post) => (
+        post.uploadedUserID,
+        console.log(post.uploadedUserID, 'Loggedin user', loggedUserId)
+      ),
+    ),
   });
 
   console.log(loggedUserId);
@@ -65,8 +70,9 @@ const PostedContainer = () => {
     <>
       {posted ? (
         <>
-          {posted.map((post, index) =>
-            post.postAudience === 'friends' ? (
+          {posted
+            .filter((post) => isFriend && post.postAudience === 'public')
+            .map((post, index) => (
               <section
                 key={index}
                 className='bg-white mt-3 rounded shadow border'>
@@ -239,10 +245,7 @@ const PostedContainer = () => {
                   </div>
                 </div>
               </section>
-            ) : (
-              'False'
-            ),
-          )}
+            ))}
         </>
       ) : isLoading ? (
         <>

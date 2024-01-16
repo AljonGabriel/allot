@@ -148,11 +148,24 @@ const checkIfFriend = asyncHandler(async (req, res) => {
       userId: loggedInUserId,
     });
 
+    console.log(
+      'Loggedin User:',
+      loggedInUser
+        ? loggedInUser.friends.some((friend) =>
+            otherUserId.includes(friend.friendId),
+          )
+        : false,
+    );
+
     //Check if the loggedin user is friend with other otherUserId
 
     const isFriend = loggedInUser
-      ? loggedInUser.friends.some((friend) => friend.friendId === otherUserId)
+      ? loggedInUser.friends.some((friend) =>
+          otherUserId.includes(friend.friendId),
+        )
       : false;
+
+    console.log(loggedInUser && loggedInUser.friends);
 
     // Step 5: Respond based on the friendship status
     if (isFriend) {

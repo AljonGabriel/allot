@@ -48,7 +48,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   useEffect(() => {
     const checkIfFriend = async () => {
-      setFriend(isFriend.areFriends);
+      setFriend(isFriend.isFriend || []);
     };
 
     const reFetch = async () => {
@@ -77,7 +77,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   return (
     <>
-      {friend ? (
+      {friend && friend[0] ? (
         <Dropdown>
           <Dropdown.Toggle variant='outline-primary'>
             <Check size={20} />

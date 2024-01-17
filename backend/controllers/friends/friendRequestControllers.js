@@ -86,7 +86,7 @@ const acceptRequest = asyncHandler(async (req, res) => {
     // Step 1: Find or Create the FriendList Document
     let requestee = await FriendListModel.findOne({ userId: feRequesteeId });
 
-    let requester = await FriendListModel.findOne({ userId: feRequesteeId });
+    let requester = await FriendListModel.findOne({ userId: feRequesterId });
 
     // If no friendList document exists, create one
     if (!requestee) {
@@ -140,36 +140,27 @@ const acceptRequest = asyncHandler(async (req, res) => {
 const checkIfFriend = asyncHandler(async (req, res) => {
   const { loggedInUserId, otherUserId } = req.query;
 
-  console.log(loggedInUserId, otherUserId);
-
   try {
     //Check if loggedin user is exist
     const loggedInUser = await FriendListModel.findOne({
       userId: loggedInUserId,
     });
 
-    console.log(
-      'Loggedin User:',
-      loggedInUser
-        ? loggedInUser.friends.some((friend) =>
-            otherUserId.includes(friend.friendId),
-          )
-        : false,
-    );
-
     //Check if the loggedin user is friend with other otherUserId
 
     const isFriend = loggedInUser
-      ? loggedInUser.friends.some((friend) =>
-          otherUserId.includes(friend.friendId),
-        )
-      : false;
+      ? otherUserId
+          .split(',')
+          .map((userId) =>
+            loggedInUser.friends.some((friend) => friend.friendId === userId),
+          )
+      : [];
 
-    console.log(loggedInUser && loggedInUser.friends);
+    console.log(isFriend);
 
     // Step 5: Respond based on the friendship status
     if (isFriend) {
-      res.status(200).json({ areFriends: true });
+      res.status(200).json({ isFriend });
     } else {
       res.status(200).json({ areFriends: false });
     }

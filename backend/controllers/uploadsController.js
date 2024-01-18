@@ -58,7 +58,6 @@ const getSpecificPostByUserId = asyncHandler(async (req, res) => {
 
 const pfUpload = asyncHandler(async (req, res) => {
   const userInfo = req.user;
-
   const { feDescription } = req.body;
 
   // Check if req.file is defined
@@ -66,25 +65,30 @@ const pfUpload = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'No file provided' });
   }
 
-  const fePostImages = req.file.filename;
+  const fePostImage = req.file.filename;
+
+  console.log(fePostImage);
 
   const newUpload = new UploadModel({
     uploadedUserID: userInfo._id,
     uploadedBy: userInfo.fname + ' ' + userInfo.lname,
-    images: fePostImages,
+    images: fePostImage,
     description: feDescription,
     postedDate: formatDate(new Date()),
-    userProfile: fePostImages,
+    userProfile: fePostImage,
+    postAudience: 'public',
   });
 
   try {
     const uploaded = await newUpload.save();
-    if (uploaded) {
-      userInfo.profileImage = `${uploaded.images}`;
-      await userInfo.save(); // Corrected the method name here
-      res.status(200).json({ uploaded, updatedProfile: userInfo });
-    }
+
+    // Update user's profile image
+    userInfo.profileImage = fePostImage;
+    await userInfo.save();
+
+    res.status(200).json({ uploaded, updatedProfile: userInfo });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ error: 'Posting failed' });
   }
 });

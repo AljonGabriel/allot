@@ -85,7 +85,7 @@ const ProfilePicture = () => {
       <section className='bg-white p-5 border border-white-secondary rounded-3'>
         <Form
           className='text-center'
-          onSubmit={(e) => handlesSubmit(e)}>
+          onSubmit={handlesSubmit}>
           <Image
             src={defImg}
             alt='Default Image'

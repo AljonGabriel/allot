@@ -140,6 +140,8 @@ const acceptRequest = asyncHandler(async (req, res) => {
 const checkIfFriend = asyncHandler(async (req, res) => {
   const { loggedInUserId, otherUserId } = req.query;
 
+  console.log('otherUserId:', typeof otherUserId);
+
   try {
     //Check if loggedin user is exist
     const loggedInUser = await FriendListModel.findOne({
@@ -156,7 +158,7 @@ const checkIfFriend = asyncHandler(async (req, res) => {
           )
       : [];
 
-    console.log(isFriend);
+    console.log('IsFriend:', isFriend);
 
     // Step 5: Respond based on the friendship status
     if (isFriend) {

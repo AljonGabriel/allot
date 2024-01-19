@@ -25,6 +25,8 @@ const UserPageRoute = () => {
 
   const { data: userUploads } = useGetUploadsByIdQuery({ id });
 
+  const loggedInUser = userInfo;
+
   useEffect(() => {
     if (userProfile && userUploads) {
       setViewedUser(userProfile.user);
@@ -61,6 +63,7 @@ const UserPageRoute = () => {
           <UserProfile
             viewedUserPosts={viewedUserPosts}
             viewedUser={viewedUser}
+            loggedInUser={loggedInUser}
           />
         </div>
       </Container>

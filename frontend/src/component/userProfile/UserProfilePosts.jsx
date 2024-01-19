@@ -13,21 +13,53 @@ import { HandThumbsUp, Send, ChatLeftText } from 'react-bootstrap-icons';
 
 import TimeAgo from '../../utils/TimeAgo';
 
+import { useEffect, useState } from 'react';
+
+import { useCheckIfFriendQuery } from '../../states/slices/friends/apiFriendsEndpoints';
+
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
 const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
 
-const UserProfile = ({ viewedUserPosts, viewedUser }) => {
+const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
   const viewed = viewedUser || '';
   const viewedPost = viewedUserPosts || [];
+  const loggedInUserId = loggedInUser._id || [];
+
+  console.log('Viewed:', viewed);
+
+  const [friend, setFriend] = useState([]);
+
+  const { data: isFriend } = useCheckIfFriendQuery({
+    loggedInUserId,
+    otherUserId: viewed._id,
+  });
+
+  useEffect(() => {
+    setFriend(isFriend || []);
+  }, [isFriend]);
+
+  console.log(friend.isFriend);
   return (
     <section className='w-100'>
       {viewed ? (
         <>
           <h4 className='text-muted mb-3'>Other posts</h4>
-          {viewedPost ? (
-            <>
-              {viewedPost.map((post, index) => (
+
+          {viewedPost.map((post, index) => {
+            const isFriendPost =
+              post.postAudience === 'friends' &&
+              friend.isFriend &&
+              friend.isFriend[index] === true;
+
+            const isOwnPost = loggedInUserId === post.uploadedUserID;
+
+            const isPrivatePost = post.postAudience === 'private' && isOwnPost;
+
+            const isPublicPost = post.postAudience === 'public';
+
+            return (
+              (isFriendPost || isOwnPost || isPrivatePost || isPublicPost) && (
                 <section
                   key={index}
                   className='bg-white mb-3 rounded shadow border'>
@@ -200,16 +232,12 @@ const UserProfile = ({ viewedUserPosts, viewedUser }) => {
                     </div>
                   </div>
                 </section>
-              ))}
-            </>
-          ) : (
-            <>
-              <h2>No post yet</h2>
-            </>
-          )}
+              )
+            );
+          })}
         </>
       ) : (
-        <LoadingSpinner />
+        ''
       )}
     </section>
   );

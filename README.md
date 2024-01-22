@@ -26,7 +26,7 @@ Friend Requests: Connect with other users by sending and accepting friend
 requests. ![App Screenshot](screenshots/add-friend.jpg)
 
 Privacy Settings: Choose the audience for each post (public, friends, private).
-![App Screenshot](screenshots/post-sharing.jpg)
+![App Screenshot](screenshots/privacy-setting.jpg)
 
 Real-time Updates: Receive real-time notifications for friend requests, likes,
 and comments. ![App Screenshot](screenshots/notifications.jpg)

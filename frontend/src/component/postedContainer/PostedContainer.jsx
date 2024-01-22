@@ -12,12 +12,19 @@ import { useGetUploadsQuery } from '../../states/slices/uploads/apiUploadsEndpoi
 
 import { useCheckIfFriendQuery } from '../../states/slices/friends/apiFriendsEndpoints';
 
-import LoadingSpinner from './../loading/LoadingSpinner';
 import { useSelector } from 'react-redux';
 import TimeAgo from '../../utils/TimeAgo';
 import { LinkContainer } from 'react-router-bootstrap';
-import { HandThumbsUp, Send, ChatLeftText } from 'react-bootstrap-icons';
+import {
+  HandThumbsUp,
+  Send,
+  ChatLeftText,
+  Globe,
+  People,
+  Person,
+} from 'react-bootstrap-icons';
 import LoadingData from '../loading/LoadingData';
+import AddComment from '../comment/AddComment';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -60,24 +67,23 @@ const PostedContainer = () => {
     fetchData();
   }, [postedData, data, friend]);
 
-  console.log('isFriend:', isFriend);
+  console.log('isFriend:', isFriend, isLoading);
 
   return (
     <>
-      {posted ? (
-        posted.map((post, index) => {
-          const areFriend =
-            post.postAudience === 'friends' &&
-            friend &&
-            friend.isFriend[index] === true;
-          const isOwnPost = loggedUserId === post.uploadedUserID;
+      {posted
+        ? posted.map((post, index) => {
+            const areFriend =
+              post.postAudience === 'friends' &&
+              friend &&
+              friend.isFriend[index] === true;
+            const isOwnPost = loggedUserId === post.uploadedUserID;
 
-          const isPrivatePost = post.postAudience === 'private' && isOwnPost;
+            const isPrivatePost = post.postAudience === 'private' && isOwnPost;
 
-          const isPublicPost = post.postAudience === 'public';
+            const isPublicPost = post.postAudience === 'public';
 
-          return (
-            (areFriend || isOwnPost || isPrivatePost || isPublicPost) && (
+            return areFriend || isOwnPost || isPrivatePost || isPublicPost ? (
               <>
                 <section
                   key={index}
@@ -110,8 +116,24 @@ const PostedContainer = () => {
                               <h4 className='d-block m-0 text-text'>
                                 {post.uploadedBy}
                               </h4>
-                              <small className='d-block text-muted white'>
+                              <small className='text-muted white me-2'>
                                 <TimeAgo date={post.createdAt} />
+                              </small>
+                              <small className=' '>
+                                {post.postAudience === 'private' ? (
+                                  <>
+                                    <Person />
+                                    {post.postAudience}
+                                  </>
+                                ) : post.postAudience === 'friends' ? (
+                                  <>
+                                    <People /> {post.postAudience}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Globe /> {post.postAudience}
+                                  </>
+                                )}
                               </small>
                             </div>
                           </>
@@ -237,27 +259,16 @@ const PostedContainer = () => {
                           <label>Comment</label>
                         </div>
                       </Stack>
-                      <Form>
-                        <InputGroup>
-                          <Form.Control
-                            type='text'
-                            placeholder='Write a public comment'
-                          />
-                          <Button size='lg'>
-                            <Send />
-                          </Button>
-                        </InputGroup>
-                      </Form>
+                      <AddComment />
                     </div>
                   </div>
                 </section>
               </>
-            )
-          );
-        })
-      ) : (
-        <LoadingData />
-      )}
+            ) : (
+              isLoading && <LoadingData />
+            );
+          })
+        : isLoading && <LoadingData />}
     </>
   );
 };

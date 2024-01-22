@@ -6,10 +6,16 @@ import {
   InputGroup,
   Button,
 } from 'react-bootstrap';
-import LoadingSpinner from '../loading/LoadingSpinner';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { HandThumbsUp, Send, ChatLeftText } from 'react-bootstrap-icons';
+import {
+  HandThumbsUp,
+  Send,
+  ChatLeftText,
+  Person,
+  Globe,
+  People,
+} from 'react-bootstrap-icons';
 
 import TimeAgo from '../../utils/TimeAgo';
 
@@ -95,8 +101,24 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
                               <h4 className='d-block m-0 text-text'>
                                 {post.uploadedBy}
                               </h4>
-                              <small className='d-block text-muted white'>
+                              <small className='text-muted white me-2'>
                                 <TimeAgo date={post.createdAt} />
+                              </small>
+                              <small className=' '>
+                                {post.postAudience === 'private' ? (
+                                  <>
+                                    <Person />
+                                    {post.postAudience}
+                                  </>
+                                ) : post.postAudience === 'friends' ? (
+                                  <>
+                                    <People /> {post.postAudience}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Globe /> {post.postAudience}
+                                  </>
+                                )}
                               </small>
                             </div>
                           </>

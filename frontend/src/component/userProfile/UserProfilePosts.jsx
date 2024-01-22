@@ -16,6 +16,7 @@ import TimeAgo from '../../utils/TimeAgo';
 import { useEffect, useState } from 'react';
 
 import { useCheckIfFriendQuery } from '../../states/slices/friends/apiFriendsEndpoints';
+import LoadingData from '../loading/LoadingData';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -32,14 +33,16 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
 
   const { data: isFriend } = useCheckIfFriendQuery({
     loggedInUserId,
-    otherUserId: viewed._id,
+    otherUserId: [viewed._id],
   });
 
   useEffect(() => {
-    setFriend(isFriend || []);
+    // Assuming isFriend has a property called isFriend which is an array
+    setFriend(isFriend && isFriend.isFriend && isFriend.isFriend[0]);
   }, [isFriend]);
 
-  console.log(friend.isFriend);
+  console.log('userProfile DataL', friend);
+
   return (
     <section className='w-100'>
       {viewed ? (
@@ -47,16 +50,17 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
           <h4 className='text-muted mb-3'>Other posts</h4>
 
           {viewedPost.map((post, index) => {
-            const isFriendPost =
-              post.postAudience === 'friends' &&
-              friend.isFriend &&
-              friend.isFriend[index] === true;
-
             const isOwnPost = loggedInUserId === post.uploadedUserID;
+
+            const isFriendPost =
+              post.postAudience === 'friends' && friend === true;
 
             const isPrivatePost = post.postAudience === 'private' && isOwnPost;
 
             const isPublicPost = post.postAudience === 'public';
+
+            console.log('Options:', isFriendPost + [index] + ' ' + friend);
+            console.log('UserProfle Post:', friend);
 
             return (
               (isFriendPost || isOwnPost || isPrivatePost || isPublicPost) && (
@@ -199,7 +203,6 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
                     )}
 
                     <div className='p-3'>
-                      <hr />
                       <Stack direction='horizontal'>
                         <div>
                           <HandThumbsUp
@@ -237,7 +240,7 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
           })}
         </>
       ) : (
-        ''
+        <LoadingData />
       )}
     </section>
   );

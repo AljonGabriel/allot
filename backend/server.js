@@ -24,6 +24,7 @@ db();
 import usersRoutes from './routes/usersRoutes.js';
 import uploadsRoutes from './routes/uploadsRoutes.js';
 import friendRoutes from './routes/friendRoutes.js';
+import commentRoutes from './routes/commentRoutes.js';
 
 app.use(
   cors({
@@ -52,6 +53,7 @@ app.use(express.static(uploadsPath));
 app.use('/api/users', usersRoutes);
 app.use('/api/uploads', uploadsRoutes);
 app.use('/api/friends', friendRoutes);
+app.use('/api/v1/comments', commentRoutes);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 

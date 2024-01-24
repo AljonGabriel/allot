@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Image,
-  Form,
-  CloseButton,
-  InputGroup,
-  Button,
-  Stack,
-} from 'react-bootstrap';
+import { Image, CloseButton, Stack } from 'react-bootstrap';
 
 import { useGetUploadsQuery } from '../../states/slices/uploads/apiUploadsEndpoints';
 
@@ -17,14 +10,13 @@ import TimeAgo from '../../utils/TimeAgo';
 import { LinkContainer } from 'react-router-bootstrap';
 import {
   HandThumbsUp,
-  Send,
   ChatLeftText,
   Globe,
   People,
   Person,
 } from 'react-bootstrap-icons';
 import LoadingData from '../loading/LoadingData';
-import AddComment from '../comment/AddComment';
+import CommentField from '../comment/CommentField';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -259,7 +251,10 @@ const PostedContainer = () => {
                           <label>Comment</label>
                         </div>
                       </Stack>
-                      <AddComment />
+                      <CommentField
+                        post={post}
+                        userInfo={userInfo}
+                      />
                     </div>
                   </div>
                 </section>

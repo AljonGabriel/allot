@@ -33,8 +33,10 @@ const addComment = asyncHandler(async (req, res) => {
 });
 
 const viewPostComments = asyncHandler(async (req, res) => {
+  const { fePostId } = req.query;
+
   const comment = await CommentModel.find({
-    postId: '65b2551b5e7a4233ae6498fb', // Assuming postId is a string representation of ObjectId
+    postId: fePostId,
   });
 
   if (comment) {

@@ -33,8 +33,6 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
   const viewedPost = viewedUserPosts || [];
   const loggedInUserId = loggedInUser._id || [];
 
-  console.log('Viewed:', viewed);
-
   const [friend, setFriend] = useState([]);
 
   const { data: isFriend } = useCheckIfFriendQuery({

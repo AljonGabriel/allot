@@ -17,8 +17,6 @@ const CommentField = ({ post, userInfo }) => {
   const commentedBy = userInfo.fname + userInfo.mname + userInfo.lname;
   const loggedUser = userInfo._id;
 
-  console.log(postedBy);
-
   const [inputData, setInputData] = useState({
     fePostId: postId,
     fePostedBy: postedBy,
@@ -62,8 +60,6 @@ const CommentField = ({ post, userInfo }) => {
       console.log(error);
     }
   };
-
-  console.log(inputData);
 
   return (
     <>

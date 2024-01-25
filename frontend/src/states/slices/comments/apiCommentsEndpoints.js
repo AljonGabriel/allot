@@ -11,7 +11,15 @@ export const apiCommentsEndpoints = apiCommentsSlice.injectEndpoints({
         body: inputData,
       }),
     }),
+    viewPostComments: builder.query({
+      query: (inputData) => ({
+        url: `${BASE_URL}/view`,
+        method: 'GET',
+        params: inputData,
+      }),
+    }),
   }),
 });
 
-export const { useAddCommentMutation } = apiCommentsEndpoints;
+export const { useAddCommentMutation, useViewPostCommentsQuery } =
+  apiCommentsEndpoints;

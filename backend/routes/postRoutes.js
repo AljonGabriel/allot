@@ -7,7 +7,7 @@ import {
   pfUpload,
   getPostByUserId,
   getSpecificPostByUserId,
-} from '../controllers/uploadsController.js';
+} from '../controllers/postControllers.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
 import {

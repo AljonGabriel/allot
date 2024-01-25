@@ -22,7 +22,7 @@ db();
 
 //Imported Routes
 import usersRoutes from './routes/usersRoutes.js';
-import uploadsRoutes from './routes/uploadsRoutes.js';
+import postRoutes from './routes/postRoutes.js';
 import friendRoutes from './routes/friendRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
 
@@ -51,7 +51,7 @@ const uploadsPath = path.join('frontend', 'src', 'assets', 'uploads');
 app.use(express.static(uploadsPath));
 //routes
 app.use('/api/users', usersRoutes);
-app.use('/api/uploads', uploadsRoutes);
+app.use('/api/uploads', postRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/v1/comments', commentRoutes);
 

@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import UploadModel from '../models/uploadsModel.js';
+import PostModel from '../models/postModels.js';
 import formatDate from '../utils/formatDate.js';
 
 const post = asyncHandler(async (req, res) => {
@@ -8,9 +8,7 @@ const post = asyncHandler(async (req, res) => {
 
   const userInfo = req.user;
 
-  console.log(fePostAudience);
-
-  const newUpload = new UploadModel({
+  const newUpload = new PostModel({
     uploadedUserID: userInfo._id,
     uploadedBy: userInfo.fname + userInfo.lname,
     images: fePostImages,
@@ -30,7 +28,7 @@ const post = asyncHandler(async (req, res) => {
 });
 
 const getPost = asyncHandler(async (req, res) => {
-  await UploadModel.find()
+  await PostModel.find()
     .sort({ postedDate: -1 })
     .then((posted) => res.status(200).json({ posted }))
     .catch((err) => res.status(400).json(err));
@@ -39,7 +37,7 @@ const getPost = asyncHandler(async (req, res) => {
 const getPostByUserId = asyncHandler(async (req, res) => {
   const uId = req.query.id;
 
-  const userPost = await UploadModel.find({
+  const userPost = await PostModel.find({
     uploadedUserID: uId,
   }).sort({ postedDate: -1 });
 
@@ -49,7 +47,7 @@ const getPostByUserId = asyncHandler(async (req, res) => {
 const getSpecificPostByUserId = asyncHandler(async (req, res) => {
   const img = req.query.img;
 
-  const userPost = await UploadModel.findOne({
+  const userPost = await PostModel.findOne({
     userProfile: img,
   });
 
@@ -69,7 +67,7 @@ const pfUpload = asyncHandler(async (req, res) => {
 
   console.log(fePostImage);
 
-  const newUpload = new UploadModel({
+  const newUpload = new PostModel({
     uploadedUserID: userInfo._id,
     uploadedBy: userInfo.fname + ' ' + userInfo.lname,
     images: fePostImage,

@@ -7,25 +7,42 @@ import { useAddCommentMutation } from '../../states/slices/comments/apiCommentsE
 import { setCommentAction } from '../../states/slices/comments/commentsSlice';
 
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const CommentField = ({ post, userInfo }) => {
+  const postId = post._id;
+  const postedBy = post.uploadedBy;
+  const postedById = post.uploadedUserID;
+  const commentedBy = userInfo.fname + userInfo.mname + userInfo.lname;
+  const loggedUser = userInfo._id;
 
-  const loggedUser = 
-
+  console.log(postedBy);
 
   const [inputData, setInputData] = useState({
+    fePostId: postId,
+    fePostedBy: postedBy,
+    fePostedById: postedById,
+    feCommentedBy: commentedBy,
+    feCommentedById: loggedUser,
+    feUserComment: '',
+  });
+
+  const initialInputData = {
     fePostId: '',
     fePostedBy: '',
     fePostedById: '',
     feCommentedBy: '',
     feCommentedById: '',
     feUserComment: '',
-  });
+  };
 
-  console.log('Fomr Comment Field: ', post);
+  const resetInputData = () => {
+    setInputData(initialInputData);
+  };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleData = (event) => {
     setInputData({ ...inputData, feUserComment: event.target.value });
@@ -39,6 +56,8 @@ const CommentField = ({ post, userInfo }) => {
     try {
       const res = await commented(inputData).unwrap();
       dispatch(setCommentAction(res));
+      navigate('/home');
+      resetInputData();
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +78,7 @@ const CommentField = ({ post, userInfo }) => {
           <Button
             size='lg'
             type='submit'
-            disabled={isLoading}>
+            disabled={isLoading || !inputData.feUserComment}>
             {isLoading ? <LoadingSpinner /> : <Send />}
           </Button>
         </InputGroup>

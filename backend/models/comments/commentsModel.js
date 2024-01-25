@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const commentSchema = mongoose.Schema(
   {
     postId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     postedBy: {
@@ -11,7 +11,7 @@ const commentSchema = mongoose.Schema(
       required: true,
     },
     postedById: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     commentedBy: {
@@ -19,7 +19,7 @@ const commentSchema = mongoose.Schema(
       required: true,
     },
     commentedById: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     comment: {

@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-const uploadSchema = mongoose.Schema(
+const postSchema = mongoose.Schema(
   {
     uploadedUserID: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     uploadedBy: {
@@ -34,6 +34,6 @@ const uploadSchema = mongoose.Schema(
   },
 );
 
-const UploadModel = mongoose.model('Uploads', uploadSchema);
+const PostModel = mongoose.model('posts', postSchema);
 
-export default UploadModel;
+export default PostModel;

@@ -29,7 +29,6 @@ const PostedContainer = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
   const { postedData } = useSelector((state) => state.posts);
-  const { commentAction } = useSelector((state) => state.comments);
 
   const loggedUserId = userInfo._id;
 
@@ -55,7 +54,7 @@ const PostedContainer = () => {
       getPosted();
     };
     fetchData();
-  }, [postedData, data, friend, commentAction]);
+  }, [postedData, data, friend]);
 
   return (
     <>
@@ -246,7 +245,7 @@ const PostedContainer = () => {
                         <label>Comment</label>
                       </div>
                     </Stack>
-                    <hr className='text-gray' />
+
                     <Comments
                       post={post}
                       userInfo={userInfo}

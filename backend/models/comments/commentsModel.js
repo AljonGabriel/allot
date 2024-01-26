@@ -12,6 +12,7 @@ const commentSchema = mongoose.Schema(
     },
     postedById: {
       type: mongoose.Schema.Types.ObjectId,
+
       required: true,
     },
     commentedBy: {
@@ -20,6 +21,7 @@ const commentSchema = mongoose.Schema(
     },
     commentedById: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'Users',
       required: true,
     },
     comment: {

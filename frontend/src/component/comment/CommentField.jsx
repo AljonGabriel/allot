@@ -14,7 +14,8 @@ const CommentField = ({ post, userInfo }) => {
   const postId = post._id;
   const postedBy = post.uploadedBy;
   const postedById = post.uploadedUserID;
-  const commentedBy = userInfo.fname + userInfo.mname + userInfo.lname;
+  const commentedBy =
+    userInfo.fname + ' ' + userInfo.mname + ' ' + userInfo.lname;
   const loggedUser = userInfo._id;
 
   const [inputData, setInputData] = useState({

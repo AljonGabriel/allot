@@ -37,7 +37,9 @@ const viewPostComments = asyncHandler(async (req, res) => {
 
   const comment = await CommentModel.find({
     postId: fePostId,
-  });
+  })
+    .populate('commentedById')
+    .exec();
 
   if (comment) {
     res.status(200).json(comment);

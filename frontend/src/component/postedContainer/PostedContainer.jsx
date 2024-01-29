@@ -226,30 +226,36 @@ const PostedContainer = () => {
                       ))}
                     </>
                   )}
-                  <div className='p-3'>
-                    <Stack direction='horizontal'>
-                      <div>
-                        <HandThumbsUp
-                          color='gray'
-                          className='m-3 bg-white'
-                          size={30}
-                        />
-                        <small>Like</small>
-                      </div>
-                      <div>
-                        <ChatLeftText
-                          color='gray'
-                          className='m-3 bg-white'
-                          size={30}
-                        />
-                        <label>Comment</label>
-                      </div>
-                    </Stack>
-
+                  <Stack direction='horizontal'>
+                    <div>
+                      <HandThumbsUp
+                        color='gray'
+                        className='m-3 bg-white'
+                        size={30}
+                      />
+                      <small>Like</small>
+                    </div>
+                    <div>
+                      <ChatLeftText
+                        color='gray'
+                        className='m-3 bg-white'
+                        size={30}
+                      />
+                      <label>Comment</label>
+                    </div>
+                  </Stack>
+                  <div
+                    className='p-3'
+                    style={{
+                      maxHeight: '200px',
+                      overflow: 'auto',
+                    }}>
                     <Comments
                       post={post}
                       userInfo={userInfo}
                     />
+                  </div>
+                  <div className='p-3'>
                     <CommentField
                       post={post}
                       userInfo={userInfo}

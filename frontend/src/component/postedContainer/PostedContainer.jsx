@@ -24,11 +24,21 @@ const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
 const defImg = 'http://localhost:5000/defaultImg/Default.jpg';
 
 const PostedContainer = () => {
+  //useStates
+
   const [posted, setPosted] = useState([]);
   const [isFriend, setIsFriend] = useState([]);
 
   const { userInfo } = useSelector((state) => state.auth);
   const { postedData } = useSelector((state) => state.posts);
+
+  const [showField, setShowField] = useState(Array(posted.length).fill(false));
+
+  const toggleCommentField = (index) => {
+    const updatedShowFields = [...showField];
+    updatedShowFields[index] = !updatedShowFields[index];
+    setShowField(updatedShowFields);
+  };
 
   const loggedUserId = userInfo._id;
 
@@ -235,7 +245,7 @@ const PostedContainer = () => {
                       />
                       <small>Like</small>
                     </div>
-                    <div>
+                    <div onClick={() => toggleCommentField(index)}>
                       <ChatLeftText
                         color='gray'
                         className='m-3 bg-white'
@@ -244,21 +254,19 @@ const PostedContainer = () => {
                       <label>Comment</label>
                     </div>
                   </Stack>
-                  <div
-                    className='p-3'
-                    style={{
-                      maxHeight: '200px',
-                      overflow: 'auto',
-                    }}>
+                  <div>
                     <Comments
                       post={post}
                       userInfo={userInfo}
+                      toggleCommentField={() => toggleCommentField(index)}
+                      showField={showField}
                     />
                   </div>
-                  <div className='p-3'>
+                  <div>
                     <CommentField
                       post={post}
                       userInfo={userInfo}
+                      showField={showField[index]}
                     />
                   </div>
                 </div>

@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
-const CommentField = ({ post, userInfo }) => {
+const CommentField = ({ post, userInfo, showField }) => {
   const postId = post._id;
   const postedBy = post.uploadedBy;
   const postedById = post.uploadedUserID;
@@ -18,6 +18,7 @@ const CommentField = ({ post, userInfo }) => {
     userInfo.fname + ' ' + userInfo.mname + ' ' + userInfo.lname;
   const loggedUser = userInfo._id;
 
+  //useStates
   const [inputData, setInputData] = useState({
     fePostId: postId,
     fePostedBy: postedBy,
@@ -26,19 +27,6 @@ const CommentField = ({ post, userInfo }) => {
     feCommentedById: loggedUser,
     feUserComment: '',
   });
-
-  const initialInputData = {
-    fePostId: '',
-    fePostedBy: '',
-    fePostedById: '',
-    feCommentedBy: '',
-    feCommentedById: '',
-    feUserComment: '',
-  };
-
-  const resetInputData = () => {
-    setInputData(initialInputData);
-  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,8 +43,6 @@ const CommentField = ({ post, userInfo }) => {
     try {
       const res = await commented(inputData).unwrap();
       dispatch(setCommentAction(res));
-      navigate('/home');
-      resetInputData();
     } catch (error) {
       console.log(error);
     }
@@ -64,22 +50,26 @@ const CommentField = ({ post, userInfo }) => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <InputGroup>
-          <Form.Control
-            type='text'
-            placeholder='Write a public comment'
-            onChange={handleData}
-            value={inputData.feUserComment}
-          />
-          <Button
-            size='lg'
-            type='submit'
-            disabled={isLoading || !inputData.feUserComment}>
-            {isLoading ? <LoadingSpinner /> : <Send />}
-          </Button>
-        </InputGroup>
-      </Form>
+      {showField && (
+        <section className='p-1'>
+          <Form onSubmit={handleSubmit}>
+            <InputGroup>
+              <Form.Control
+                type='text'
+                placeholder='Write a public comment'
+                onChange={handleData}
+                value={inputData.feUserComment}
+              />
+              <Button
+                size='lg'
+                type='submit'
+                disabled={isLoading || !inputData.feUserComment}>
+                {isLoading ? <LoadingSpinner /> : <Send />}
+              </Button>
+            </InputGroup>
+          </Form>
+        </section>
+      )}
     </>
   );
 };

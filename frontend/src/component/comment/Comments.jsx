@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useViewPostCommentsQuery } from '../../states/slices/comments/apiCommentsEndpoints';
 import { useSelector } from 'react-redux';
-import { Image, Stack } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 
 import TimeAgo from '../../utils/TimeAgo';
 import LoadingData from '../loading/LoadingData';
@@ -15,7 +15,12 @@ import './comments.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import MoreCommentsModal from './moreCommentsModal';
 
-const Comments = ({ post, userInfo, toggleCommentField, showField }) => {
+const Comments = ({
+  post,
+  userInfo,
+  toggleModalCommentField,
+  showModalField,
+}) => {
   const postId = post._id;
 
   //useStates
@@ -40,6 +45,13 @@ const Comments = ({ post, userInfo, toggleCommentField, showField }) => {
     reFetchComments();
   }, [commentAction, refetch]);
 
+  useEffect(() => {
+    setInputData((prevInputData) => ({
+      ...prevInputData,
+      fePostId: postId,
+    }));
+  }, [postId]);
+
   console.log(comment);
 
   return (
@@ -53,22 +65,23 @@ const Comments = ({ post, userInfo, toggleCommentField, showField }) => {
       {comment && comment.length >= 2 && (
         <div className='my-1'>
           <small
-            onClick={() => setModalShow(true, toggleCommentField)}
+            onClick={() => setModalShow(true, toggleModalCommentField)}
             style={{ cursor: 'pointer' }}>
-            <strong onClick={toggleCommentField}>View more comments</strong>
+            <strong onClick={toggleModalCommentField}>
+              View more comments
+            </strong>
           </small>
           <MoreCommentsModal
             show={modalShow}
-            onHide={() => setModalShow(false, toggleCommentField)}
+            onHide={() => setModalShow(false, toggleModalCommentField)}
             comment={comment}
             userInfo={userInfo}
             post={post}
-            showField={showField}
+            showModalField={showModalField}
           />
         </div>
       )}
       {!isLoading ? (
-        comment &&
         comment.length > 0 && (
           <section className='my-2 p-2 gap-3 bg-white-secondary border border-secondary-white rounded border-1'>
             <LinkContainer to={`/userPage/${comment[0].commentedById._id}`}>

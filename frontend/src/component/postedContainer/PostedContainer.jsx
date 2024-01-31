@@ -33,6 +33,11 @@ const PostedContainer = () => {
   const { postedData } = useSelector((state) => state.posts);
 
   const [showField, setShowField] = useState(Array(posted.length).fill(false));
+  const [showModalField, setShowModalField] = useState(
+    Array(posted.length).fill(false),
+  );
+
+  console.log(showField);
 
   const toggleCommentField = (index) => {
     const updatedShowFields = [...showField];
@@ -40,31 +45,32 @@ const PostedContainer = () => {
     setShowField(updatedShowFields);
   };
 
+  const toggleModalCommentField = (index) => {
+    const updatedShowModalFields = [...showField];
+    updatedShowModalFields[index] = !updatedShowModalFields[index];
+    setShowModalField(updatedShowModalFields);
+  };
+
   const loggedUserId = userInfo._id;
 
   const { data, isLoading, refetch } = useGetUploadsQuery();
   const { data: friend } = useCheckIfFriendQuery({
     loggedInUserId: loggedUserId,
-    otherUserId: posted.map((post) => post.uploadedUserID),
+    otherUserId: data?.posted.map((post) => post.uploadedUserID) || [], // Ensure data.posted is available before mapping
   });
-
-  const getPosted = async () => {
-    try {
-      setPosted(data?.posted || []);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-  };
 
   useEffect(() => {
     setIsFriend(friend || []);
+    setPosted(data?.posted || []);
 
     const fetchData = async () => {
       await refetch();
-      getPosted();
     };
+
+    postedData;
+
     fetchData();
-  }, [postedData, data, friend]);
+  }, [friend, refetch, postedData, data]);
 
   return (
     <>
@@ -236,39 +242,37 @@ const PostedContainer = () => {
                       ))}
                     </>
                   )}
-                  <Stack direction='horizontal'>
-                    <div>
-                      <HandThumbsUp
-                        color='gray'
-                        className='m-3 bg-white'
-                        size={30}
-                      />
-                      <small>Like</small>
-                    </div>
-                    <div onClick={() => toggleCommentField(index)}>
-                      <ChatLeftText
-                        color='gray'
-                        className='m-3 bg-white'
-                        size={30}
-                      />
-                      <label>Comment</label>
-                    </div>
-                  </Stack>
+                  <hr />
+
+                  <div
+                    onClick={() => toggleCommentField(index)}
+                    style={{ cursor: 'pointer' }}
+                    className='m-3'>
+                    <ChatLeftText
+                      color='gray'
+                      size={25}
+                    />
+                    <label className='ms-2'>Write comment</label>
+                  </div>
+
                   <div>
                     <Comments
                       post={post}
                       userInfo={userInfo}
-                      toggleCommentField={() => toggleCommentField(index)}
-                      showField={showField}
+                      toggleModalCommentField={() =>
+                        toggleModalCommentField(index)
+                      }
+                      showModalField={showModalField}
                     />
                   </div>
-                  <div>
-                    <CommentField
-                      post={post}
-                      userInfo={userInfo}
-                      showField={showField[index]}
-                    />
-                  </div>
+                  {showField[index] && (
+                    <div>
+                      <CommentField
+                        post={post}
+                        userInfo={userInfo}
+                      />
+                    </div>
+                  )}
                 </div>
               </section>
             ) : (

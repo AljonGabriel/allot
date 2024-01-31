@@ -30,7 +30,6 @@ const UserProfileImage = () => {
       }
       style={{ width: '50px', height: '50px', objectFit: 'cover' }}
       roundedCircle
-      className='m-auto'
     />
   );
 };

@@ -164,6 +164,8 @@ const AppNavbar = () => {
                         style={{ cursor: 'pointer' }}>
                         <People size={25} />
                       </NavLink>
+                      <Button variant='outline-danger'>Delete all post</Button>
+                      <Button variant='danger'>Delete all comment</Button>
                     </div>
                   </section>
 

@@ -28,6 +28,10 @@ const PostModal = () => {
 
   const dispatch = useDispatch();
 
+  const resetInputData = () => {
+    setInputData({ ...inputData, fePostDescription: '', fePostImages: [] });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -46,9 +50,8 @@ const PostModal = () => {
 
     try {
       const data = await post(formData).unwrap();
-
       dispatch(setPosts({ ...data.uploaded.images }));
-
+      resetInputData();
       handleClose();
     } catch (err) {
       console.log(err);
@@ -83,30 +86,30 @@ const PostModal = () => {
       <Modal
         show={show}
         onHide={handleClose}
-        backdrop='static'
         keyboard={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Share something ?</Modal.Title>
+        <Modal.Header>
+          <Modal.Title>
+            <h4 className='text-center m-auto'>{`${userInfo.fname}, express something ?`}</h4>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <section className='border border-1  mb-3 rounded-2 p-3'>
+          <section>
             <Form
               id='postingForm'
               onSubmit={(e) => handleSubmit(e)}>
               <Form.Select
                 aria-label='Default select example'
-                className='mb-3 border border-0'
+                className='border border-1'
                 onChange={handlePostSortChange}
                 value={inputData.fePostAudience}>
                 <option value='public'>Public</option>
                 <option value='friends'>Friends</option>
                 <option value='private'>Private</option>
               </Form.Select>
-
               <Form.Control
                 as='textarea'
                 style={{ maxHeight: '100px' }}
-                className='mb-3 border border-0 bg-transparent'
+                className='my-3 border border-0'
                 placeholder={`Whats on your mind, ${userInfo.fname}`}
                 value={inputData.fePostDescription}
                 onChange={(e) =>
@@ -116,40 +119,42 @@ const PostModal = () => {
                   })
                 }
               />
+              <small className='d-block m-auto text-center w-100 mb-3'>
+                Other actions
+              </small>
 
-              <Stack
-                gap={1}
-                className='p-3 d-flex align-items-center justify-content-center rounded border bg-white'>
-                <Form.Label htmlFor='postFileInput'>
-                  {' '}
-                  <Images
-                    size={50}
-                    className='d-block text-center m-auto text-secondary'
-                  />
-                  Add photos/Videos
-                </Form.Label>
-                <Form.Control
-                  type='file'
-                  accept='image/*'
-                  id='postFileInput'
-                  name='postImages' // Ensure this matches the field name in the array function
-                  className='d-none'
-                  multiple
-                  onChange={(e) => {
-                    const selectedFiles = e.target.files;
-                    setInputData({
-                      ...inputData,
-                      fePostImages: selectedFiles,
-                    });
-                  }}
+              <Form.Label
+                htmlFor='postFileInput'
+                className='text-text border border-1 p-1 rounded m-auto'
+                style={{ cursor: 'pointer' }}>
+                {' '}
+                <Images
+                  size={25}
+                  className='me-3 text-secondary'
                 />
-              </Stack>
+                Attach photo
+              </Form.Label>
+              <Form.Control
+                type='file'
+                accept='image/*, video/mp4'
+                id='postFileInput'
+                name='postImages' // Ensure this matches the field name in the array function
+                className='d-none'
+                multiple
+                onChange={(e) => {
+                  const selectedFiles = e.target.files;
+                  setInputData({
+                    ...inputData,
+                    fePostImages: selectedFiles,
+                  });
+                }}
+              />
             </Form>
           </section>
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant='secondary'
+            variant='outline-secondary'
             onClick={handleClose}>
             Close
           </Button>
@@ -157,7 +162,7 @@ const PostModal = () => {
             form='postingForm'
             variant='primary'
             type='submit'
-            disabled={!inputData.fePostDescription ? true : isLoading && true}>
+            disabled={!inputData.fePostImages.length >= 1 ? true : false}>
             {isLoading ? <LoadingSpinner /> : 'Post'}
           </Button>
         </Modal.Footer>

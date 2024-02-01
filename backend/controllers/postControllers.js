@@ -91,4 +91,23 @@ const pfUpload = asyncHandler(async (req, res) => {
   }
 });
 
-export { post, getPost, pfUpload, getPostByUserId, getSpecificPostByUserId };
+//Testing purposes
+
+const deleteAllPost = asyncHandler(async (req, res) => {
+  const deleted = await PostModel.deleteMany();
+
+  if (deleted) {
+    res.status(200).json({ res: 'All post deleted' });
+  } else {
+    res.status(400).json({ error: 'Deleting all post failed!' });
+  }
+});
+
+export {
+  post,
+  getPost,
+  pfUpload,
+  getPostByUserId,
+  getSpecificPostByUserId,
+  deleteAllPost,
+};

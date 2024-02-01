@@ -23,6 +23,8 @@ import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndp
 import TimeAgo from '../../utils/TimeAgo';
 import { NavLink } from 'react-router-dom';
 import AcceptRequestBtn from '../acceptRequestBtn/AcceptRequestBtn';
+import DeleteAllCommentBtn from '../testing/deleteAllCommentBtn';
+import DeleteAllPost from '../testing/DeleteAllPost';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
@@ -164,8 +166,8 @@ const AppNavbar = () => {
                         style={{ cursor: 'pointer' }}>
                         <People size={25} />
                       </NavLink>
-                      <Button variant='outline-danger'>Delete all post</Button>
-                      <Button variant='danger'>Delete all comment</Button>
+                      <DeleteAllCommentBtn />
+                      <DeleteAllPost />
                     </div>
                   </section>
 

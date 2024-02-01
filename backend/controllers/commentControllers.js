@@ -48,4 +48,15 @@ const viewPostComments = asyncHandler(async (req, res) => {
   }
 });
 
-export { addComment, viewPostComments };
+//Testing purposes
+
+const deleteAllComments = asyncHandler(async (req, res) => {
+  try {
+    await CommentModel.deleteMany();
+    res.status(200).json({ res: 'All comments deleted' });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+export { addComment, viewPostComments, deleteAllComments };

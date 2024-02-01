@@ -18,8 +18,17 @@ export const apiCommentsEndpoints = apiCommentsSlice.injectEndpoints({
         params: inputData,
       }),
     }),
+    deleteAllComment: builder.mutation({
+      query: () => ({
+        url: `${BASE_URL}/deleteAllComment`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useAddCommentMutation, useViewPostCommentsQuery } =
-  apiCommentsEndpoints;
+export const {
+  useAddCommentMutation,
+  useViewPostCommentsQuery,
+  useDeleteAllCommentMutation,
+} = apiCommentsEndpoints;

@@ -7,6 +7,7 @@ import {
   pfUpload,
   getPostByUserId,
   getSpecificPostByUserId,
+  deleteAllPost,
 } from '../controllers/postControllers.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
@@ -25,5 +26,9 @@ router.post(
 router.get('/view', protect, getPost);
 router.get('/viewById', protect, getPostByUserId);
 router.get('/viewSpecificById', protect, getSpecificPostByUserId);
+
+//testing purposes
+
+router.delete('/deleteAllPost', deleteAllPost);
 
 export default router;

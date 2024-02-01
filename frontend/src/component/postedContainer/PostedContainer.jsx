@@ -111,17 +111,16 @@ const PostedContainer = () => {
                               cursor: 'pointer',
                             }}
                             roundedCircle
-                            className='m-auto '
                           />
 
                           <div>
-                            <h4 className='d-block m-0 text-text'>
+                            <h3 className='text-text m-auto'>
                               {post.uploadedBy}
-                            </h4>
+                            </h3>
                             <small className='text-muted white me-2'>
                               <TimeAgo date={post.createdAt} />
                             </small>
-                            <small className=' '>
+                            <small>
                               {post.postAudience === 'private' ? (
                                 <>
                                   <Person />
@@ -142,14 +141,14 @@ const PostedContainer = () => {
                       </div>
                     </LinkContainer>
                     {post.uploadedUserID === userInfo._id && (
-                      <div>
+                      <>
                         <CloseButton />
-                      </div>
+                      </>
                     )}
                   </div>
 
                   {post.images.length <= 0 ? (
-                    <h2 className='m-auto text-text'>{post.description}</h2>
+                    <h3 className='mt-3 text-text'>{post.description}</h3>
                   ) : post.images[0].includes('PF_') ? (
                     <>
                       <p className='text-accent m-auto d-flex align-items-center py-3'>

@@ -35,6 +35,12 @@ export const apiUploadsEndpoints = apiUploadsSlice.injectEndpoints({
         params: { img },
       }),
     }),
+    deleteAllPost: builder.mutation({
+      query: () => ({
+        url: `${UPLOAD_URL}/deleteAllPost`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -44,4 +50,5 @@ export const {
   useCreateProfilePicMutation,
   useGetUploadsByIdQuery,
   useGetSpecificUploadsByIdQuery,
+  useDeleteAllPostMutation,
 } = apiUploadsEndpoints;

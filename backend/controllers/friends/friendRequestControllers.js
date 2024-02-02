@@ -3,6 +3,7 @@ import FriendRequestModel from '../../models/friends/friendRequestModel.js';
 import UserModel from '../../models/userModel.js';
 
 import FriendListModel from '../../models/friends/friendListModel.js';
+import NotificationModel from '../../models/notification/notificationModel.js';
 
 const addRequest = asyncHandler(async (req, res) => {
   const { feRequesterId, feRequesterName, feRequesteeId, feRequesteeName } =
@@ -26,18 +27,33 @@ const addRequest = asyncHandler(async (req, res) => {
   }
 
   // Create a new friend request
-  const friendRequest = new FriendRequestModel({
+  const friendRequest = {
     requesterId: feRequesterId,
     requesterName: feRequesterName,
     requesteeId: feRequesteeId,
     requesteeName: feRequesteeName,
     status: 'pending',
-  });
+  };
 
   // Save the friend request to the database
-  await friendRequest.save();
+  const requested = await FriendRequestModel.create(friendRequest);
 
-  res.status(201).json({ message: 'Friend request added successfully' });
+  if (requested) {
+    const newFriendRequestNotification = {
+      type: 'friendRequest',
+      notificationForId: feRequesteeId,
+      notificationFor: feRequesteeName,
+      friendRequestId: requested._id,
+    };
+
+    await NotificationModel.create(newFriendRequestNotification);
+    res
+      .status(201)
+      .json({
+        message: 'Friend request added successfully',
+        newFriendRequestNotification,
+      });
+  }
 });
 
 const cancelRequest = asyncHandler(async (req, res) => {

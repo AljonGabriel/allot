@@ -162,7 +162,11 @@ const PostModal = () => {
             form='postingForm'
             variant='primary'
             type='submit'
-            disabled={!inputData.fePostImages.length >= 1 ? true : false}>
+            disabled={
+              inputData.fePostImages.length >= 1 || inputData.fePostDescription
+                ? false
+                : true
+            }>
             {isLoading ? <LoadingSpinner /> : 'Post'}
           </Button>
         </Modal.Footer>

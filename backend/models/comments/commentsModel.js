@@ -12,7 +12,6 @@ const commentSchema = mongoose.Schema(
     },
     postedById: {
       type: mongoose.Schema.Types.ObjectId,
-
       required: true,
     },
     commentedBy: {

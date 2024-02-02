@@ -241,7 +241,6 @@ const PostedContainer = () => {
                       ))}
                     </>
                   )}
-                  <hr />
 
                   <div
                     onClick={() => toggleCommentField(index)}

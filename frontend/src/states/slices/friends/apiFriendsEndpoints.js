@@ -1,7 +1,7 @@
 import { apiFriendsSlice } from './apiFriendsSlice';
 
 const BASE_URL = '/api/friends/';
-export const apiUploadsEndpoints = apiFriendsSlice.injectEndpoints({
+export const apiFriendEndpoints = apiFriendsSlice.injectEndpoints({
   endpoints: (builder) => ({
     add: builder.mutation({
       query: (data) => ({
@@ -49,4 +49,4 @@ export const {
   useCancelRequestMutation,
   useAcceptRequestMutation,
   useCheckIfFriendQuery,
-} = apiUploadsEndpoints;
+} = apiFriendEndpoints;

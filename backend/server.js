@@ -25,6 +25,7 @@ import usersRoutes from './routes/usersRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import friendRoutes from './routes/friendRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
+import notificationsRoute from './routes/notificationsRoute.js';
 
 app.use(
   cors({
@@ -54,6 +55,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/uploads', postRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/notifications', notificationsRoute);
 
 app.get('/', (req, res) => res.send('Server is ready'));
 

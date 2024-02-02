@@ -6,13 +6,11 @@ import {
   Form,
   Image,
   InputGroup,
-  Button,
-  Badge,
 } from 'react-bootstrap';
 import LogoutBtn from '../logoutBtn/LogoutBtn';
 import { useSelector } from 'react-redux';
 import { UserProfileImage } from './../userProfile/UserProfileImage';
-import { Search, Bell, House, People } from 'react-bootstrap-icons';
+import { Search, House, People } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -20,11 +18,11 @@ import { useSearchQuery } from '../../states/slices/users/apiUsersEndpoints';
 
 import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndpoints';
 
-import TimeAgo from '../../utils/TimeAgo';
 import { NavLink } from 'react-router-dom';
-import AcceptRequestBtn from '../acceptRequestBtn/AcceptRequestBtn';
+
 import DeleteAllCommentBtn from '../testing/deleteAllCommentBtn';
 import DeleteAllPost from '../testing/DeleteAllPost';
+import Notifications from '../notifications/Notifications';
 
 const AppNavbar = () => {
   const [search, setSearch] = useState([]);
@@ -172,59 +170,7 @@ const AppNavbar = () => {
                   </section>
 
                   <div className='d-flex align-items-center'>
-                    <NavDropdown
-                      title={
-                        <>
-                          <Bell size={25} />
-
-                          <Badge bg='primary'>{friendRequest.length}</Badge>
-                        </>
-                      }
-                      drop='down'
-                      className='remove-arrow '
-                      align='end'>
-                      <NavDropdown.Header>Notifications</NavDropdown.Header>
-                      <NavDropdown.Divider />
-
-                      {friendRequest && friendRequest.length > 0 ? (
-                        friendRequest.map((request, index) => (
-                          <div key={index}>
-                            <NavDropdown.Item>
-                              <ul>
-                                <li>
-                                  <LinkContainer
-                                    to={`/userPage/${request.requesterId}`}>
-                                    <small>
-                                      <strong>
-                                        {request?.requesterName + ' '}
-                                      </strong>{' '}
-                                      Sent you a friend request{' '}
-                                      <TimeAgo date={request.createdAt} />
-                                    </small>
-                                  </LinkContainer>
-
-                                  <InputGroup>
-                                    <AcceptRequestBtn friendRequest={request} />
-                                    <Button
-                                      variant='outline-danger'
-                                      size='sm'>
-                                      Reject
-                                    </Button>
-                                  </InputGroup>
-                                </li>
-                              </ul>
-                            </NavDropdown.Item>
-                          </div>
-                        ))
-                      ) : (
-                        <ul>
-                          <li>
-                            <small>{'null'}</small>
-                          </li>
-                        </ul>
-                      )}
-                    </NavDropdown>
-
+                    <Notifications />
                     <NavDropdown
                       title={
                         <span>

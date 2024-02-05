@@ -170,7 +170,7 @@ const AppNavbar = () => {
                   </section>
 
                   <div className='d-flex align-items-center'>
-                    <Notifications />
+                    <Notifications userInfo={userInfo} />
                     <NavDropdown
                       title={
                         <span>

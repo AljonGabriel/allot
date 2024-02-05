@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import NotificationModel from '../models/notification/notificationModel.js';
 
 const fetchNotifications = asyncHandler(async (req, res) => {
-  const notification = await NotificationModel.find()
+  const notification = await NotificationModel.findMany()
     .populate('friendRequestId')
     .exec();
 

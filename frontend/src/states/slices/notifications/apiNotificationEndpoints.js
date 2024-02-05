@@ -12,10 +12,4 @@ export const apiNotificationEndpoints = apiNotificationSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useAddMutation,
-  useCheckRequestQuery,
-  useCancelRequestMutation,
-  useAcceptRequestMutation,
-  useCheckIfFriendQuery,
-} = apiNotificationEndpoints;
+export const { useFetchNotificationQuery } = apiNotificationEndpoints;

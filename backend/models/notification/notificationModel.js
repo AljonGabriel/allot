@@ -4,7 +4,7 @@ const notificationSchema = mongoose.Schema(
   {
     type: {
       required: true,
-      enum: ['friendRequest', 'post'],
+      enum: ['friendRequest', 'post', 'comment'],
       type: String,
     },
     notificationForId: {
@@ -18,11 +18,14 @@ const notificationSchema = mongoose.Schema(
     },
     friendRequestId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'friendRequest',
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'posts',
+    },
+    commentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'comments',
     },
   },
   {

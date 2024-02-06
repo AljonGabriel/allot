@@ -16,8 +16,6 @@ import './appNavbar.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSearchQuery } from '../../states/slices/users/apiUsersEndpoints';
 
-import { useCheckRequestQuery } from '../../states/slices/friends/apiFriendsEndpoints';
-
 import { NavLink } from 'react-router-dom';
 
 import DeleteAllCommentBtn from '../testing/deleteAllCommentBtn';
@@ -28,21 +26,11 @@ const AppNavbar = () => {
   const [search, setSearch] = useState([]);
   const [key, setKey] = useState('');
 
-  const [friendRequest, setFriendRequest] = useState([]);
-
   const { userInfo } = useSelector((state) => state.auth);
-
-  const { friendAction } = useSelector((state) => state.friends);
-
-  const feRequesteeId = userInfo._id;
 
   const { data: searchData } = useSearchQuery({
     key,
     limit: 5,
-  });
-
-  const { data: checkedRequestData, refetch } = useCheckRequestQuery({
-    feRequesteeId,
   });
 
   useEffect(() => {
@@ -58,24 +46,6 @@ const AppNavbar = () => {
 
     // Remove friendRequest from the dependency array
   }, [key, searchData]);
-
-  useEffect(() => {
-    const fetchFriendRequest = async () => {
-      try {
-        setFriendRequest(checkedRequestData ? checkedRequestData : []);
-        await refetch();
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    // Call the fetchFriendRequest function whenever friendAction changes
-    fetchFriendRequest();
-
-    // Assuming friendAction is a dependency you want to track
-  }, [checkedRequestData, friendAction, refetch]); // Add other dependencies as needed
-
-  console.log('Friend Request', friendRequest);
 
   return (
     <>

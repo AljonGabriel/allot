@@ -12,7 +12,6 @@ const notificationSchema = mongoose.Schema(
       required: true,
     },
     notificationFor: {
-      // Changed from 'for' to 'notificationFor'
       type: String,
       required: true,
     },
@@ -21,11 +20,9 @@ const notificationSchema = mongoose.Schema(
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'posts',
     },
     commentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'comments',
     },
   },
   {

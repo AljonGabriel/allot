@@ -23,20 +23,18 @@ const addComment = asyncHandler(async (req, res) => {
       comment: feUserComment,
     };
 
-    const newNotification = {
-      type: 'comment',
-      notificationForId: fePostedById,
-      notificationFor: fePostedBy,
-      commentId: newComment._id,
-    };
+    const commented = await CommentModel.create(newComment);
 
-    if (newComment) {
-      const commented = await CommentModel.create(newComment);
+    if (commented) {
+      const newNotification = {
+        type: 'comment',
+        notificationForId: fePostedById,
+        notificationFor: fePostedBy,
+        commentId: commented._id,
+      };
 
-      if (commented) {
-        await NotificationModel.create(newNotification);
-        res.status(200).json({ commentRes: commented });
-      }
+      await NotificationModel.create(newNotification);
+      res.status(200).json({ commentRes: commented });
     }
   } catch (err) {
     res.status(400).json({ error: err });

@@ -3,23 +3,41 @@ import NotificationModel from '../models/notification/notificationModel.js';
 
 const fetchNotifications = asyncHandler(async (req, res) => {
   const { feLoggedInUserId } = req.query;
-  const notification = await NotificationModel.find({
+  const notifications = await NotificationModel.find({
     notificationForId: feLoggedInUserId,
   })
-    .populate({
-      path: 'friendRequestId',
-      model: 'friendRequest',
-      populate: {
-        path: 'requesterId', // Populate the requesterId within the friendRequest model
-        model: 'Users',
+    .populate([
+      {
+        path: 'friendRequestId',
+        model: 'friendRequest',
+        populate: {
+          path: 'requesterId',
+          model: 'Users',
+        },
       },
-    })
+      {
+        path: 'postId',
+        model: 'posts',
+        populate: {
+          path: 'uploadedUserID',
+          model: 'Users',
+        },
+      },
+      {
+        path: 'commentId',
+        model: 'comments',
+        populate: {
+          path: 'commentedById',
+          model: 'Users',
+        },
+      },
+    ])
     .exec();
 
-  console.log(feLoggedInUserId);
+  console.log(notifications);
 
-  if (notification) {
-    res.status(200).json(notification);
+  if (notifications) {
+    res.status(200).json(notifications);
   }
 });
 

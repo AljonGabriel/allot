@@ -13,11 +13,12 @@ const AcceptRequestBtn = (props) => {
   const [friendRequest, setFriendRequest] = useState();
 
   const feRequesteeId = props.userInfo._id;
-  const feRequesteeName = friendRequest && friendRequest.requesteeName;
-  const feRequesterId = friendRequest && friendRequest.requesterId;
-  const feRequesterName = friendRequest && friendRequest.requesterName;
+  const feRequesteeName = friendRequest && friendRequest[0].requesteeName;
+  const feRequesterId = friendRequest && friendRequest[0].requesterId;
+  const feRequesterName =
+    friendRequest && friendRequest.map((request) => request.requesterName);
 
-  console.log('AcceptBtn:', friendRequest);
+  console.log('AcceptBtn:', feRequesterName);
 
   const dispatch = useDispatch();
 
@@ -46,8 +47,6 @@ const AcceptRequestBtn = (props) => {
       console.log(err);
     }
   };
-
-  console.log('AcceptBtn:', data);
 
   return (
     <>

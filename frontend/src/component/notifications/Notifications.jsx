@@ -7,6 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import AcceptRequestBtn from '../acceptRequestBtn/AcceptRequestBtn';
 import { useFetchNotificationQuery } from '../../states/slices/notifications/apiNotificationEndpoints';
 import { useEffect, useState } from 'react';
+import LoadingSpinner from '../loading/LoadingSpinner';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -44,124 +45,77 @@ const Notifications = (props) => {
         <NavDropdown.Header>notifications</NavDropdown.Header>
         <NavDropdown.Divider />
 
-        <div>
-          <NavDropdown.Item>
+        <section>
+          {notifications && notifications.length > 0 ? (
             <ul>
-              {notifications?.map((notification, index) =>
-                notification.type === 'friendRequest' ? (
-                  <li key={index}>
-                    <div>
-                      <LinkContainer
-                        to={`/userPage/${notification?.friendRequestId?.requesterId?._id}`}>
-                        <div className='d-flex gap-3 align-items-center'>
-                          <Image
-                            src={`http://localhost:5000/${notification?.friendRequestId?.requesterId?._id}/profilePictures/${notification?.friendRequestId?.requesterId?.profileImage}`}
-                            alt={
-                              loggedInUser.gender === 'Male'
-                                ? defMaleImg
-                                : loggedInUser.gender === 'Female'
-                                ? defFemaleImg
-                                : defImg
-                            }
-                            style={{
-                              width: '50px',
-                              height: '50px',
-                              objectFit: 'cover',
-                              cursor: 'pointer',
-                            }}
-                            roundedCircle
-                          />
-                          <p>
-                            <strong>
-                              {notification?.friendRequestId?.requesterName ??
-                                ''}
-                              , {''}
-                            </strong>
-                            sent you a friend request
-                          </p>
-                          <AcceptRequestBtn userInfo={loggedInUser} />
-                          <Button
-                            variant='outline-danger'
-                            size='sm'>
-                            Reject
-                          </Button>
-                        </div>
-                      </LinkContainer>
-                    </div>
-                  </li>
-                ) : notification.type === 'post' ? (
-                  <li key={index}>
-                    <div>
-                      <LinkContainer
-                        to={`/userPage/${notification?.friendRequestId?.requesterId?._id}`}>
-                        <div className='d-flex gap-3 align-items-center'>
-                          <Image
-                            src={`http://localhost:5000/${notification?.friendRequestId?.requesterId?._id}/profilePictures/${notification?.friendRequestId?.requesterId?.profileImage}`}
-                            alt={
-                              loggedInUser.gender === 'Male'
-                                ? defMaleImg
-                                : loggedInUser.gender === 'Female'
-                                ? defFemaleImg
-                                : defImg
-                            }
-                            style={{
-                              width: '50px',
-                              height: '50px',
-                              objectFit: 'cover',
-                              cursor: 'pointer',
-                            }}
-                            roundedCircle
-                          />
-                          <p>
-                            <strong>
-                              {notification?.friendRequestId?.requesterName ??
-                                ''}
-                              , {''}
-                            </strong>
-                            Posted
-                          </p>
-                        </div>
-                      </LinkContainer>
-                    </div>
-                  </li>
-                ) : notification.type === 'comment' ? (
-                  <li key={index}>
-                    <div>
-                      <LinkContainer
-                        to={`/userPage/${notification?.commentId?.commentedById?._id}`}>
-                        <div className='d-flex gap-3 align-items-center'>
-                          <Image
-                            src={`http://localhost:5000/${notification?.commentId?.commentedById?._id}/profilePictures/${notification?.commentId?.commentedById?.profileImage}`}
-                            alt={
-                              loggedInUser.gender === 'Male'
-                                ? defMaleImg
-                                : loggedInUser.gender === 'Female'
-                                ? defFemaleImg
-                                : defImg
-                            }
-                            style={{
-                              width: '50px',
-                              height: '50px',
-                              objectFit: 'cover',
-                              cursor: 'pointer',
-                            }}
-                            roundedCircle
-                          />
-                          <p>
-                            <strong>
-                              {notification?.commentId?.commentedBy ?? ''}, {''}
-                            </strong>
-                            Commented
-                          </p>
-                        </div>
-                      </LinkContainer>
-                    </div>
-                  </li>
-                ) : null,
-              )}
+              {notifications.map((notification, index) => (
+                <li key={index}>
+                  <NavDropdown.Item>
+                    {notification.type === 'friendRequest' &&
+                    notification.friendRequestId ? (
+                      <div>
+                        <LinkContainer
+                          to={`/userPage/${notification.friendRequestId.requesterId._id}`}>
+                          <div className='d-flex align-items-center gap-3 p-3 my-1'>
+                            <Image
+                              src={`http://localhost:5000/${notification.friendRequestId.requesterId._id}/profilePictures/${notification.friendRequestId.requesterId.profileImage}`}
+                              alt={
+                                loggedInUser.gender === 'Male'
+                                  ? defMaleImg
+                                  : loggedInUser.gender === 'Female'
+                                  ? defFemaleImg
+                                  : defImg
+                              }
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                                objectFit: 'cover',
+                                cursor: 'pointer',
+                              }}
+                              roundedCircle
+                            />
+
+                            <small>
+                              <strong>
+                                {' '}
+                                {notification.friendRequestId.requesterName}
+                              </strong>
+                              , sent you a friend request <br />
+                            </small>
+                          </div>
+                        </LinkContainer>
+                        <AcceptRequestBtn userInfo={props.userInfo} />
+                        <Button
+                          variant='outline-danger'
+                          className='mx-1'
+                          size='sm'>
+                          Reject
+                        </Button>
+                      </div>
+                    ) : notification.type === 'post' && notification.postId ? (
+                      <small>{notification.postId.uploadedBy}</small>
+                    ) : notification.type === 'comment' &&
+                      notification.commentId ? (
+                      <small>{notification.commentId.postedBy}</small>
+                    ) : null}
+                  </NavDropdown.Item>
+                </li>
+              ))}
             </ul>
-          </NavDropdown.Item>
-        </div>
+          ) : isLoading ? (
+            <ul>
+              <li>
+                <LoadingSpinner />
+              </li>
+            </ul>
+          ) : (
+            <ul>
+              <li>
+                <small className='tex-ted'>No notification</small>
+              </li>
+            </ul>
+          )}
+        </section>
       </NavDropdown>
     </>
   );

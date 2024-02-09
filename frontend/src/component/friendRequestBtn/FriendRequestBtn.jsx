@@ -48,7 +48,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
 
   useEffect(() => {
     const checkIfFriend = async () => {
-      setFriend(isFriend.isFriend || []);
+      setFriend((isFriend && isFriend.isFriend) || []);
     };
 
     const reFetch = async () => {

@@ -13,12 +13,11 @@ const AcceptRequestBtn = (props) => {
   const [friendRequest, setFriendRequest] = useState();
 
   const feRequesteeId = props.userInfo._id;
-  const feRequesteeName = friendRequest && friendRequest[0].requesteeName;
-  const feRequesterId = friendRequest && friendRequest[0].requesterId;
+  const feRequesteeName =
+    friendRequest && friendRequest[props.index].requesteeName;
+  const feRequesterId = friendRequest && friendRequest[props.index].requesterId;
   const feRequesterName =
-    friendRequest && friendRequest.map((request) => request.requesterName);
-
-  console.log('AcceptBtn:', feRequesterName);
+    friendRequest && friendRequest[props.index].requesterName;
 
   const dispatch = useDispatch();
 
@@ -32,8 +31,8 @@ const AcceptRequestBtn = (props) => {
     setFriendRequest(data);
   }, [data]);
 
-  const handleAccept = async (event) => {
-    event.preventDefault();
+  const handleAccept = async (e) => {
+    e.preventDefault();
 
     try {
       const res = await accepted({
@@ -46,6 +45,8 @@ const AcceptRequestBtn = (props) => {
     } catch (err) {
       console.log(err);
     }
+
+    console.log('AcceptBtn:', feRequesterId);
   };
 
   return (
@@ -54,7 +55,7 @@ const AcceptRequestBtn = (props) => {
         <Button
           variant='primary'
           size='sm'
-          onClick={() => handleAccept()}
+          onClick={(e) => handleAccept(e)}
           disabled={isLoading}>
           {isLoading ? <LoadingSpinner /> : 'Confirm'}
         </Button>

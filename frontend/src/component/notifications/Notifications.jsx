@@ -21,13 +21,13 @@ const Notifications = (props) => {
 
   console.log(loggedInUserId);
 
-  const { data, isLoading } = useFetchNotificationQuery({
+  const { data, isLoading, refetch } = useFetchNotificationQuery({
     feLoggedInUserId: loggedInUserId,
   });
 
   useEffect(() => {
     setNotification(data);
-  }, [data]);
+  }, [data, refetch]);
 
   console.log('Notifications:', notifications);
   return (
@@ -84,7 +84,10 @@ const Notifications = (props) => {
                             </small>
                           </div>
                         </LinkContainer>
-                        <AcceptRequestBtn userInfo={props.userInfo} />
+                        <AcceptRequestBtn
+                          userInfo={props.userInfo}
+                          index={index}
+                        />
                         <Button
                           variant='outline-danger'
                           className='mx-1'

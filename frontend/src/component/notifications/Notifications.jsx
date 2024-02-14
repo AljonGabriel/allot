@@ -87,6 +87,7 @@ const Notifications = (props) => {
                         <AcceptRequestBtn
                           userInfo={props.userInfo}
                           index={index}
+                          notifications={notifications}
                         />
                         <Button
                           variant='outline-danger'

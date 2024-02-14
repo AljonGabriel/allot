@@ -19,6 +19,8 @@ const AcceptRequestBtn = (props) => {
   const feRequesterName =
     friendRequest && friendRequest[props.index].requesterName;
 
+  const notifiCationId = props.notifications[props.index]._id;
+
   const dispatch = useDispatch();
 
   const { data } = useCheckRequestQuery({
@@ -46,7 +48,7 @@ const AcceptRequestBtn = (props) => {
       console.log(err);
     }
 
-    console.log('AcceptBtn:', feRequesterId);
+    console.log('AcceptBtn:', notifiCationId);
   };
 
   return (

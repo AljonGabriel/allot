@@ -47,17 +47,15 @@ const addRequest = asyncHandler(async (req, res) => {
     };
 
     await NotificationModel.create(newFriendRequestNotification);
-    res
-      .status(201)
-      .json({
-        message: 'Friend request added successfully',
-        newFriendRequestNotification,
-      });
+    res.status(201).json({
+      message: 'Friend request added successfully',
+      newFriendRequestNotification,
+    });
   }
 });
 
 const cancelRequest = asyncHandler(async (req, res) => {
-  const { feRequesterId, feRequesteeId } = req.body;
+  const { feRequesterId, feRequesteeId, feNotificationId } = req.body;
 
   const cancelled = await FriendRequestModel.deleteOne({
     requesterId: feRequesterId,
@@ -65,6 +63,9 @@ const cancelRequest = asyncHandler(async (req, res) => {
   });
 
   if (cancelled) {
+    await NotificationModel.findOneAndDelete({
+      friendRequestId: feNotificationId,
+    }).exec();
     res.status(200).json({ cancelled });
   } else {
     res.status(401);
@@ -95,8 +96,13 @@ const checkRequest = asyncHandler(async (req, res) => {
 });
 
 const acceptRequest = asyncHandler(async (req, res) => {
-  const { feRequesteeId, feRequesterId, feRequesteeName, feRequesterName } =
-    req.body;
+  const {
+    feRequesteeId,
+    feRequesterId,
+    feRequesteeName,
+    feRequesterName,
+    feNotifiCationId,
+  } = req.body;
 
   try {
     // Step 1: Find or Create the FriendList Document
@@ -143,8 +149,13 @@ const acceptRequest = asyncHandler(async (req, res) => {
       friendId: feRequesteeId,
       friendName: feRequesteeName,
     });
+
     await requestee.save();
     await requester.save();
+
+    await NotificationModel.findOneAndDelete({
+      _id: feNotifiCationId,
+    }).exec();
 
     res.status(200).json({ requestee });
   } catch (error) {
@@ -155,8 +166,6 @@ const acceptRequest = asyncHandler(async (req, res) => {
 
 const checkIfFriend = asyncHandler(async (req, res) => {
   const { loggedInUserId, otherUserId } = req.query;
-
-  console.log('otherUserId:', typeof otherUserId);
 
   try {
     //Check if loggedin user is exist
@@ -173,8 +182,6 @@ const checkIfFriend = asyncHandler(async (req, res) => {
             loggedInUser.friends.some((friend) => friend.friendId === userId),
           )
       : [];
-
-    console.log('IsFriend:', isFriend);
 
     // Step 5: Respond based on the friendship status
     if (isFriend) {

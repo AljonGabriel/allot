@@ -8,6 +8,8 @@ import AcceptRequestBtn from '../acceptRequestBtn/AcceptRequestBtn';
 import { useFetchNotificationQuery } from '../../states/slices/notifications/apiNotificationEndpoints';
 import { useEffect, useState } from 'react';
 import LoadingSpinner from '../loading/LoadingSpinner';
+import { useSelector } from 'react-redux';
+import TimeAgo from '../../utils/TimeAgo';
 
 const defMaleImg = 'http://localhost:5000/defaultImg/defaultMale.jpg';
 const defFemaleImg = 'http://localhost:5000/defaultImg/defaultFemale.jpg';
@@ -25,11 +27,12 @@ const Notifications = (props) => {
     feLoggedInUserId: loggedInUserId,
   });
 
+  const { notificationAction } = useSelector((state) => state.notifications);
+
   useEffect(() => {
     setNotification(data);
-  }, [data, refetch]);
+  }, [data, notificationAction]);
 
-  console.log('Notifications:', notifications);
   return (
     <>
       <NavDropdown
@@ -42,7 +45,7 @@ const Notifications = (props) => {
         drop='down'
         className='remove-arrow '
         align='end'>
-        <NavDropdown.Header>notifications</NavDropdown.Header>
+        <NavDropdown.Header>Notifications</NavDropdown.Header>
         <NavDropdown.Divider />
 
         <section>
@@ -53,54 +56,112 @@ const Notifications = (props) => {
                   <NavDropdown.Item>
                     {notification.type === 'friendRequest' &&
                     notification.friendRequestId ? (
-                      <div>
-                        <LinkContainer
-                          to={`/userPage/${notification.friendRequestId.requesterId._id}`}>
-                          <div className='d-flex align-items-center gap-3 p-3 my-1'>
-                            <Image
-                              src={`http://localhost:5000/${notification.friendRequestId.requesterId._id}/profilePictures/${notification.friendRequestId.requesterId.profileImage}`}
-                              alt={
-                                loggedInUser.gender === 'Male'
-                                  ? defMaleImg
-                                  : loggedInUser.gender === 'Female'
-                                  ? defFemaleImg
-                                  : defImg
-                              }
-                              style={{
-                                width: '50px',
-                                height: '50px',
-                                objectFit: 'cover',
-                                cursor: 'pointer',
-                              }}
-                              roundedCircle
-                            />
+                      <div
+                        onClick={(e) => {
+                          // Prevent the click event from reaching the dropdown container
+                          e.stopPropagation();
+                        }}>
+                        <div className='p-3 my-1'>
+                          <LinkContainer
+                            to={`/userPage/${notification.friendRequestId.requesterId._id}`}>
+                            <div className='d-flex align-items-center gap-3'>
+                              <Image
+                                src={`http://localhost:5000/${notification.friendRequestId.requesterId._id}/profilePictures/${notification.friendRequestId.requesterId.profileImage}`}
+                                alt={
+                                  loggedInUser.gender === 'Male'
+                                    ? defMaleImg
+                                    : loggedInUser.gender === 'Female'
+                                    ? defFemaleImg
+                                    : defImg
+                                }
+                                style={{
+                                  width: '50px',
+                                  height: '50px',
+                                  objectFit: 'cover',
+                                  cursor: 'pointer',
+                                }}
+                                roundedCircle
+                              />
 
-                            <small>
-                              <strong>
-                                {' '}
-                                {notification.friendRequestId.requesterName}
-                              </strong>
-                              , sent you a friend request <br />
-                            </small>
+                              <div>
+                                <strong>
+                                  {' '}
+                                  {notification.friendRequestId.requesterName}
+                                </strong>
+                                <small>
+                                  , sent you a friend request <br />
+                                  <TimeAgo
+                                    date={
+                                      notification.friendRequestId.createdAt
+                                    }
+                                  />
+                                </small>
+                              </div>
+                            </div>
+                          </LinkContainer>
+                          <div className='w-100 mt-3'>
+                            <AcceptRequestBtn
+                              userInfo={props.userInfo}
+                              index={index}
+                              notifications={notifications}
+                              refetch={refetch}
+                            />
+                            <Button
+                              variant='outline-danger'
+                              className='mx-1'
+                              size='md'>
+                              Reject
+                            </Button>
                           </div>
-                        </LinkContainer>
-                        <AcceptRequestBtn
-                          userInfo={props.userInfo}
-                          index={index}
-                          notifications={notifications}
-                        />
-                        <Button
-                          variant='outline-danger'
-                          className='mx-1'
-                          size='sm'>
-                          Reject
-                        </Button>
+                        </div>
                       </div>
                     ) : notification.type === 'post' && notification.postId ? (
                       <small>{notification.postId.uploadedBy}</small>
                     ) : notification.type === 'comment' &&
                       notification.commentId ? (
-                      <small>{notification.commentId.postedBy}</small>
+                      <div
+                        onClick={(e) => {
+                          // Prevent the click event from reaching the dropdown container
+                          e.stopPropagation();
+                        }}>
+                        <div className='p-3 my-1'>
+                          <LinkContainer
+                            to={`/userPage/${notification.commentId.commentedById._id}`}>
+                            <div className='d-flex align-items-center gap-3'>
+                              <Image
+                                src={`http://localhost:5000/${notification.commentId.commentedById._id}/profilePictures/${notification.commentId.commentedById.profileImage}`}
+                                alt={
+                                  loggedInUser.gender === 'Male'
+                                    ? defMaleImg
+                                    : loggedInUser.gender === 'Female'
+                                    ? defFemaleImg
+                                    : defImg
+                                }
+                                style={{
+                                  width: '50px',
+                                  height: '50px',
+                                  objectFit: 'cover',
+                                  cursor: 'pointer',
+                                }}
+                                roundedCircle
+                              />
+
+                              <div>
+                                <strong>
+                                  {' '}
+                                  {notification.commentId.commentedBy}
+                                </strong>
+                                <small>
+                                  , commented on your post <br />
+                                  <TimeAgo
+                                    date={notification.commentId.createdAt}
+                                  />
+                                </small>
+                              </div>
+                            </div>
+                          </LinkContainer>
+                        </div>
+                      </div>
                     ) : null}
                   </NavDropdown.Item>
                 </li>

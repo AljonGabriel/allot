@@ -6,7 +6,7 @@ import { useCancelRequestMutation } from '../../states/slices/friends/apiFriends
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
-const CancelRequestBtn = ({ feData }) => {
+const CancelRequestBtn = ({ feData, refetch }) => {
   const [cancel, { isLoading }] = useCancelRequestMutation();
 
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const CancelRequestBtn = ({ feData }) => {
     try {
       const cancelledData = await cancel(feData).unwrap();
       dispatch(setFriendAction({ ...cancelledData }));
+      await refetch();
     } catch (err) {
       console.log(err);
     }

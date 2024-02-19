@@ -25,6 +25,9 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
   const loggedUserId = userInfo._id;
   const requesteeId = viewedUser._id;
 
+  const friendRequestId =
+    checkRequest && checkRequest[0] && checkRequest[0]._id;
+
   const dispatch = useDispatch();
 
   const { friendAction } = useSelector((state) => state.friends);
@@ -34,6 +37,7 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     feRequesterName: requesterName,
     feRequesteeId: requesteeId,
     feRequesteeName: requesteeName,
+    feNotificationId: friendRequestId,
   };
 
   const { data: request, refetch } = useCheckRequestQuery({
@@ -50,17 +54,10 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     const checkIfFriend = async () => {
       setFriend((isFriend && isFriend.isFriend) || []);
     };
-
-    const reFetch = async () => {
-      setCheckRequest(request);
-      await refetch();
-    };
+    setCheckRequest(request);
 
     checkIfFriend();
-    reFetch();
-  }, [request, friendAction, refetch, isFriend]); // Include data in the dependency array
-
-  console.log('friend', friend);
+  }, [request, friendAction, isFriend]); // Include data in the dependency array
 
   const [addRequest, { isLoading }] = useAddMutation();
 
@@ -70,6 +67,8 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
     try {
       const addFriend = await addRequest(feData).unwrap();
       dispatch(setFriendAction(addFriend));
+
+      await refetch();
     } catch (err) {
       console.log(err);
     }
@@ -101,7 +100,11 @@ const FriendRequestBtn = ({ viewedUser, userInfo }) => {
           )}
         </Button>
       ) : (
-        <CancelRequestBtn feData={feData} />
+        <CancelRequestBtn
+          feData={feData}
+          refetch={refetch}
+          /*  requestId={} */
+        />
       )}
     </>
   );

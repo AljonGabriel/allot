@@ -5,6 +5,7 @@ import {
   useCheckRequestQuery,
 } from '../../states/slices/friends/apiFriendsEndpoints';
 import { setFriendAction } from '../../states/slices/friends/friendsSlice';
+import { setNotificationSlice } from '../../states/slices/notifications/notificationSlice';
 import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ const AcceptRequestBtn = (props) => {
   const feRequesterName =
     friendRequest && friendRequest[props.index].requesterName;
 
-  const notifiCationId = props.notifications[props.index]._id;
+  const feNotifiCationId = props.notifications[props.index]._id;
 
   const dispatch = useDispatch();
 
@@ -42,13 +43,15 @@ const AcceptRequestBtn = (props) => {
         feRequesterId,
         feRequesteeName,
         feRequesterName,
+        feNotifiCationId,
       }).unwrap();
       dispatch(setFriendAction(res));
+      dispatch(setNotificationSlice(res));
+
+      props.refetch();
     } catch (err) {
       console.log(err);
     }
-
-    console.log('AcceptBtn:', notifiCationId);
   };
 
   return (
@@ -56,7 +59,7 @@ const AcceptRequestBtn = (props) => {
       {friendRequest && (
         <Button
           variant='primary'
-          size='sm'
+          size='md'
           onClick={(e) => handleAccept(e)}
           disabled={isLoading}>
           {isLoading ? <LoadingSpinner /> : 'Confirm'}

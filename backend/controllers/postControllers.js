@@ -27,6 +27,12 @@ const post = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteOwnPost = asyncHandler(async (req, res) => {
+  const photoPaths = deletedPost.images.map((filename) =>
+    path.join(__dirname, 'uploads', filename),
+  );
+});
+
 const getPost = asyncHandler(async (req, res) => {
   await PostModel.find()
     .sort({ postedDate: -1 })

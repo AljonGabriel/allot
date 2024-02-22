@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import PostModel from '../models/postModels.js';
 import formatDate from '../utils/formatDate.js';
+import path from 'path';
+import fs from 'fs';
 
 const post = asyncHandler(async (req, res) => {
   const { fePostDescription, fePostAudience } = req.body;
@@ -28,9 +30,49 @@ const post = asyncHandler(async (req, res) => {
 });
 
 const deleteOwnPost = asyncHandler(async (req, res) => {
-  const photoPaths = deletedPost.images.map((filename) =>
-    path.join(__dirname, 'uploads', filename),
-  );
+  const { postId } = req.body; // Assuming you pass the post ID through the URL params
+
+  try {
+    // Retrieve the post details
+    const post = await PostModel.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Delete each image file associated with the post
+    for (const filename of post.images) {
+      const filePath = path.resolve(
+        'frontend',
+        'src',
+        'assets',
+        'uploads',
+        `${post.uploadedUserID}`,
+        'post',
+        `${formatDate(post.createdAt)}`,
+        filename,
+      );
+
+      console.log('file path:', filePath);
+
+      // Check if the file exists before attempting to delete
+      if (fs.existsSync(filePath)) {
+        await fs.promises.unlink(filePath);
+        console.log('File deleted successfully:', filePath);
+
+        // Now delete the post itself from the database
+        await PostModel.deleteOne({ _id: postId });
+
+        res.status(200).json({ message: 'Post deleted successfully' });
+      } else {
+        console.log('File does not exist:', filePath);
+        res.status(400).json({ message: 'File does not exist' });
+      }
+    }
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 const getPost = asyncHandler(async (req, res) => {
@@ -47,7 +89,9 @@ const getPostByUserId = asyncHandler(async (req, res) => {
     uploadedUserID: uId,
   }).sort({ postedDate: -1 });
 
-  userPost && res.status(200).json({ userPost });
+  userPost
+    ? res.status(200).json({ userPost })
+    : res.status(404).json({ err: 'No Post' });
 });
 
 const getSpecificPostByUserId = asyncHandler(async (req, res) => {
@@ -116,4 +160,5 @@ export {
   getPostByUserId,
   getSpecificPostByUserId,
   deleteAllPost,
+  deleteOwnPost,
 };

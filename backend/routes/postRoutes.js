@@ -8,6 +8,7 @@ import {
   getPostByUserId,
   getSpecificPostByUserId,
   deleteAllPost,
+  deleteOwnPost,
 } from '../controllers/postControllers.js';
 
 import { protect } from '../middlewares/authMiddleware.js';
@@ -17,6 +18,7 @@ import {
 } from '../middlewares/MulterMiddleware.js';
 
 router.post('/', protect, postUploadMiddleWare.array('postImages', 4), post);
+router.delete('/deleteOwnPost', protect, deleteOwnPost);
 router.post(
   '/createProfilePic',
   protect,

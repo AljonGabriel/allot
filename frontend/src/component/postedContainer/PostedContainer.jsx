@@ -61,7 +61,7 @@ const PostedContainer = () => {
 
   useEffect(() => {
     setIsFriend(friend || []);
-    setPosted(data?.posted || []);
+    setPosted(data ? data.posted : []);
 
     const fetchData = async () => {
       await refetch();
@@ -74,7 +74,7 @@ const PostedContainer = () => {
 
   return (
     <>
-      {posted
+      {posted && posted.length > 0
         ? posted.map((post, index) => {
             const areFriend =
               post.postAudience === 'friends' &&
@@ -274,10 +274,10 @@ const PostedContainer = () => {
                 </div>
               </section>
             ) : (
-              isLoading && <LoadingData />
+              'No post'
             );
           })
-        : isLoading && <LoadingData />}
+        : 'No post'}
     </>
   );
 };

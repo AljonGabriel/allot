@@ -6,7 +6,7 @@ function App() {
     <>
       <Container
         fluid
-        className='bg-light'>
+        className='bg-secondary-white'>
         <Container>
           <Row
             style={{ height: '600px' }}

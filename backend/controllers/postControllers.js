@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import PostModel from '../models/postModels.js';
 import formatDate from '../utils/formatDate.js';
 import path from 'path';
+import fsExtra from 'fs-extra';
 import fs from 'fs';
 
 const post = asyncHandler(async (req, res) => {
@@ -40,34 +41,28 @@ const deleteOwnPost = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    // Delete each image file associated with the post
-    for (const filename of post.images) {
-      const filePath = path.resolve(
-        'frontend',
-        'src',
-        'assets',
-        'uploads',
-        `${post.uploadedUserID}`,
-        'post',
-        `${formatDate(post.createdAt)}`,
-        filename,
-      );
+    // Define the parent folder path to be deleted
+    const parentFolderPath = path.join(
+      'frontend',
+      'src',
+      'assets',
+      'uploads',
+      `${post.uploadedUserID}`,
+      'post',
+      `${formatDate(post.createdAt)}`,
+    );
 
-      console.log('file path:', filePath);
+    if (fs.existsSync(parentFolderPath)) {
+      // Use fs-extra to remove the directory recursively
+      await fsExtra.remove(parentFolderPath);
 
-      // Check if the file exists before attempting to delete
-      if (fs.existsSync(filePath)) {
-        await fs.promises.unlink(filePath);
-        console.log('File deleted successfully:', filePath);
+      await PostModel.deleteOne({ _id: post._id });
 
-        // Now delete the post itself from the database
-        await PostModel.deleteOne({ _id: postId });
-
-        res.status(200).json({ message: 'Post deleted successfully' });
-      } else {
-        console.log('File does not exist:', filePath);
-        res.status(400).json({ message: 'File does not exist' });
-      }
+      console.log('File path exist:', parentFolderPath);
+      res.status(200).json({ msg: 'Folder removed' });
+    } else {
+      console.log('File path not exist:', parentFolderPath);
+      res.status(200).json({ msg: 'Failed to removed' });
     }
   } catch (err) {
     console.error('Error deleting post:', err);

@@ -61,7 +61,6 @@ const PostModal = () => {
   //Handles data
   const handlePostSortChange = (event) => {
     event.preventDefault();
-    console.log('clicked');
 
     setInputData({
       ...inputData,

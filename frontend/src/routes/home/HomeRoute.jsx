@@ -3,13 +3,16 @@ import AppNavbar from './../../component/navbar/AppNavbar';
 import ProfileSection from '../../component/profileSection/ProfileSection';
 import PostSeciton from '../../component/postSection/PostSeciton';
 
+//css
+import './homeRoute.css';
+
 const HomeRoute = () => {
   return (
     <>
       <AppNavbar />
       <Container
-        className='d-flex justify-content-start bg-white-secondary h-100'
-        style={{ paddingTop: '90px' }}
+        style={{ paddingTop: '100px' }}
+        className='bg'
         fluid>
         <ProfileSection />
         <PostSeciton />

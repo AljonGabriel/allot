@@ -45,7 +45,7 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
     setFriend(isFriend && isFriend.isFriend && isFriend.isFriend[0]);
   }, [isFriend]);
 
-  console.log('userProfile DataL', friend);
+  console.log('userProfile Data', friend);
 
   return (
     <section className='w-100'>
@@ -62,9 +62,6 @@ const UserProfile = ({ viewedUserPosts, viewedUser, loggedInUser }) => {
             const isPrivatePost = post.postAudience === 'private' && isOwnPost;
 
             const isPublicPost = post.postAudience === 'public';
-
-            console.log('Options:', isFriendPost + [index] + ' ' + friend);
-            console.log('UserProfle Post:', friend);
 
             return (
               (isFriendPost || isOwnPost || isPrivatePost || isPublicPost) && (

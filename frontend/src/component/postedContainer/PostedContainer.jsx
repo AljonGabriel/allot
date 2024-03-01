@@ -57,7 +57,7 @@ const PostedContainer = () => {
   });
 
   useEffect(() => {
-    setPosted(data ? data.posted : []);
+    setPosted(data && data ? data.posted : []);
 
     const fetchData = async () => {
       await refetch();
@@ -84,6 +84,7 @@ const PostedContainer = () => {
         const deletedPost = await deletePost({ postId }).unwrap();
         dispatch(setPosts({ deletedPost }));
         await refetch();
+        console.log(deletedPost);
       } catch (err) {
         console.log('handleDeleteOwnPostClick err', err);
       }
@@ -105,9 +106,11 @@ const PostedContainer = () => {
 
             const isPublicPost = post.postAudience === 'public';
 
+            console.log('loggedUserId:', loggedUserId);
+            console.log('uploadedUserID:', post.uploadedUserID);
+
             return (
               areFriend ||
-              isOwnPost ||
               isPrivatePost ||
               (isPublicPost && (
                 <section

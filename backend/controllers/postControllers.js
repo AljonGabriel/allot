@@ -40,29 +40,33 @@ const deleteOwnPost = asyncHandler(async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
+    console.log(post.images.length);
 
-    // Define the parent folder path to be deleted
-    const parentFolderPath = path.join(
-      'frontend',
-      'src',
-      'assets',
-      'uploads',
-      `${post.uploadedUserID}`,
-      'post',
-      `${formatDate(post.createdAt)}`,
-    );
+    if (post.images.length > 0) {
+      // Define the parent folder path to be deleted
+      const parentFolderPath = path.join(
+        'frontend',
+        'src',
+        'assets',
+        'uploads',
+        `${post.uploadedUserID}`,
+        'post',
+        `${formatDate(post.createdAt)}`,
+      );
 
-    if (fs.existsSync(parentFolderPath)) {
-      // Use fs-extra to remove the directory recursively
-      await fsExtra.remove(parentFolderPath);
-
-      await PostModel.deleteOne({ _id: post._id });
-
-      console.log('File path exist:', parentFolderPath);
-      res.status(200).json({ msg: 'Folder removed' });
+      if (fs.existsSync(parentFolderPath)) {
+        // Use fs-extra to remove the directory recursively
+        await fsExtra.remove(parentFolderPath);
+        await PostModel.deleteOne({ _id: post._id });
+        console.log('File path exist:', parentFolderPath);
+        res.status(200).json({ msg: 'Folder removed' });
+      } else {
+        console.log('File path not exist:', parentFolderPath);
+        res.status(200).json({ msg: 'Failed to removed' });
+      }
     } else {
-      console.log('File path not exist:', parentFolderPath);
-      res.status(200).json({ msg: 'Failed to removed' });
+      await PostModel.deleteOne({ _id: post._id });
+      res.status(200).json({ msg: 'Post deleted without images' });
     }
   } catch (err) {
     console.error('Error deleting post:', err);
